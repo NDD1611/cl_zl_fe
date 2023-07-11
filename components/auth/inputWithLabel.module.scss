@@ -1,0 +1,47 @@
+.labelInput {
+    width: 100%;
+    position: relative;
+}
+
+.label {
+    display: block;
+    font-size: 18px;
+    margin-bottom: 8px;
+    margin-top: 20px;
+    font-weight: 600;
+    position: relative;
+
+
+    .showHidePass {
+        position: absolute;
+        right: 10px;
+        font-size: 15px;
+    }
+}
+
+.input {
+    height: 30px;
+    width: 90%;
+    padding: 5px 15px;
+    border-radius: 10px;
+    border: 0.1px solid #ccc;
+    font-size: 17px;
+    background-color: #f9fafb;
+}
+
+.input:focus {
+    outline-color: #0091ff;
+}
+
+.errMes {
+    color: red;
+    padding-left: 10px;
+}
+
+.checkSucces {
+    color: green !important;
+    position: absolute;
+    right: 20px;
+    bottom: 10px;
+
+}
