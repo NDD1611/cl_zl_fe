@@ -1,0 +1,75 @@
+.mainTab {
+    background-color: #0091ff;
+    width: 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+}
+
+.avatar {
+    margin-bottom: 20px;
+
+    &:hover {
+        background-color: #0091ff !important;
+    }
+}
+
+.quare {
+    cursor: pointer;
+    position: relative;
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+        background-color: #0082e5;
+    }
+
+    svg {
+        color: #fff;
+        font-size: 30px;
+    }
+
+
+}
+
+.top {
+    padding-top: 30px;
+}
+
+.bottom {
+    padding-bottom: 30px;
+}
+
+.maintabSelect {
+    background-color: #006edc !important;
+}
+
+.toggleMenu {
+    position: absolute;
+    width: 220px;
+    left: 66px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px 0 #ccc;
+
+    div {
+        padding: 10px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #ccc;
+        }
+    }
+}
+
+.logout {
+    color: red;
+}
+
+.hideToggle {
+    display: none !important;
+}

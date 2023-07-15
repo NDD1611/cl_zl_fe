@@ -25,7 +25,7 @@ const Login = () => {
                 position: 'bottom-center'
             })
         } else {
-            toast.success('Bạn đã đăng nhập thành công')
+            // toast.success('Bạn đã đăng nhập thành công')
             const data = response.data
             localStorage.setItem('userDetails', JSON.stringify(data))
 

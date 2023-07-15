@@ -1,0 +1,226 @@
+.contentModalInfo {
+    position: relative;
+    width: 100%;
+
+    .hideModal {
+        display: none !important;
+    }
+
+    .modalCropImage {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        .backgroundModal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+        }
+
+        .btns {
+            z-index: 101;
+            margin-top: 20px;
+
+            button {
+                cursor: pointer;
+                border: none;
+                padding: 5px 10px;
+                border-radius: 5px;
+                margin: 0 10px;
+            }
+
+            .btnAcceptAvatar {
+                background-color: #0091ff;
+                color: #fff;
+
+                &:hover {
+                    background-color: #0062cc;
+                }
+            }
+
+            .btnCancelAvatar {
+
+                &:hover {
+                    background-color: #6c757c;
+                }
+            }
+        }
+
+
+        .imageCrop {
+            width: 700px;
+
+            img {
+                max-width: 100%;
+            }
+        }
+    }
+
+    .image {
+        width: 100%;
+
+        img {
+            width: 100%;
+            height: 150px;
+        }
+    }
+
+    .avatarInfo {
+        position: absolute;
+        top: 110px;
+        left: calc(50% - 40px);
+
+        .camera {
+            width: 25px;
+            height: 25px;
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            border-radius: 50%;
+            border: 1px solid #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #fff;
+
+            svg {
+                color: #ccc;
+            }
+        }
+
+        .inputHide {
+            display: none;
+        }
+    }
+
+    .fullname {
+        display: flex;
+        padding: 0 20px;
+        padding-top: 20px;
+
+        div {
+            width: 50%;
+
+            label {
+                display: block;
+                padding-bottom: 10px;
+            }
+
+            input {
+                width: 70%;
+                padding: 5px 10px;
+                border-radius: 5px;
+                border: 1px solid #ccc;
+
+                &:focus {
+                    outline-color: #0091ff;
+                }
+            }
+        }
+    }
+
+    .name {
+        padding-top: 30px;
+        text-align: center;
+    }
+
+    .userInfo {
+        margin-top: 10px;
+        border-top: 1px solid #ccc;
+        padding: 10px;
+
+        .birthday {
+
+            .dmy {
+                display: flex;
+                gap: 5px;
+
+                .subdmy {
+                    width: 32%;
+                    position: relative;
+
+                    .clickFake {
+                        position: absolute;
+                        width: 100%;
+                        height: 100%;
+                        top: 0;
+                        left: 0;
+                        z-index: 1000;
+                    }
+
+                    input {
+                        padding: 5px 10px;
+                        width: 75%;
+                    }
+
+                    .arrowDown {
+                        position: absolute;
+                        right: 10px;
+                        top: 10px;
+                        font-size: 12px;
+                    }
+                }
+            }
+        }
+
+        .titleInfo {
+            font-weight: 600;
+        }
+
+        .sex {
+            display: block;
+            width: 150px;
+        }
+
+        .inputRadio {
+            padding-left: 20px;
+
+            input {
+                padding-left: 20px;
+                width: 15px;
+                height: 15px;
+            }
+
+            label {
+                padding-left: 10px;
+                padding-right: 20px;
+            }
+        }
+
+        .divBtn {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            align-items: center;
+
+            .btnCancel {
+                padding: 5px 10px;
+                border: none;
+                background-color: #dfe2e7;
+
+                &:hover {
+                    background-color: #ccc;
+                }
+            }
+
+            .btnUpdate {
+                padding: 5px 10px;
+                border: none;
+                background-color: #0091ff;
+                color: #fff;
+            }
+        }
+
+    }
+}

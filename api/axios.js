@@ -5,6 +5,18 @@ const apiClient = axios.create({
     timeout: 10000
 })
 
+apiClient.interceptors.request.use(function (config) {
+    const userDetails = JSON.parse(localStorage.getItem('userDetails'))
+    if (userDetails) {
+        config.headers.token = userDetails.token
+    }
+
+    return config;
+}, function (error) {
+    // Do something with request error
+    return Promise.reject(error);
+});
+
 
 export default apiClient;
 

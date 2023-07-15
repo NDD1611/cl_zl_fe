@@ -1,5 +1,6 @@
 
 import axios from './axios'
+import { logout } from '../utils/auth'
 
 const register = async (data) => {
     try {
@@ -37,9 +38,47 @@ const refreshToken = async (data) => {
     }
 }
 
+
+
+//secure router
+const uploadAvatar = async (data) => {
+    try {
+        let response = await axios.post('/user/upload-avatar', data)
+        return response
+    } catch (exception) {
+        checkErr(exception)
+        return {
+            err: true,
+            exception
+        }
+    }
+}
+
+const updateUserInfo = async (data) => {
+    try {
+        let response = await axios.post('/user/update-info', data)
+        return response
+    } catch (exception) {
+        checkErr(exception)
+        return {
+            err: true,
+            exception
+        }
+    }
+}
+
+const checkErr = (exception) => {
+    const errCode = exception?.response?.status
+    if (errCode === 401 || errCode === 403) {
+        logout()
+    }
+}
+
 export default {
     register,
     login,
-    refreshToken
+    refreshToken,
+    uploadAvatar,
+    updateUserInfo
 }
 

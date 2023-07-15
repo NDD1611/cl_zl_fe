@@ -1,0 +1,61 @@
+.HeaderTabTwo {
+    display: flex;
+    padding: 10px 20px;
+    gap: 10px;
+}
+
+.input {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    input {
+        border: none;
+        background-color: #eaedf0;
+        padding: 3px;
+        height: 24px;
+    }
+
+}
+
+.iconAddFriend {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 32px;
+    width: 32px;
+
+    &:hover {
+        background-color: #eaedf0;
+    }
+}
+
+
+.inputEmail {
+    margin: 20px 0;
+    padding: 0 20px;
+
+    input {
+        width: 100%;
+        border: none;
+        border-bottom: 1px solid #ccc;
+
+        &:focus {
+            outline: none;
+            border-bottom: 1px solid blue;
+        }
+    }
+}
+
+.btnAdd {
+    cursor: pointer;
+    border: none;
+    padding: 10px 20px;
+    background-color: #0091ff;
+    color: #fff;
+    font-weight: 600;
+    float: right;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}

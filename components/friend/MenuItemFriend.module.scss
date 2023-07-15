@@ -1,0 +1,19 @@
+.Item {
+    display: flex;
+    cursor: pointer;
+    padding: 0 25px;
+    font-size: 16px;
+    font-weight: 600;
+
+    &:hover {
+        background-color: #eaedf0;
+    }
+}
+
+.Icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: 10px;
+
+}

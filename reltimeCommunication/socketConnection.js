@@ -18,18 +18,20 @@ export const socketConnectToServer = (userDetails) => {
     })
 
     socket.on("connect_error", async (err) => {
+        // console.log(err.message)
         if (err.message === 'TokenExpire') {
-            console.log('refresh token')
+            // console.log('refresh token')
             const userDetails = JSON.parse(localStorage.getItem('userDetails'))
             const response = await api.refreshToken({ userDetails })
+            console.log(response)
             localStorage.setItem('userDetails', JSON.stringify(response.data))
             store.dispatch({
                 type: authActions.SET_USER_DETAIL,
                 userDetails: response.data
             })
             socketConnectToServer(userDetails)
-        } else {
-            alert('Có lỗi xảy ra. Vui lòng đăng nhập lại.')
+        } else if (err.message !== 'UserConnected') {
+            // alert('Vui lòng đăng nhập lại.')
             logout()
         }
     });

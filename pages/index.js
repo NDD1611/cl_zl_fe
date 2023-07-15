@@ -1,8 +1,10 @@
-import Head from 'next/head';
-import Link from 'next/link';
 import { useEffect } from 'react';
 import { logout } from '../utils/auth';
 import { socketConnectToServer } from '../reltimeCommunication/socketConnection'
+import styles from './index.module.scss'
+import MainTab from '../components/common/MainTab';
+import TabTwo from '../components/common/tabTwo';
+import HeaderTabTwo from '../components/common/HeaderTabTwo';
 
 function DashBoasd() {
 
@@ -15,10 +17,13 @@ function DashBoasd() {
     }
   }, [])
   return (
-    <>
-      <div>DashBoasd</div>
-    </>
-  );
+    <div className={styles.dashboash}>
+      <MainTab></MainTab>
+      <TabTwo>
+        <HeaderTabTwo />
+      </TabTwo>
+    </div>
+  )
 }
 
 
