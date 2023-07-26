@@ -1,0 +1,97 @@
+.messageArea {
+    height: 100%;
+    overflow-y: scroll;
+
+
+    &::-webkit-scrollbar {
+        width: 7px;
+    }
+
+    /* Track */
+    &::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    /* Handle */
+    &::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 10px;
+    }
+
+    /* Handle on hover */
+    &::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+
+    .dateShow {
+        display: flex;
+        justify-content: center;
+        color: #fff;
+
+        p {
+            background-color: #ccc;
+            padding: 5px;
+            border-radius: 5px;
+        }
+    }
+
+    .acceptFriend {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .paddingHeader {
+        padding-top: 100px;
+    }
+
+    .paddingfooter {
+
+        padding-bottom: 30px;
+    }
+
+    .footerDate {
+        display: flex;
+        justify-content: flex-end;
+        color: #555;
+    }
+
+    .sameAuth {
+        margin-left: 30px;
+    }
+
+    .messageLeft {
+        display: flex;
+        padding-top: 3px;
+        padding-left: 10px;
+
+
+        .content {
+            width: fit-content;
+            word-wrap: break-word;
+            padding: 10px;
+            background-color: #fff;
+            margin-left: 10px;
+            border-radius: 5px;
+            min-width: 100px;
+        }
+    }
+
+    .messageRight {
+        padding-left: 10px;
+        display: flex;
+        justify-content: flex-end;
+        padding-right: 10px;
+
+        .content {
+
+            width: fit-content;
+            word-wrap: break-word;
+            padding: 10px;
+            background-color: #fff;
+            margin-top: 3px;
+            border-radius: 5px;
+            min-width: 100px;
+        }
+    }
+}

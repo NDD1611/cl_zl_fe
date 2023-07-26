@@ -67,6 +67,43 @@ const updateUserInfo = async (data) => {
     }
 }
 
+const friendInvitation = async (data) => {
+    try {
+        let response = await axios.post('/friend/friend-invitation', data)
+        return response
+    } catch (exception) {
+        checkErr(exception)
+        return {
+            err: true,
+            exception
+        }
+    }
+}
+const rejectInvitation = async (data) => {
+    try {
+        let response = await axios.post('/friend/reject-invitation', data)
+        return response
+    } catch (exception) {
+        checkErr(exception)
+        return {
+            err: true,
+            exception
+        }
+    }
+}
+const acceptInvitation = async (data) => {
+    try {
+        let response = await axios.post('/friend/accept-invitation', data)
+        return response
+    } catch (exception) {
+        checkErr(exception)
+        return {
+            err: true,
+            exception
+        }
+    }
+}
+
 const checkErr = (exception) => {
     const errCode = exception?.response?.status
     if (errCode === 401 || errCode === 403) {
@@ -75,10 +112,8 @@ const checkErr = (exception) => {
 }
 
 export default {
-    register,
-    login,
-    refreshToken,
-    uploadAvatar,
-    updateUserInfo
+    register, login, refreshToken,
+    uploadAvatar, updateUserInfo,
+    friendInvitation, rejectInvitation, acceptInvitation
 }
 

@@ -4,9 +4,12 @@ import { logout } from '../utils/auth'
 import api from '../api/api'
 import store from '../redux/store'
 import { authActions } from '../redux/actions/authAction'
+import { friendActions } from '../redux/actions/friendAction'
+import { conversationActions } from '../redux/actions/conversationAction'
 
+let socket = null
 export const socketConnectToServer = (userDetails) => {
-    const socket = io(process.env.NEXT_PUBLIC_BACKEND_URL, {
+    socket = io(process.env.NEXT_PUBLIC_BACKEND_URL, {
         auth: {
             token: userDetails.token,
             userDetails: userDetails
@@ -34,5 +37,32 @@ export const socketConnectToServer = (userDetails) => {
             // alert('Vui lòng đăng nhập lại.')
             logout()
         }
+        // else if (err.message === 'UserConnected') {
+        //     alert('Bạn đã đăng nhập ở một nơi khác')
+        //     logout()
+        // }
     });
+
+    socket.on('update-friend-invitation', (data) => {
+        console.log('update invitation')
+        const { pendingInvitations } = data
+        store.dispatch({
+            type: friendActions.SET_PENDING_INVITATION,
+            pendingInvitations: pendingInvitations
+        })
+    })
+
+    socket.on('update-conversation', (data) => {
+        console.log('update conversation', data)
+        const { conversations } = data
+        store.dispatch({
+            type: conversationActions.SET_CONVERSATION,
+            conversations: conversations
+        })
+    })
+}
+
+export const sendMessage = (data) => {
+    console.log(data, '=====')
+    socket.emit('send-message', data)
 }

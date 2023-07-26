@@ -12,4 +12,4 @@ const TabTwo = (props) => {
     )
 }
 
-export default TabTwo
+export default TabTwo;

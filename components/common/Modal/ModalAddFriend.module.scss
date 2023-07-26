@@ -1,0 +1,27 @@
+.inputEmail {
+    margin: 20px 0;
+    padding: 0 20px;
+
+    input {
+        width: 100%;
+        border: none;
+        border-bottom: 1px solid #ccc;
+
+        &:focus {
+            outline: none;
+            border-bottom: 1px solid blue;
+        }
+    }
+}
+
+.btnAdd {
+    cursor: pointer;
+    border: none;
+    padding: 10px 20px;
+    background-color: #0091ff;
+    color: #fff;
+    font-weight: 600;
+    float: right;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}

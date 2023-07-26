@@ -204,7 +204,6 @@ const ModalUpdateInfo = () => {
         setShowScollMonth(false)
         setShowScollDay(false)
     }
-    console.log(userDetails, '=====================')
     return (
         <>
             <MainModal
