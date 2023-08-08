@@ -9,8 +9,25 @@ config.autoAddCss = false
 import 'normalize.css/normalize.css';
 
 import 'react-toastify/dist/ReactToastify.css';
+import { useEffect } from 'react';
+import { socketConnectToServer } from '../reltimeCommunication/socketConnection'
+
+import { socket } from '../reltimeCommunication/socketConnection';
 
 export default function app({ Component, pageProps }) {
+    useEffect(() => {
+        // let timeoutId = setInterval(() => {
+        //     console.log(socket)
+
+        // }, 2000)
+        const userDetails = JSON.parse(localStorage.getItem('userDetails'))
+        if ((userDetails && socket === null) || (socket && socket.connected === false)) {
+            socketConnectToServer(userDetails)
+        }
+        // return () => {
+        //     clearInterval(timeoutId)
+        // }
+    })
     return <Provider store={store}>
         <Component {...pageProps} />
         <ToastContainer />

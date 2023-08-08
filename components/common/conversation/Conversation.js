@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import addPathToLinkAvatar from '../../../utils/path'
 import { conversationActions } from '../../../redux/actions/conversationAction';
 
+
 const Conversation = ({ conversation }) => {
     const userDetails = useSelector(state => state.auth.userDetails)
     const [friend, setFriend] = useState({})

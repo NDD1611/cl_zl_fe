@@ -12,6 +12,7 @@ import addPathToLinkAvatar from '../../../utils/path'
 import { authActions } from '../../../redux/actions/authAction';
 import ExpandDate from './expandDate';
 import { checkLeapYear } from '../../../utils/check';
+import LoaderModal from './LoaderModal'
 import Cropper from 'cropperjs';
 import 'cropperjs/dist/cropper.js'
 import 'cropperjs/dist/cropper.css'
@@ -36,6 +37,7 @@ const ModalUpdateInfo = () => {
     const [showScollYear, setShowScollYear] = useState(false)
     const [showScollMonth, setShowScollMonth] = useState(false)
     const [showScollDay, setShowScollDay] = useState(false)
+    const [showLoader, setShowLoader] = useState(false)
     const user = useSelector(state => state.auth.userDetails)
     const dispatch = useDispatch()
 
@@ -127,6 +129,7 @@ const ModalUpdateInfo = () => {
     }
 
     const handleUpdateInfoUser = async () => {
+        setShowLoader(true)
         let formData = new FormData()
         let birthday = new Date(selectYear, parseInt(selectMonth) - 1, selectDay).toDateString()
         if (haveUpdateAvatar) {
@@ -174,6 +177,7 @@ const ModalUpdateInfo = () => {
         }
         setSrcAfterCropped(null)
         dispatch({ type: modalActions.SET_HIDE_MODAL_UPDATE_INFO })
+        setShowLoader(false)
     }
 
     const handleCloseModalUpdateInfo = () => {
@@ -206,6 +210,7 @@ const ModalUpdateInfo = () => {
     }
     return (
         <>
+            {showLoader ? <LoaderModal /> : ''}
             <MainModal
                 title='Cập nhật thông tin'
                 closeModal={showModalUpdateInfo}

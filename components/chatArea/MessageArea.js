@@ -54,7 +54,7 @@ const MessageArea = () => {
                 }
                 {
                     messages && messages.map((message) => {
-                        console.log(message)
+                        // console.log(message)
                         if (message.typeAnnounce === "acceptFriend") {
                             if (message.senderId === userDetails._id) {
                                 return (

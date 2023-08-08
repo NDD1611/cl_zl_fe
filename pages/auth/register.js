@@ -40,8 +40,8 @@ const Register = () => {
     const router = useRouter()
 
     const register = async () => {
-        setShowLoader(true)
         if (errEmail && errPassword && errConfirmPassword) {
+            setShowLoader(true)
             const response = await api.register({ email, password, firstName, lastName })
             if (response?.err) {
                 toast.error(response?.exception?.response?.data, {
@@ -52,8 +52,8 @@ const Register = () => {
                 toast.success(response?.data, {
                     position: 'bottom-center'
                 })
-                setShowLoader(false)
                 router.push('/auth/login')
+                setShowLoader(false)
             }
         }
     }
@@ -100,7 +100,6 @@ const Register = () => {
         checkConfirmPassword()
         checkLastName()
         checkFirstName()
-        console.log(lastName, firstName)
     }, [email, password, confirmPassword, lastName, firstName])
 
     return (

@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { logout } from '../utils/auth';
-import { socketConnectToServer } from '../reltimeCommunication/socketConnection'
 import styles from './index.module.scss'
 import MainTab from '../components/common/MainTab';
 import TabTwo from '../components/common/tabTwo';
@@ -18,7 +17,6 @@ function DashBoasd() {
     if (!userDetails) {
       logout()
     } else {
-      socketConnectToServer(userDetails)
       setRender(true)
     }
   }, [])

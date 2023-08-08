@@ -11,7 +11,6 @@ const MenuItemFriend = () => {
     const dispatch = useDispatch()
     const selectItem = useSelector(state => state.friend.selectItem)
     const pendingInvitation = useSelector(state => state.friend.pendingInvitations)
-    console.log(selectItem)
 
     return (
         <>

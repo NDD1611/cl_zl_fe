@@ -10,6 +10,7 @@ import MenuItemFriend from '../components/friend/MenuItemFriend';
 import HeaderTabTwo from '../components/common/HeaderTabTwo';
 import TabThree from '../components/common/TabThree';
 import PendingInvitation from '../components/friend/PendingInvitation';
+import ListFriend from '../components/friend/ListFriend';
 
 const Friend = () => {
     const dispatch = useDispatch()
@@ -25,8 +26,6 @@ const Friend = () => {
         const userDetails = JSON.parse(localStorage.getItem('userDetails'))
         if (!userDetails) {
             logout()
-        } else {
-            socketConnectToServer(userDetails)
         }
     }, [])
     return (
@@ -39,6 +38,9 @@ const Friend = () => {
             <TabThree>
                 {
                     selectItem === 'friendInvitation' && <PendingInvitation></PendingInvitation>
+                }
+                {
+                    selectItem === 'listFriend' && <ListFriend></ListFriend>
                 }
             </TabThree>
         </div>

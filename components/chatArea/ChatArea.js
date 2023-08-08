@@ -46,8 +46,6 @@ const ChatArea = () => {
         setMessage(e.target.innerHTML)
         let heightCurrent = e.target.clientHeight
         if (e.target.clientHeight !== heightDivInputPre) {
-            console.log(heightDivInputPre, heightCurrent)
-            console.log(parseInt(heightRootChatArea) - heightCurrent)
             setHeightChatMessage(parseInt(heightRootChatArea) - heightCurrent - iconTopInput.current.clientHeight)
         }
     }
