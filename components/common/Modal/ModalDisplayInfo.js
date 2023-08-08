@@ -26,7 +26,6 @@ const ModalDisplayInfo = () => {
         let date = new Date(userDetails.birthday)
         setDay(date.getDate().toString())
         setMonth((date.getMonth() + 1).toString())
-        setYear(date.getFullYear().toString())
     }, [datefake])
 
     const userDetails = useSelector(state => state.auth.userDetails)

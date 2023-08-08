@@ -3,7 +3,7 @@ import styles from './MessageArea.module.scss'
 import { useSelector } from 'react-redux';
 import { useEffect, useState, useRef } from 'react';
 import Avatar from '../common/Avatar'
-import { addSameDayAndSameAuth } from '../../utils/message';
+import { addSameDayAndSameAuth, checkShowTimeInBottom } from '../../utils/message';
 import addPathToLinkAvatar from '../../utils/path'
 
 const MessageArea = () => {
@@ -25,6 +25,7 @@ const MessageArea = () => {
             if (conversationId === conversation._id) {
 
                 addSameDayAndSameAuth(conversation.messages)
+                checkShowTimeInBottom(conversation.messages)
 
                 setMessages(conversation.messages)
             }
@@ -57,7 +58,7 @@ const MessageArea = () => {
                         if (message.typeAnnounce === "acceptFriend") {
                             if (message.senderId === userDetails._id) {
                                 return (
-                                    <>
+                                    <div key={message._id}>
                                         {
                                             message.sameDay === false &&
                                             <div className={styles.dateShow}>
@@ -66,7 +67,7 @@ const MessageArea = () => {
                                                 </p>
                                             </div>
                                         }
-                                        <div key={message._id} className={styles.acceptFriend}>
+                                        <div className={styles.acceptFriend}>
                                             <Avatar
                                                 src={receiverUser ? addPathToLinkAvatar(receiverUser.avatar) : ''}
                                                 width={20}
@@ -76,11 +77,11 @@ const MessageArea = () => {
                                             </p>
                                             <p> đã đồng ý kết bạn</p>
                                         </div>
-                                    </>
+                                    </div>
                                 )
                             } else {
                                 return (
-                                    <>
+                                    <div key={message._id}>
                                         {
                                             message.sameDay === false &&
                                             <div className={styles.dateShow}>
@@ -89,7 +90,7 @@ const MessageArea = () => {
                                                 </p>
                                             </div>
                                         }
-                                        <div key={message._id} className={styles.acceptFriend}>
+                                        <div className={styles.acceptFriend}>
                                             <p> bạn vừa mới kết bạn với</p>
                                             <Avatar
                                                 src={receiverUser ? addPathToLinkAvatar(receiverUser.avatar) : ''}
@@ -99,13 +100,14 @@ const MessageArea = () => {
                                                 {receiverUser ? receiverUser.firstName + ' ' + receiverUser.lastName : ''}
                                             </p>
                                         </div>
-                                    </>
+                                    </div>
                                 )
                             }
-                        } else if (message.senderId === receiverUser._id) {
-                            if (message.sameAuth === false) {
+                        }
+                        if (message.senderId === receiverUser._id) {
+                            if (message.sameAuth === false || message.sameDay === false) {
                                 return (
-                                    <>
+                                    <div key={message._id}>
                                         {
                                             message.sameDay === false &&
                                             <div className={styles.dateShow}>
@@ -114,7 +116,7 @@ const MessageArea = () => {
                                                 </p>
                                             </div>
                                         }
-                                        <div key={message._id} className={styles.messageLeft} >
+                                        <div className={styles.messageLeft} >
                                             <Avatar
                                                 src={receiverUser ? addPathToLinkAvatar(receiverUser.avatar) : ''}
                                                 width={30}
@@ -122,14 +124,14 @@ const MessageArea = () => {
                                             <div className={styles.content}
                                                 style={{ maxWidth: maxWidthMessage ? maxWidthMessage : '' }}>
                                                 {message.content}
-                                                <div className={styles.footerDate}>{message.hourMinute}</div>
+                                                <div className={styles.footerDate}>{message.showTime ? message.hourMinute : ''}</div>
                                             </div>
                                         </div>
-                                    </>
+                                    </div>
                                 )
                             } else {
                                 return (
-                                    <>
+                                    <div key={message._id}>
                                         {
                                             message.sameDay === false &&
                                             <div className={styles.dateShow}>
@@ -138,32 +140,40 @@ const MessageArea = () => {
                                                 </p>
                                             </div>
                                         }
-                                        <div key={message._id}
+                                        <div
                                             className={`${styles.messageLeft} ${styles.sameAuth}`}
                                         >
                                             <div className={styles.content}
                                                 style={{ maxWidth: maxWidthMessage ? maxWidthMessage : '' }}>
                                                 {message.content}
-                                                <div className={styles.footerDate}>{message.hourMinute}</div>
+                                                <div className={styles.footerDate}>{message.showTime ? message.hourMinute : ''}</div>
                                             </div>
                                         </div>
-                                    </>
+                                    </div>
                                 )
                             }
                         }
                         else if (message.senderId === userDetails._id) {
                             return (
-                                <>
-                                    <div key={message._id} className={styles.messageRight}
+                                <div key={message._id}>
+                                    {
+                                        message.sameDay === false &&
+                                        <div className={styles.dateShow}>
+                                            <p>
+                                                {message.dateShow}
+                                            </p>
+                                        </div>
+                                    }
+                                    <div className={styles.messageRight}
                                     >
                                         <div className={styles.content}
                                             style={{ maxWidth: maxWidthMessage ? maxWidthMessage : '' }}
                                         >
                                             {message.content}
-                                            <div className={styles.footerDate}>{message.hourMinute}</div>
+                                            <div className={styles.footerDate}>{message.showTime ? message.hourMinute : ''}</div>
                                         </div>
                                     </div>
-                                </>
+                                </div>
                             )
                         }
                     })

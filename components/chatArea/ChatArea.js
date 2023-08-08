@@ -140,9 +140,9 @@ const ChatArea = () => {
                     >
                     </div>
                     <div className={styles.rightInputArea}>
-                        <button onClick={(e) => { handleSendMessage(e) }}>
-                            <FontAwesomeIcon icon={faPaperPlane} />
-                            {/* Gửi */}
+                        <button className={styles.btnSendMes} onClick={(e) => { handleSendMessage(e) }}>
+                            {/* <FontAwesomeIcon icon={faPaperPlane} /> */}
+                            Gửi
                         </button>
                     </div>
                 </div>

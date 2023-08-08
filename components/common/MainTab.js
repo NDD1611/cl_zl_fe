@@ -23,6 +23,7 @@ const MainTab = () => {
     const router = useRouter()
     const maintabSelect = useSelector(state => state.maintab.maintabSelect)
     const [userDetails, setUserDetails] = useState({})
+    const pendingInvitation = useSelector(state => state.friend.pendingInvitations)
 
     const avatarLink = useSelector(state => state.auth.userDetails.avatar)
 
@@ -81,6 +82,11 @@ const MainTab = () => {
                 </div>
                 <div className={`${styles.quare} ${maintabSelect === 'friend' ? styles.maintabSelect : ''}`} onClick={clickFriend}>
                     <FontAwesomeIcon icon={faAddressBook} />
+                    {
+                        pendingInvitation.length !== 0 && <div className={styles.quantityFriendInvitation}>
+                            <span>{pendingInvitation.length}</span>
+                        </div>
+                    }
                 </div>
             </div>
             <div className={styles.bottom}>

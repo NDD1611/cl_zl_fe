@@ -10,6 +10,7 @@ import { friendActions } from '../../redux/actions/friendAction'
 const MenuItemFriend = () => {
     const dispatch = useDispatch()
     const selectItem = useSelector(state => state.friend.selectItem)
+    const pendingInvitation = useSelector(state => state.friend.pendingInvitations)
     console.log(selectItem)
 
     return (
@@ -39,6 +40,11 @@ const MenuItemFriend = () => {
                         <FontAwesomeIcon icon={faEnvelopeOpen} />
                     </div>
                     <p>Lời mời kết bạn</p>
+                    {
+                        pendingInvitation.length !== 0 && <div className={styles.quantityFriendInvitation}>
+                            <span>{pendingInvitation.length}</span>
+                        </div>
+                    }
                 </div>
             </div>
         </>

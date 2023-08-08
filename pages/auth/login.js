@@ -8,22 +8,26 @@ import api from '../../api/api';
 import { useDispatch } from 'react-redux';
 import { authActions } from '../../redux/actions/authAction';
 import { useRouter } from 'next/router';
+import LoaderModal from '../../components/common/Modal/LoaderModal';
 
 const Login = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('12345678')
     const [typePassword, setTypePassword] = useState('password')
+    const [showLoader, setShowLoader] = useState(false)
 
     const dispatch = useDispatch()
     const router = useRouter()
 
     const login = async () => {
+        setShowLoader(true)
         const response = await api.login({ email, password })
         if (response.err) {
             console.log(response)
             toast.error(response?.exception?.response?.data, {
                 position: 'bottom-center'
             })
+            setShowLoader(false)
         } else {
             // toast.success('Bạn đã đăng nhập thành công')
             const data = response.data
@@ -33,11 +37,14 @@ const Login = () => {
                 type: authActions.SET_USER_DETAIL,
                 userDetails: data
             })
+            setShowLoader(false)
             router.push('/')
         }
     }
     return (
         <>
+
+            {showLoader ? <LoaderModal /> : ''}
             <div className={styles.mainLayout}>
                 <div className={styles.form}>
                     <div className={styles.title}>Đăng nhập</div>

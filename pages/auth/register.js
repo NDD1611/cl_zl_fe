@@ -10,6 +10,9 @@ import api from '../../api/api'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/navigation'
 
+import LoaderModal from '../../components/common/Modal/LoaderModal'
+
+
 const Register = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -32,20 +35,24 @@ const Register = () => {
 
     const [typeConfirmPassword, setTypeConfirmPassword] = useState('password')
     const [typePassword, setTypePassword] = useState('password')
+    const [showLoader, setShowLoader] = useState(false)
 
     const router = useRouter()
 
     const register = async () => {
+        setShowLoader(true)
         if (errEmail && errPassword && errConfirmPassword) {
             const response = await api.register({ email, password, firstName, lastName })
             if (response?.err) {
                 toast.error(response?.exception?.response?.data, {
                     position: 'bottom-center'
                 })
+                setShowLoader(false)
             } else {
                 toast.success(response?.data, {
                     position: 'bottom-center'
                 })
+                setShowLoader(false)
                 router.push('/auth/login')
             }
         }
@@ -98,6 +105,7 @@ const Register = () => {
 
     return (
         <>
+            {showLoader ? <LoaderModal /> : ''}
             <div className={styles.mainLayout}>
                 <div className={styles.form}>
                     <div className={styles.title}>Tạo tài khoản</div>

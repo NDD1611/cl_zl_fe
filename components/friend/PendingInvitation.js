@@ -2,24 +2,32 @@
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelopeOpen } from '@fortawesome/free-regular-svg-icons';
+import { useState } from 'react';
 
 import styles from './PendingInvitation.module.scss'
 import Avatar from '../common/Avatar';
 import addPathToLinkAvatar from '../../utils/path'
 import api from '../../api/api';
+import LoaderModal from '../common/Modal/LoaderModal';
 
 
 const PendingInvitation = () => {
     const pendingInvitations = useSelector(state => state.friend.pendingInvitations)
+    const [showLoader, setShowLoader] = useState(false)
 
     const handleRejectFriend = async (invitation) => {
+        setShowLoader(true)
         const response = await api.rejectInvitation(invitation)
+        setShowLoader(false)
     }
     const handleAcceptFriend = async (invitation) => {
+        setShowLoader(true)
         const response = await api.acceptInvitation({ invitationId: invitation._id })
+        setShowLoader(false)
     }
     return (
         <>
+            {showLoader ? <LoaderModal /> : ''}
             <div className={styles.PendingInvitation}>
                 <div className={styles.headerInvitation}>
                     <FontAwesomeIcon className={styles.headerIcon} icon={faEnvelopeOpen} />

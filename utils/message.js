@@ -41,3 +41,18 @@ export const addSameDayAndSameAuth = (messages) => {
         message.hourMinute = hourMinute
     }
 }
+
+export const checkShowTimeInBottom = (messages) => {
+
+    for (let i = 0; i < messages.length; i++) {
+        let message = messages[i]
+        let lastMessage = messages[i - 1]
+        if (message.sameDay === false) {
+            messages[i - 1].showTime = true
+        }
+        if (message.sameAuth === false) {
+            messages[i - 1].showTime = true
+        }
+    }
+    messages[messages.length - 1].showTime = true
+}

@@ -4,9 +4,33 @@
     padding: 0 25px;
     font-size: 16px;
     font-weight: 600;
+    position: relative;
 
     &:hover {
         background-color: #f7f7f8;
+    }
+
+
+    .quantityFriendInvitation {
+        position: absolute;
+        height: 100%;
+        width: 30px;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        top: 0;
+
+        span {
+            background-color: red;
+            padding: 5px;
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            text-align: center;
+            font-size: 13px;
+            color: #fff;
+        }
     }
 }
 

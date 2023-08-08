@@ -93,6 +93,16 @@
             justify-content: center;
             align-items: center;
 
+            .btnSendMes {
+                border: none;
+                color: rgb(106, 106, 214);
+                background-color: #fff;
+
+                &:hover {
+                    background-color: #ccc;
+                }
+            }
+
             svg {
                 font-size: 20px;
                 border: none;

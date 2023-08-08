@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { logout } from '../utils/auth';
 import { socketConnectToServer } from '../reltimeCommunication/socketConnection'
 import styles from './index.module.scss'
@@ -11,27 +11,31 @@ import ChatArea from '../components/chatArea/ChatArea';
 
 function DashBoasd() {
 
+  const [render, setRender] = useState(false)
+
   useEffect(() => {
     const userDetails = JSON.parse(localStorage.getItem('userDetails'))
     if (!userDetails) {
       logout()
     } else {
       socketConnectToServer(userDetails)
+      setRender(true)
     }
   }, [])
 
-  return (
-    <div className={styles.dashboash}>
-      <MainTab></MainTab>
-      <TabTwo>
-        <HeaderTabTwo></HeaderTabTwo>
-        <ConversationList ></ConversationList>
-      </TabTwo>
-      <TabThree>
-        <ChatArea></ChatArea>
-      </TabThree>
-    </div>
-  )
+  if (render)
+    return (
+      <div className={styles.dashboash}>
+        <MainTab></MainTab>
+        <TabTwo>
+          <HeaderTabTwo></HeaderTabTwo>
+          <ConversationList ></ConversationList>
+        </TabTwo>
+        <TabThree>
+          <ChatArea></ChatArea>
+        </TabThree>
+      </div>
+    )
 }
 
 
