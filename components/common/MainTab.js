@@ -22,17 +22,37 @@ const MainTab = () => {
     const [showToggle, setShowToggle] = useState(false)
     const router = useRouter()
     const maintabSelect = useSelector(state => state.maintab.maintabSelect)
-    const [userDetails, setUserDetails] = useState({})
+    const countAnnounceMessage = useSelector(state => state.maintab.countAnnounceMessage)
     const pendingInvitation = useSelector(state => state.friend.pendingInvitations)
+    const conversations = useSelector(state => state.conversation.conversations)
 
     const avatarLink = useSelector(state => state.auth.userDetails.avatar)
+
+    useEffect(() => {
+        if (conversations) {
+            const userDetails = JSON.parse(localStorage.getItem('userDetails'))
+            let userId = userDetails._id
+            let count = 0
+            conversations.forEach(conversation => {
+                let messages = conversation.messages
+                messages.forEach(message => {
+                    if (message.receiverId === userId && message.status === '2') {
+                        count++
+                    }
+                })
+            });
+            dispatch({
+                type: maintabActions.SET_COUNT_ANNOUNCE_MESSAGE,
+                countAnnounceMessage: count
+            })
+        }
+    }, [conversations])
 
     useEffect(() => {
         const handleDomClick = () => {
             setShowToggle(false)
         }
         const userFromLocalStoge = JSON.parse(localStorage.getItem('userDetails'))
-        setUserDetails(userFromLocalStoge)
 
         dispatch({
             type: authActions.SET_USER_DETAIL,
@@ -79,6 +99,13 @@ const MainTab = () => {
                 </div>
                 <div className={`${styles.quare} ${maintabSelect === 'chat' ? styles.maintabSelect : ''}`} onClick={clickChat}>
                     <FontAwesomeIcon icon={faComments} />
+                    {countAnnounceMessage != 0
+                        ?
+                        <div className={styles.quantityMessageReceived}>
+                            <span>{countAnnounceMessage}</span>
+                        </div>
+                        : ''
+                    }
                 </div>
                 <div className={`${styles.quare} ${maintabSelect === 'friend' ? styles.maintabSelect : ''}`} onClick={clickFriend}>
                     <FontAwesomeIcon icon={faAddressBook} />

@@ -1,7 +1,8 @@
 import { maintabActions } from "../actions/maintabAction"
 
 const initState = {
-    maintabSelect: 'chat'
+    maintabSelect: 'chat',
+    countAnnounceMessage: 0,
 }
 
 const reducer = (state = initState, action) => {
@@ -10,6 +11,11 @@ const reducer = (state = initState, action) => {
             return {
                 ...state,
                 maintabSelect: action.maintabSelect
+            }
+        case maintabActions.SET_COUNT_ANNOUNCE_MESSAGE:
+            return {
+                ...state,
+                countAnnounceMessage: action.countAnnounceMessage
             }
         default:
             return state

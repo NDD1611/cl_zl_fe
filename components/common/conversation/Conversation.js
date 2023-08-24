@@ -5,15 +5,39 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import addPathToLinkAvatar from '../../../utils/path'
 import { conversationActions } from '../../../redux/actions/conversationAction';
-
+import { updateReceivedMessageStatus } from '../../../reltimeCommunication/socketConnection';
+import { maintabActions } from '../../../redux/actions/maintabAction';
 
 const Conversation = ({ conversation }) => {
     const userDetails = useSelector(state => state.auth.userDetails)
+    const conversations = useSelector(state => state.conversation.conversations)
+    const countAnnounceMessage = useSelector(state => state.maintab.countAnnounceMessage)
     const [friend, setFriend] = useState({})
     const [message, setMessage] = useState('')
+    const [countMessageReceived, setCountMessageReceived] = useState(0)
 
     const dispatch = useDispatch()
 
+    useEffect(() => {
+        // update received message status
+        // update in redux 
+        if (friend && userDetails) {
+            dispatch({
+                type: conversationActions.SET_STATUS_RECEIVED_FOR_MESSAGES,
+                conversationId: conversation._id,
+                receiverId: userDetails._id,
+                senderId: friend._id
+            })
+
+            // update in sender user
+            updateReceivedMessageStatus({
+                conversationId: conversation._id,
+                receiverId: userDetails._id,
+                senderId: friend._id
+            })
+        }
+
+    }, [friend])
     useEffect(() => {
         const { participants, messages } = conversation
         if (participants) {
@@ -33,9 +57,23 @@ const Conversation = ({ conversation }) => {
                 setMessage(mesTemp)
             }
         } else {
-            setMessage(lastMessage.content)
+            if (lastMessage.senderId === userDetails._id) {
+                setMessage('Bạn: ' + lastMessage.content)
+            } else {
+                setMessage(lastMessage.content)
+            }
         }
-    }, [message, conversation])
+
+
+        let listMessages = conversation.messages
+        let count = 0
+        for (let message of listMessages) {
+            if (message.status && message.status == 2 && message.receiverId == userDetails._id) {
+                count++
+            }
+        }
+        setCountMessageReceived(count)
+    }, [message, conversation, conversations])
 
     const handleChooseConversation = () => {
         localStorage.setItem('receiverUser', JSON.stringify(friend))
@@ -60,7 +98,11 @@ const Conversation = ({ conversation }) => {
                 </div>
             </div>
             <div className={styles.right}>
-
+                {
+                    countMessageReceived !== 0 ? <pan className={styles.annouceMessage}>
+                        {countMessageReceived}
+                    </pan> : ''
+                }
             </div>
         </div>
     )

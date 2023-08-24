@@ -30,6 +30,7 @@ export const socketConnectToServer = (userDetails) => {
             //     userDetails: response.data
             // })
             // socketConnectToServer(userDetails)
+            logout()
         } else if (err.message !== 'UserConnected') {
             // alert('Vui lòng đăng nhập lại.')
             logout()
@@ -58,8 +59,57 @@ export const socketConnectToServer = (userDetails) => {
             listFriends: listFriends
         })
     })
+    socket.on('update-watched-status-message-in-redux-store', (data) => {
+        const { senderId, receiverId, conversationId } = data
+        store.dispatch({
+            type: conversationActions.SET_STATUS_WATCHED_FOR_MESSAGES,
+            senderId,
+            receiverId,
+            conversationId
+        })
+    })
+    socket.on('update-sent-status-message-in-redux-store', (data) => {
+        const { senderId, receiverId, conversationId } = data
+        store.dispatch({
+            type: conversationActions.SET_STATUS_SENT_FOR_MESSAGES,
+            senderId,
+            receiverId,
+            conversationId
+        })
+    })
+    socket.on('update-received-status-message-in-redux-store', (data) => {
+        const { senderId, receiverId, conversationId } = data
+        store.dispatch({
+            type: conversationActions.SET_STATUS_RECEIVED_FOR_MESSAGES,
+            senderId,
+            receiverId,
+            conversationId
+        })
+    })
+    socket.on('all-active-user', (data) => {
+        const { activeUsers } = data
+        store.dispatch({
+            type: authActions.SET_ACTIVE_USER,
+            activeUsers: activeUsers
+        })
+    })
 }
 
 export const sendMessage = (data) => {
     socket.emit('send-message', data)
+}
+
+export const updateStatusMessage = ({ receiverId, senderId, conversationId }) => {
+    socket.emit('message-watched', {
+        receiverId,
+        senderId,
+        conversationId
+    })
+}
+export const updateReceivedMessageStatus = ({ receiverId, senderId, conversationId }) => {
+    socket.emit('message-received', {
+        receiverId,
+        senderId,
+        conversationId
+    })
 }

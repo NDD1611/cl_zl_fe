@@ -12,7 +12,7 @@ import LoaderModal from '../../components/common/Modal/LoaderModal';
 
 const Login = () => {
     const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('12345678')
+    const [password, setPassword] = useState('')
     const [typePassword, setTypePassword] = useState('password')
     const [showLoader, setShowLoader] = useState(false)
 

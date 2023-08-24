@@ -1,5 +1,5 @@
 
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useState, useEffect, useRef } from 'react';
 import styles from './ChatArea.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,9 +8,11 @@ import { sendMessage } from '../../reltimeCommunication/socketConnection';
 import Avatar from '../common/Avatar';
 import addPathToLinkAvatar from '../../utils/path';
 import MessageArea from './MessageArea';
+import { conversationActions } from '../../redux/actions/conversationAction';
 
 const ChatArea = () => {
     const conversationSelected = useSelector(state => state.conversation.conversationSelected)
+    const activeUsers = useSelector(state => state.auth.activeUsers)
     const [receiverUser, setReceiverUser] = useState({})
     const [userDetails, setUserDetails] = useState({})
     const [message, setMessage] = useState('')
@@ -19,11 +21,15 @@ const ChatArea = () => {
     const [heightRootChatMessage, setHeightRootChatMessage] = useState('')
     const [heightRootChatArea, setHeightRootChatArea] = useState('')
     const [heightDivInputPre, setHeightDivInputPre] = useState(38)
+    const [showActiveUser, setShowActiveUser] = useState(false)
+    const [receiverUserId, setReceiverUserId] = useState('')
 
     const chatAreaElement = useRef()
     const chatMessageElement = useRef()
     const chatInputElement = useRef()
     const iconTopInput = useRef()
+
+    const dispatch = useDispatch()
 
     useEffect(() => {
         let widthInput = parseInt(chatAreaElement.current.clientWidth * 0.75) + 'px'
@@ -34,10 +40,14 @@ const ChatArea = () => {
     }, [])
 
     useEffect(() => {
-        setReceiverUser(JSON.parse(localStorage.getItem('receiverUser')))
-        setMessage('')
-        if (chatInputElement.current) {
-            chatInputElement.current.innerHTML = ''
+        let receiverUser = JSON.parse(localStorage.getItem('receiverUser'))
+        if (receiverUser) {
+            setReceiverUser(receiverUser)
+            setReceiverUserId(receiverUser._id)
+            setMessage('')
+            if (chatInputElement.current) {
+                chatInputElement.current.innerHTML = ''
+            }
         }
     }, [conversationSelected])
 
@@ -64,8 +74,18 @@ const ChatArea = () => {
                 receiverId,
                 content: message.replace('&nbsp;', ''),
                 type: 'text',
-                date: new Date()
+                date: new Date(),
+                status: 0     //0: dang gui, 1: da gui, 2: da nhan, 3: da xem.
             }
+
+            let conversationCurrent = conversationSelected
+            conversationCurrent.messages[conversationCurrent.messages.length - 1].showTime = false
+            conversationCurrent.messages.push(data)
+            dispatch({
+                type: conversationActions.SEND_NEW_MESSAGE,
+                newConversation: conversationCurrent
+            })
+
             sendMessage(data)
         }
     }
@@ -91,9 +111,11 @@ const ChatArea = () => {
                                 src={addPathToLinkAvatar(receiverUser ? receiverUser.avatar : '')}
                                 width={50}
                             />
+                            {activeUsers.includes(receiverUserId) ? <span className={styles.iconUserOnline}></span> : ''}
                         </div>
                         <div className={styles.headerName}>
-                            <p> {receiverUser ? receiverUser.firstName + ' ' + receiverUser.lastName : ''}</p>
+                            <p className={styles.name}> {receiverUser ? receiverUser.firstName + ' ' + receiverUser.lastName : ''}</p>
+                            {activeUsers.includes(receiverUserId) ? <p className={styles.minuteActive}>vừa truy cập</p> : ''}
                         </div>
                     </div>
                     <div></div>

@@ -41,10 +41,11 @@ export const addSameDayAndSameAuth = (messages) => {
     }
 }
 
-export const checkShowTimeInBottom = (messages) => {
+export const checkShowTimeAndStatusInBottom = (messages) => {
 
     for (let i = 0; i < messages.length; i++) {
         let message = messages[i]
+        messages[i].showStatus = false
         let lastMessage = messages[i - 1]
         if (message.sameDay === false) {
             messages[i - 1].showTime = true
@@ -54,4 +55,18 @@ export const checkShowTimeInBottom = (messages) => {
         }
     }
     messages[messages.length - 1].showTime = true
+    messages[messages.length - 1].showStatus = true
+    let status = messages[messages.length - 1].status
+    if (status == 0) {
+        messages[messages.length - 1].statusText = 'đang gửi'
+    }
+    if (status == 1) {
+        messages[messages.length - 1].statusText = 'đã gửi'
+    }
+    if (status == 2) {
+        messages[messages.length - 1].statusText = 'đã nhận'
+    }
+    if (status == 3) {
+        messages[messages.length - 1].statusText = 'đã xem'
+    }
 }

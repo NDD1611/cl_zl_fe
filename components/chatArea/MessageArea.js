@@ -1,10 +1,12 @@
 
 import styles from './MessageArea.module.scss'
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState, useRef } from 'react';
 import Avatar from '../common/Avatar'
-import { addSameDayAndSameAuth, checkShowTimeInBottom } from '../../utils/message';
+import { addSameDayAndSameAuth, checkShowTimeAndStatusInBottom } from '../../utils/message';
 import addPathToLinkAvatar from '../../utils/path'
+import { updateStatusMessage } from '../../reltimeCommunication/socketConnection';
+import { conversationActions } from '../../redux/actions/conversationAction';
 
 const MessageArea = () => {
     const conversationSelected = useSelector(state => state.conversation.conversationSelected)
@@ -17,15 +19,17 @@ const MessageArea = () => {
 
     const messageAreaElement = useRef()
 
+    const dispatch = useDispatch()
+
     useEffect(() => {
         setReceiverUser(JSON.parse(localStorage.getItem('receiverUser')))
         setUserDetails(JSON.parse(localStorage.getItem('userDetails')))
         const conversationId = conversationSelected._id
+
         conversations.forEach((conversation) => {
             if (conversationId === conversation._id) {
-
                 addSameDayAndSameAuth(conversation.messages)
-                checkShowTimeInBottom(conversation.messages)
+                checkShowTimeAndStatusInBottom(conversation.messages)
 
                 setMessages(conversation.messages)
             }
@@ -34,11 +38,35 @@ const MessageArea = () => {
             setMaxWidthMessage((messageAreaElement.current.clientWidth * 0.75) + 'px')
             messageAreaElement.current.scrollTop = messageAreaElement.current.scrollHeight
         }
+
     }, [conversationSelected, conversations])
 
+    // useEffect(() => {
+    //     dispatch({
+    //         type: conversationActions.SET_STATUS_WATCHED_FOR_MESSAGES,
+    //         conversationId: conversationSelected._id
+    //     })
+    // }, [conversationSelected])
     useEffect(() => {
         if (messageAreaElement.current) {
             messageAreaElement.current.scrollTop = messageAreaElement.current.scrollHeight
+        }
+        if (receiverUser && userDetails) {
+            // emit update sender
+            updateStatusMessage({
+                receiverId: userDetails._id,
+                senderId: receiverUser._id,
+                conversationId: conversationSelected._id
+            })
+
+            //update myself
+            dispatch({
+                type: conversationActions.SET_STATUS_WATCHED_FOR_MESSAGES,
+                receiverId: userDetails._id,
+                senderId: receiverUser._id,
+                conversationId: conversationSelected._id
+            })
+
         }
     }, [messages])
     return (
@@ -54,7 +82,6 @@ const MessageArea = () => {
                 }
                 {
                     messages && messages.map((message) => {
-                        // console.log(message)
                         if (message.typeAnnounce === "acceptFriend") {
                             if (message.senderId === userDetails._id) {
                                 return (
@@ -144,7 +171,8 @@ const MessageArea = () => {
                                             className={`${styles.messageLeft} ${styles.sameAuth}`}
                                         >
                                             <div className={styles.content}
-                                                style={{ maxWidth: maxWidthMessage ? maxWidthMessage : '' }}>
+                                                style={{ maxWidth: maxWidthMessage ? maxWidthMessage : '' }}
+                                            >
                                                 {message.content}
                                                 <div className={styles.footerDate}>{message.showTime ? message.hourMinute : ''}</div>
                                             </div>
@@ -152,8 +180,7 @@ const MessageArea = () => {
                                     </div>
                                 )
                             }
-                        }
-                        else if (message.senderId === userDetails._id) {
+                        } else if (message.senderId === userDetails._id) {
                             return (
                                 <div key={message._id}>
                                     {
@@ -172,6 +199,9 @@ const MessageArea = () => {
                                             {message.content}
                                             <div className={styles.footerDate}>{message.showTime ? message.hourMinute : ''}</div>
                                         </div>
+                                    </div>
+                                    <div className={styles.status}>
+                                        {message.showStatus ? <span className={styles.contentStatus}>{message.statusText}</span> : ''}
                                     </div>
                                 </div>
                             )

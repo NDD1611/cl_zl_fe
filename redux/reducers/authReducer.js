@@ -2,7 +2,8 @@
 import { authActions } from "../actions/authAction"
 
 const initState = {
-    userDetails: {}
+    userDetails: {},
+    activeUsers: []
 }
 
 const reducer = (state = initState, action) => {
@@ -11,6 +12,11 @@ const reducer = (state = initState, action) => {
             return {
                 ...state,
                 userDetails: action.userDetails
+            }
+        case authActions.SET_ACTIVE_USER:
+            return {
+                ...state,
+                activeUsers: action.activeUsers
             }
         default:
             return state
