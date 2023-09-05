@@ -8,6 +8,7 @@ import '../node_modules/@fortawesome/fontawesome-svg-core/styles.css'
 config.autoAddCss = false
 import 'normalize.css/normalize.css';
 
+import { tabsActions } from '../redux/actions/tabsAction';
 import 'react-toastify/dist/ReactToastify.css';
 import { useEffect } from 'react';
 import { socketConnectToServer } from '../reltimeCommunication/socketConnection'
@@ -21,6 +22,7 @@ export default function app({ Component, pageProps }) {
             socketConnectToServer(userDetails)
         }
     })
+
     return <Provider store={store}>
         <Component {...pageProps} />
         <ToastContainer />

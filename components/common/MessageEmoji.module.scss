@@ -1,0 +1,8 @@
+@import '../../styles/responsive.module.scss';
+
+
+.MessageEmoji {
+    @include mobile {
+        // color: red;
+    }
+}

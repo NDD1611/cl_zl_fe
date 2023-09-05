@@ -15,10 +15,8 @@ const Login = () => {
     const [password, setPassword] = useState('')
     const [typePassword, setTypePassword] = useState('password')
     const [showLoader, setShowLoader] = useState(false)
-
     const dispatch = useDispatch()
     const router = useRouter()
-
     const login = async () => {
         setShowLoader(true)
         const response = await api.login({ email, password })
@@ -31,7 +29,6 @@ const Login = () => {
             // toast.success('Bạn đã đăng nhập thành công')
             const data = response.data
             localStorage.setItem('userDetails', JSON.stringify(data))
-
             dispatch({
                 type: authActions.SET_USER_DETAIL,
                 userDetails: data
@@ -42,7 +39,6 @@ const Login = () => {
     }
     return (
         <>
-
             {showLoader ? <LoaderModal /> : ''}
             <div className={styles.mainLayout}>
                 <div className={styles.form}>
@@ -63,9 +59,7 @@ const Login = () => {
                         type={typePassword}
                         setTypeInput={setTypePassword}
                     />
-
                     <button onClick={login} className={styles.btnCreateAccount}>Đăng nhập</button>
-
                     <div className={styles.footer}>Bạn đã có tài khoản?
                         <Link className={styles.link} href='/auth/register'>  Đăng kí</Link>
                     </div>

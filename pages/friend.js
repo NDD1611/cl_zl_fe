@@ -2,9 +2,8 @@ import { useEffect } from 'react';
 import { logout } from '../utils/auth';
 import styles from './friend.module.scss'
 import MainTab from '../components/common/MainTab';
-import { socketConnectToServer } from '../reltimeCommunication/socketConnection'
 import { useDispatch, useSelector } from 'react-redux';
-import { maintabActions } from '../redux/actions/maintabAction';
+import { tabsActions } from '../redux/actions/tabsAction';
 import TabTwo from '../components/common/tabTwo';
 import MenuItemFriend from '../components/friend/MenuItemFriend';
 import HeaderTabTwo from '../components/common/HeaderTabTwo';
@@ -19,7 +18,7 @@ const Friend = () => {
     useEffect(() => {
         if (window.location.pathname === '/friend') {
             dispatch({
-                type: maintabActions.SET_MAIN_TAB,
+                type: tabsActions.SET_MAIN_TAB,
                 maintabSelect: 'friend'
             })
         }

@@ -1,20 +1,23 @@
 
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelopeOpen } from '@fortawesome/free-regular-svg-icons';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
 import styles from './PendingInvitation.module.scss'
 import Avatar from '../common/Avatar';
 import addPathToLinkAvatar from '../../utils/path'
 import api from '../../api/api';
 import LoaderModal from '../common/Modal/LoaderModal';
+import { tabsActions } from '../../redux/actions/tabsAction';
 
 
 const PendingInvitation = () => {
     const pendingInvitations = useSelector(state => state.friend.pendingInvitations)
     const [showLoader, setShowLoader] = useState(false)
-
+    const [showBackbutton, setShowBackButton] = useState(false)
+    const dispatch = useDispatch()
     const handleRejectFriend = async (invitation) => {
         setShowLoader(true)
         const response = await api.rejectInvitation(invitation)
@@ -25,11 +28,31 @@ const PendingInvitation = () => {
         const response = await api.acceptInvitation({ invitationId: invitation._id })
         setShowLoader(false)
     }
+    useEffect(() => {
+        if (window.innerWidth < 800) {
+            setShowBackButton(true)
+        } else {
+            setShowBackButton(false)
+        }
+    }, [])
+    const showTabTwoAndCloseTabThree = () => {
+        dispatch({
+            type: tabsActions.SET_CLOSE_TAB_THREE
+        })
+        dispatch({
+            type: tabsActions.SET_SHOW_TAB_TWO
+        })
+    }
     return (
         <>
             {showLoader ? <LoaderModal /> : ''}
             <div className={styles.PendingInvitation}>
                 <div className={styles.headerInvitation}>
+                    {showBackbutton &&
+                        <div className={styles.backButton} onClick={showTabTwoAndCloseTabThree}>
+                            <FontAwesomeIcon icon={faChevronLeft} />
+                        </div>
+                    }
                     <FontAwesomeIcon className={styles.headerIcon} icon={faEnvelopeOpen} />
                     Lời mời kết bạn
                 </div>

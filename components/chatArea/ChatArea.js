@@ -3,26 +3,30 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useState, useEffect, useRef } from 'react';
 import styles from './ChatArea.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import { faPaperPlane, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { faFaceSmile } from '@fortawesome/free-regular-svg-icons';
 import { sendMessage } from '../../reltimeCommunication/socketConnection';
 import Avatar from '../common/Avatar';
 import addPathToLinkAvatar from '../../utils/path';
 import MessageArea from './MessageArea';
 import { conversationActions } from '../../redux/actions/conversationAction';
+import dynamic from 'next/dynamic';
+import { tabsActions } from '../../redux/actions/tabsAction';
+
+
+const EmojiPicker = dynamic(
+    () => {
+        return import('emoji-picker-react');
+    },
+    { ssr: false }
+);
 
 const ChatArea = () => {
     const conversationSelected = useSelector(state => state.conversation.conversationSelected)
     const activeUsers = useSelector(state => state.auth.activeUsers)
     const [receiverUser, setReceiverUser] = useState({})
     const [userDetails, setUserDetails] = useState({})
-    const [message, setMessage] = useState('')
-    const [widthDivInput, setWidthDivInput] = useState('')
-    const [heightChatMessage, setHeightChatMessage] = useState('')
-    const [heightRootChatMessage, setHeightRootChatMessage] = useState('')
-    const [heightRootChatArea, setHeightRootChatArea] = useState('')
-    const [heightDivInputPre, setHeightDivInputPre] = useState(38)
-    const [showActiveUser, setShowActiveUser] = useState(false)
-    const [receiverUserId, setReceiverUserId] = useState('')
+    const [showEmoji, setShowEmoji] = useState(false)
 
     const chatAreaElement = useRef()
     const chatMessageElement = useRef()
@@ -32,61 +36,79 @@ const ChatArea = () => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        let widthInput = parseInt(chatAreaElement.current.clientWidth * 0.75) + 'px'
-        setWidthDivInput(widthInput)
-        setHeightRootChatArea(chatAreaElement.current.clientHeight - 10)
-        setHeightRootChatMessage(chatAreaElement.current.clientHeight * 0.95)
         setUserDetails(JSON.parse(localStorage.getItem('userDetails')))
+
+        document.addEventListener('click', (e) => {
+            setShowEmoji(false)
+        })
     }, [])
 
     useEffect(() => {
         let receiverUser = JSON.parse(localStorage.getItem('receiverUser'))
         if (receiverUser) {
             setReceiverUser(receiverUser)
-            setReceiverUserId(receiverUser._id)
-            setMessage('')
             if (chatInputElement.current) {
                 chatInputElement.current.innerHTML = ''
+                chatInputElement.current.focus()
             }
         }
     }, [conversationSelected])
 
-    const handleInputChange = (e) => {
-        setHeightDivInputPre(e.target.clientHeight)
-        setMessage(e.target.innerHTML)
-        let heightCurrent = e.target.clientHeight
-        if (e.target.clientHeight !== heightDivInputPre) {
-            setHeightChatMessage(parseInt(heightRootChatArea) - heightCurrent - iconTopInput.current.clientHeight)
+    const handleEmojiClick = (event) => {
+        let divInput = document.getElementById('divInput')
+        if (divInput) {
+            let unifiedEmoji = event.unified
+            let imgElement = document.createElement('img')
+            imgElement.src = `https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64/${unifiedEmoji}.png`
+            imgElement.className = styles.emojiDivInput
+            divInput.appendChild(imgElement)
         }
     }
-    const handleSendMessage = (e) => {
-        setMessage('')
-        chatInputElement.current.innerHTML = ''
-        setHeightDivInputPre(38)
-        chatInputElement.current.focus()
-        setHeightChatMessage(heightRootChatMessage)
 
-        let senderId = userDetails._id
-        let receiverId = receiverUser._id
-        if (message.length && message !== '&nbsp;') {
-            let data = {
-                senderId,
-                receiverId,
-                content: message.replace('&nbsp;', ''),
-                type: 'text',
-                date: new Date(),
-                status: 0     //0: dang gui, 1: da gui, 2: da nhan, 3: da xem.
+    const handleSendMessage = () => {
+        console.log('send message')
+        let divInputElement = document.getElementById('divInput')
+        if (divInputElement) {
+            let message = ''
+            if (divInputElement.childNodes) {
+                let childNodes = divInputElement.childNodes
+                for (let index in childNodes) {
+                    let node = childNodes[index]
+                    if (node.nodeName === '#text') {
+                        message = message + node.textContent
+                    } else if (node.nodeName === 'IMG') {
+                        let src = node.src
+                        let unified = src.slice(src.length - 9, src.length - 4)
+                        let emojiEncoded = '&#x' + unified + ';'
+                        message = message + emojiEncoded
+                    }
+                }
             }
 
-            let conversationCurrent = conversationSelected
-            conversationCurrent.messages[conversationCurrent.messages.length - 1].showTime = false
-            conversationCurrent.messages.push(data)
-            dispatch({
-                type: conversationActions.SEND_NEW_MESSAGE,
-                newConversation: conversationCurrent
-            })
+            let senderId = userDetails._id
+            let receiverId = receiverUser._id
+            if (message.length && message !== '&nbsp;') {
+                let data = {
+                    senderId,
+                    receiverId,
+                    content: message.replace('&nbsp;', ''),
+                    type: 'text',
+                    date: new Date(),
+                    status: 0     //0: dang gui, 1: da gui, 2: da nhan, 3: da xem.
+                }
 
-            sendMessage(data)
+                let conversationCurrent = conversationSelected
+                conversationCurrent.messages[conversationCurrent.messages.length - 1].showTime = false
+                conversationCurrent.messages.push(data)
+                dispatch({
+                    type: conversationActions.SEND_NEW_MESSAGE,
+                    newConversation: conversationCurrent
+                })
+                sendMessage(data)
+
+            }
+            chatInputElement.current.focus()
+            chatInputElement.current.innerHTML = ''
         }
     }
     const handleKeyDown = (e) => {
@@ -94,38 +116,67 @@ const ChatArea = () => {
             e.preventDefault()
             handleSendMessage()
         }
+        setWidthHeihgtChatArea()
+    }
+    const setWidthHeihgtChatArea = () => {
+        console.log(window.innerHeight)
+        let chatMesageArea = document.getElementById('chatMessageArea')
+        let inputArea = document.getElementById('inputArea')
+        if (chatMesageArea && inputArea) {
+            chatMesageArea.style.height = `${window.innerHeight - inputArea.clientHeight - 5}px`
+        }
+    }
+
+    const handleShowEmojiPicker = (e) => {
+        e.stopPropagation()
+        setShowEmoji(!showEmoji)
+    }
+
+    const handleBackConversation = () => {
+        dispatch({
+            type: tabsActions.SET_SHOW_TAB_TWO
+        })
+        dispatch({
+            type: tabsActions.SET_CLOSE_TAB_THREE
+        })
     }
 
     return (
         <div className={styles.ChatArea} ref={chatAreaElement}>
-
             {
                 conversationSelected === null && <div className={styles.chatOnboard}>Chọn cuộc hội thoại để chat</div>
             }
             {
                 conversationSelected &&
                 <div className={styles.headerChatArea}>
-                    <div className={styles.headerLeft}>
-                        <div className={styles.headerAvatar}>
-                            <Avatar
-                                src={addPathToLinkAvatar(receiverUser ? receiverUser.avatar : '')}
-                                width={50}
-                            />
-                            {activeUsers.includes(receiverUserId) ? <span className={styles.iconUserOnline}></span> : ''}
-                        </div>
-                        <div className={styles.headerName}>
-                            <p className={styles.name}> {receiverUser ? receiverUser.firstName + ' ' + receiverUser.lastName : ''}</p>
-                            {activeUsers.includes(receiverUserId) ? <p className={styles.minuteActive}>vừa truy cập</p> : ''}
+                    <div className={styles.headerContent}>
+                        <div className={styles.headerLeft}>
+                            {
+                                window.innerWidth < 800 &&
+                                <div className={styles.backButton} onClick={handleBackConversation}>
+                                    <FontAwesomeIcon icon={faChevronLeft} />
+                                </div>
+                            }
+                            <div className={styles.headerAvatar}>
+                                <Avatar
+                                    src={addPathToLinkAvatar(receiverUser ? receiverUser.avatar : '')}
+                                    width={50}
+                                />
+                                {activeUsers.includes(receiverUser._id) ? <span className={styles.iconUserOnline}></span> : ''}
+                            </div>
+                            <div className={styles.headerName}>
+                                <p className={styles.name}> {receiverUser ? receiverUser.firstName + ' ' + receiverUser.lastName : ''}</p>
+                                {activeUsers.includes(receiverUser._id) ? <p className={styles.minuteActive}>vừa truy cập</p> : ''}
+                            </div>
                         </div>
                     </div>
-                    <div></div>
                 </div>
             }
             {
                 conversationSelected &&
                 <div
                     ref={chatMessageElement}
-                    style={{ height: heightChatMessage }}
+                    // style={{ height: heightChatMessage }}
                     id='chatMessageArea'
                     className={styles.chatMessage}
                 >
@@ -139,31 +190,46 @@ const ChatArea = () => {
                 }}
             >
                 {/* icon send file */}
-
             </div>
             {
                 conversationSelected &&
                 <div id='inputArea' className={styles.inputArea} >
                     <div
-                        ref={chatInputElement}
-                        style={{
-                            width: widthDivInput,
-                            overflowY: heightDivInputPre > 200 ? 'scroll' : '',
+                        className={styles.containerEmojiPicker}
+                        onClick={(e) => {
+                            e.stopPropagation()
                         }}
-                        id='divInput' className={styles.divInputFake}
-                        contentEditable='true'
+                    >
+                        {
+                            showEmoji ? <EmojiPicker
+                                onEmojiClick={handleEmojiClick}
+                            /> : ''
+                        }
+                    </div>
+                    <div
+                        ref={chatInputElement}
+                        id='divInput'
+                        className={styles.divInputFake}
+                        contentEditable={true}
+                        suppressContentEditableWarning={true}
                         data-text={
                             receiverUser ? 'Nhập tin nhắn tới ' + receiverUser.firstName + ' ' + receiverUser.lastName : ''
                         }
                         onKeyDown={(e) => { handleKeyDown(e) }}
-                        onInput={(e) => { handleInputChange(e) }}
                     >
+
+
                     </div>
                     <div className={styles.rightInputArea}>
-                        <button className={styles.btnSendMes} onClick={(e) => { handleSendMessage(e) }}>
-                            {/* <FontAwesomeIcon icon={faPaperPlane} /> */}
-                            Gửi
+                        <button className={styles.btnSendMes} onClick={handleSendMessage}>
+                            <FontAwesomeIcon icon={faPaperPlane} />
                         </button>
+                        <div
+                            className={styles.buttonShowEmoji}
+                            onClick={handleShowEmojiPicker}
+                        >
+                            <FontAwesomeIcon icon={faFaceSmile} />
+                        </div>
                     </div>
                 </div>
             }

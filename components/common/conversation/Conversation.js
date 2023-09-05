@@ -6,12 +6,13 @@ import { useEffect, useState } from 'react';
 import addPathToLinkAvatar from '../../../utils/path'
 import { conversationActions } from '../../../redux/actions/conversationAction';
 import { updateReceivedMessageStatus } from '../../../reltimeCommunication/socketConnection';
-import { maintabActions } from '../../../redux/actions/maintabAction';
+import { tabsActions } from '../../../redux/actions/tabsAction';
+import MessageEmoji from '../MessageEmoji'
 
 const Conversation = ({ conversation }) => {
     const userDetails = useSelector(state => state.auth.userDetails)
     const conversations = useSelector(state => state.conversation.conversations)
-    const countAnnounceMessage = useSelector(state => state.maintab.countAnnounceMessage)
+    const countAnnounceMessage = useSelector(state => state.tabs.countAnnounceMessage)
     const [friend, setFriend] = useState({})
     const [message, setMessage] = useState('')
     const [countMessageReceived, setCountMessageReceived] = useState(0)
@@ -64,7 +65,6 @@ const Conversation = ({ conversation }) => {
             }
         }
 
-
         let listMessages = conversation.messages
         let count = 0
         for (let message of listMessages) {
@@ -81,6 +81,15 @@ const Conversation = ({ conversation }) => {
             type: conversationActions.SET_SELECT_CONVERSATION,
             conversationSelected: conversation
         })
+
+        if (window.innerWidth < 800) {
+            dispatch({
+                type: tabsActions.SET_CLOSE_TAB_TWO
+            })
+            dispatch({
+                type: tabsActions.SET_SHOW_TAB_THREE
+            })
+        }
     }
 
     return (
@@ -94,7 +103,9 @@ const Conversation = ({ conversation }) => {
             <div className={styles.center}>
                 <div>
                     <div className={styles.name}>{friend.firstName + ' ' + friend.lastName}</div>
-                    <div className={styles.message}>{message}</div>
+                    <div className={styles.message}>
+                        <MessageEmoji text={message} />
+                    </div>
                 </div>
             </div>
             <div className={styles.right}>

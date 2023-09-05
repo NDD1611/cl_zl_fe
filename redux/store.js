@@ -4,7 +4,7 @@ import thunk from 'redux-thunk';
 
 import todoReducer from "./reducers/todoReducer";
 import authReducer from './reducers/authReducer'
-import maintabReducer from './reducers/maintabReducer'
+import tabsReducer from './reducers/tabsReducer'
 import modalReducer from './reducers/modalReducer'
 import friendReducer from './reducers/friendReducer'
 import conversationreducer from './reducers/conversationReducer'
@@ -12,7 +12,7 @@ import conversationreducer from './reducers/conversationReducer'
 const rootReducer = combineReducers({
     todo: todoReducer,
     auth: authReducer,
-    maintab: maintabReducer,
+    tabs: tabsReducer,
     modal: modalReducer,
     friend: friendReducer,
     conversation: conversationreducer

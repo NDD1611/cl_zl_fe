@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComments, faAddressBook } from '@fortawesome/free-regular-svg-icons';
 import { faGear } from '@fortawesome/free-solid-svg-icons';
 import { useSelector, useDispatch } from 'react-redux';
-import { maintabActions } from '../../redux/actions/maintabAction';
+import { tabsActions } from '../../redux/actions/tabsAction';
 import { useRouter } from 'next/router';
 import { logout } from '../../utils/auth'
 import { useState, useEffect } from 'react';
@@ -21,8 +21,8 @@ const MainTab = () => {
     const dispatch = useDispatch()
     const [showToggle, setShowToggle] = useState(false)
     const router = useRouter()
-    const maintabSelect = useSelector(state => state.maintab.maintabSelect)
-    const countAnnounceMessage = useSelector(state => state.maintab.countAnnounceMessage)
+    const maintabSelect = useSelector(state => state.tabs.maintabSelect)
+    const countAnnounceMessage = useSelector(state => state.tabs.countAnnounceMessage)
     const pendingInvitation = useSelector(state => state.friend.pendingInvitations)
     const conversations = useSelector(state => state.conversation.conversations)
 
@@ -42,7 +42,7 @@ const MainTab = () => {
                 })
             });
             dispatch({
-                type: maintabActions.SET_COUNT_ANNOUNCE_MESSAGE,
+                type: tabsActions.SET_COUNT_ANNOUNCE_MESSAGE,
                 countAnnounceMessage: count
             })
         }
@@ -53,12 +53,10 @@ const MainTab = () => {
             setShowToggle(false)
         }
         const userFromLocalStoge = JSON.parse(localStorage.getItem('userDetails'))
-
         dispatch({
             type: authActions.SET_USER_DETAIL,
             userDetails: userFromLocalStoge
         })
-
         document.addEventListener('click', handleDomClick)
 
         return () => {
@@ -66,18 +64,82 @@ const MainTab = () => {
         }
     }, [])
 
+    useEffect(() => {
+        console.log('responsive in MainTab')
+        window.addEventListener('resize', () => {
+            console.log('window resize', window.innerWidth)
+            if (window.innerWidth < 800) {
+                dispatch({
+                    type: tabsActions.SET_CLOSE_TAB_THREE
+                })
+            } else {
+                dispatch({
+                    type: tabsActions.SET_SHOW_TAB_THREE
+                })
+                dispatch({
+                    type: tabsActions.SET_SHOW_TAB_TWO
+                })
+            }
+        })
+        if (window.innerWidth < 800) {
+            dispatch({
+                type: tabsActions.SET_CLOSE_TAB_THREE
+            })
+        } else {
+            dispatch({
+                type: tabsActions.SET_SHOW_TAB_THREE
+            })
+            dispatch({
+                type: tabsActions.SET_SHOW_TAB_TWO
+            })
+        }
+        return () => {
+
+        }
+    }, [])
+
     const clickChat = () => {
         dispatch({
-            type: maintabActions.SET_MAIN_TAB,
+            type: tabsActions.SET_MAIN_TAB,
             maintabSelect: 'chat'
         })
+        if (window.innerWidth < 800) {
+            dispatch({
+                type: tabsActions.SET_CLOSE_TAB_THREE
+            })
+            dispatch({
+                type: tabsActions.SET_SHOW_TAB_TWO
+            })
+        } else {
+            dispatch({
+                type: tabsActions.SET_SHOW_TAB_THREE
+            })
+            dispatch({
+                type: tabsActions.SET_SHOW_TAB_TWO
+            })
+        }
         router.push('/')
     }
     const clickFriend = () => {
         dispatch({
-            type: maintabActions.SET_MAIN_TAB,
+            type: tabsActions.SET_MAIN_TAB,
             maintabSelect: 'friend'
         })
+        if (window.innerWidth < 800) {
+            dispatch({
+                type: tabsActions.SET_CLOSE_TAB_THREE
+            })
+            dispatch({
+                type: tabsActions.SET_SHOW_TAB_TWO
+            })
+        } else {
+            dispatch({
+                type: tabsActions.SET_SHOW_TAB_THREE
+            })
+            dispatch({
+                type: tabsActions.SET_SHOW_TAB_TWO
+            })
+        }
         router.push('/friend')
     }
     const handleShowToggle = (e) => {

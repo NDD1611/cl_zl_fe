@@ -7,46 +7,28 @@ import { addSameDayAndSameAuth, checkShowTimeAndStatusInBottom } from '../../uti
 import addPathToLinkAvatar from '../../utils/path'
 import { updateStatusMessage } from '../../reltimeCommunication/socketConnection';
 import { conversationActions } from '../../redux/actions/conversationAction';
+import MessageEmoji from '../common/MessageEmoji';
 
 const MessageArea = () => {
     const conversationSelected = useSelector(state => state.conversation.conversationSelected)
     const conversations = useSelector(state => state.conversation.conversations)
     const [messages, setMessages] = useState([])
-    const [maxWidthMessage, setMaxWidthMessage] = useState('300px')
     const [receiverUser, setReceiverUser] = useState({})
     const [userDetails, setUserDetails] = useState({})
-
-
     const messageAreaElement = useRef()
-
     const dispatch = useDispatch()
-
     useEffect(() => {
         setReceiverUser(JSON.parse(localStorage.getItem('receiverUser')))
         setUserDetails(JSON.parse(localStorage.getItem('userDetails')))
         const conversationId = conversationSelected._id
-
         conversations.forEach((conversation) => {
             if (conversationId === conversation._id) {
                 addSameDayAndSameAuth(conversation.messages)
                 checkShowTimeAndStatusInBottom(conversation.messages)
-
                 setMessages(conversation.messages)
             }
         })
-        if (messageAreaElement.current) {
-            setMaxWidthMessage((messageAreaElement.current.clientWidth * 0.75) + 'px')
-            messageAreaElement.current.scrollTop = messageAreaElement.current.scrollHeight
-        }
-
     }, [conversationSelected, conversations])
-
-    // useEffect(() => {
-    //     dispatch({
-    //         type: conversationActions.SET_STATUS_WATCHED_FOR_MESSAGES,
-    //         conversationId: conversationSelected._id
-    //     })
-    // }, [conversationSelected])
     useEffect(() => {
         if (messageAreaElement.current) {
             messageAreaElement.current.scrollTop = messageAreaElement.current.scrollHeight
@@ -58,7 +40,6 @@ const MessageArea = () => {
                 senderId: receiverUser._id,
                 conversationId: conversationSelected._id
             })
-
             //update myself
             dispatch({
                 type: conversationActions.SET_STATUS_WATCHED_FOR_MESSAGES,
@@ -66,9 +47,38 @@ const MessageArea = () => {
                 senderId: receiverUser._id,
                 conversationId: conversationSelected._id
             })
-
         }
     }, [messages])
+    useEffect(() => {
+        if (messageAreaElement.current) {
+            messageAreaElement.current.scrollTop = messageAreaElement.current.scrollHeight
+        }
+        if (window.innerWidth < 800) {
+            let listMessageContentElements = document.querySelectorAll(`.${styles.messageArea} .${styles.content}`)
+            let widthChatArea = window.innerWidth - 64  // width cua mainTab and TabTwo   
+            if (listMessageContentElements) {
+                for (let index = 0; index < listMessageContentElements.length; index++) {
+                    let element = listMessageContentElements[index]
+                    // console.log(element.clientWidth)
+                    if (element.clientWidth > widthChatArea * 0.7) {
+                        listMessageContentElements[index].style.width = `${parseInt(widthChatArea * 0.7)}px`
+                    }
+                }
+            }
+        } else {
+            let listMessageContentElements = document.querySelectorAll(`.${styles.messageArea} .${styles.content}`)
+            let widthChatArea = window.innerWidth - 64 - 344  // width cua mainTab and TabTwo   
+            if (listMessageContentElements) {
+                for (let index = 0; index < listMessageContentElements.length; index++) {
+                    let element = listMessageContentElements[index]
+                    // console.log(element.clientWidth)
+                    if (element.clientWidth > widthChatArea * 0.7) {
+                        listMessageContentElements[index].style.width = `${parseInt(widthChatArea * 0.7)}px`
+                    }
+                }
+            }
+        }
+    })
     return (
         <>
             <div
@@ -85,7 +95,7 @@ const MessageArea = () => {
                         if (message.typeAnnounce === "acceptFriend") {
                             if (message.senderId === userDetails._id) {
                                 return (
-                                    <div key={message._id}>
+                                    <div key={message._id} >
                                         {
                                             message.sameDay === false &&
                                             <div className={styles.dateShow}>
@@ -108,7 +118,7 @@ const MessageArea = () => {
                                 )
                             } else {
                                 return (
-                                    <div key={message._id}>
+                                    <div key={message._id} >
                                         {
                                             message.sameDay === false &&
                                             <div className={styles.dateShow}>
@@ -134,7 +144,7 @@ const MessageArea = () => {
                         if (message.senderId === receiverUser._id) {
                             if (message.sameAuth === false || message.sameDay === false) {
                                 return (
-                                    <div key={message._id}>
+                                    <div key={message._id} >
                                         {
                                             message.sameDay === false &&
                                             <div className={styles.dateShow}>
@@ -149,8 +159,10 @@ const MessageArea = () => {
                                                 width={30}
                                             />
                                             <div className={styles.content}
-                                                style={{ maxWidth: maxWidthMessage ? maxWidthMessage : '' }}>
-                                                {message.content}
+                                            >
+                                                <MessageEmoji
+                                                    text={message.content}
+                                                />
                                                 <div className={styles.footerDate}>{message.showTime ? message.hourMinute : ''}</div>
                                             </div>
                                         </div>
@@ -158,7 +170,7 @@ const MessageArea = () => {
                                 )
                             } else {
                                 return (
-                                    <div key={message._id}>
+                                    <div key={message._id} >
                                         {
                                             message.sameDay === false &&
                                             <div className={styles.dateShow}>
@@ -171,18 +183,20 @@ const MessageArea = () => {
                                             className={`${styles.messageLeft} ${styles.sameAuth}`}
                                         >
                                             <div className={styles.content}
-                                                style={{ maxWidth: maxWidthMessage ? maxWidthMessage : '' }}
                                             >
-                                                {message.content}
+                                                <MessageEmoji
+                                                    text={message.content}
+                                                />
                                                 <div className={styles.footerDate}>{message.showTime ? message.hourMinute : ''}</div>
                                             </div>
                                         </div>
                                     </div>
                                 )
                             }
-                        } else if (message.senderId === userDetails._id) {
+                        }
+                        else if (message.senderId === userDetails._id) {
                             return (
-                                <div key={message._id}>
+                                <div key={message._id} >
                                     {
                                         message.sameDay === false &&
                                         <div className={styles.dateShow}>
@@ -193,10 +207,10 @@ const MessageArea = () => {
                                     }
                                     <div className={styles.messageRight}
                                     >
-                                        <div className={styles.content}
-                                            style={{ maxWidth: maxWidthMessage ? maxWidthMessage : '' }}
-                                        >
-                                            {message.content}
+                                        <div className={styles.content}                                        >
+                                            <MessageEmoji
+                                                text={message.content}
+                                            />
                                             <div className={styles.footerDate}>{message.showTime ? message.hourMinute : ''}</div>
                                         </div>
                                     </div>
@@ -208,7 +222,6 @@ const MessageArea = () => {
                         }
                     })
                 }
-
                 <div className={styles.paddingfooter}></div>
             </div>
         </>

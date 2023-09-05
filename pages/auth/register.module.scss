@@ -4,6 +4,9 @@
     font-weight: 600;
 }
 
+@import '../../styles/responsive.module.scss';
+
+
 .mainLayout {
     width: 100vw;
     height: 90vh;
@@ -19,6 +22,10 @@
     width: 400px;
     height: 80%;
     padding: 20px;
+
+    @include mobile {
+        width: 80%;
+    }
 }
 
 .btnCreateAccount {

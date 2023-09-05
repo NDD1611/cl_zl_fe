@@ -5,6 +5,7 @@ import { faEnvelopeOpen } from '@fortawesome/free-regular-svg-icons'
 import { faUser } from '@fortawesome/free-regular-svg-icons'
 import { useSelector, useDispatch } from 'react-redux'
 import { friendActions } from '../../redux/actions/friendAction'
+import { tabsActions } from '../../redux/actions/tabsAction'
 
 
 const MenuItemFriend = () => {
@@ -12,6 +13,23 @@ const MenuItemFriend = () => {
     const selectItem = useSelector(state => state.friend.selectItem)
     const pendingInvitation = useSelector(state => state.friend.pendingInvitations)
 
+    const showTab3AndCloseTabTwo = () => {
+        if (window.innerWidth < 800) {
+            dispatch({
+                type: tabsActions.SET_SHOW_TAB_THREE
+            })
+            dispatch({
+                type: tabsActions.SET_CLOSE_TAB_TWO
+            })
+        } else {
+            dispatch({
+                type: tabsActions.SET_SHOW_TAB_THREE
+            })
+            dispatch({
+                type: tabsActions.SET_SHOW_TAB_TWO
+            })
+        }
+    }
     return (
         <>
             <div>
@@ -21,6 +39,7 @@ const MenuItemFriend = () => {
                             type: friendActions.SET_SELECT_ITEM_TAB_TWO,
                             selectItem: 'listFriend'
                         })
+                        showTab3AndCloseTabTwo()
                     }}
                 >
                     <div className={styles.Icon}>
@@ -33,6 +52,7 @@ const MenuItemFriend = () => {
                         type: friendActions.SET_SELECT_ITEM_TAB_TWO,
                         selectItem: 'friendInvitation'
                     })
+                    showTab3AndCloseTabTwo()
                 }}
                 >
                     <div className={styles.Icon}>
