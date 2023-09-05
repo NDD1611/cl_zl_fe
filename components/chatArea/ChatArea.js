@@ -49,7 +49,9 @@ const ChatArea = () => {
             setReceiverUser(receiverUser)
             if (chatInputElement.current) {
                 chatInputElement.current.innerHTML = ''
-                chatInputElement.current.focus()
+                if (window.innerWidth >= 800) {
+                    chatInputElement.current.focus()
+                }
             }
         }
     }, [conversationSelected])
