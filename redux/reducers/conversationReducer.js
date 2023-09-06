@@ -18,16 +18,16 @@ const reducer = (state = initState, action) => {
                 conversationSelected: action.conversationSelected
             }
         case conversationActions.SEND_NEW_MESSAGE:
-            let copyConversation = [...state.conversations]
+            let copyConversations = [...state.conversations]
             let newConversation = action.newConversation
-            for (let index in copyConversation) {
-                if (copyConversation[index]._id === newConversation._id) {
-                    copyConversation[index] = newConversation
+            for (let index in copyConversations) {
+                if (copyConversations[index]._id === newConversation._id) {
+                    copyConversations[index] = newConversation
                 }
             }
             return {
                 ...state,
-                conversations: copyConversation
+                conversations: copyConversations
             }
         case conversationActions.SET_STATUS_WATCHED_FOR_MESSAGES:
             var { senderId, receiverId, conversationId } = action

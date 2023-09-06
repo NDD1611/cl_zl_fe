@@ -22,6 +22,7 @@ const EmojiPicker = dynamic(
 
 const ChatArea = () => {
     const conversationSelected = useSelector(state => state.conversation.conversationSelected)
+    const conversations = useSelector(state => state.conversation.conversations)
     const activeUsers = useSelector(state => state.auth.activeUsers)
     const [receiverUser, setReceiverUser] = useState({})
     const [userDetails, setUserDetails] = useState({})
@@ -62,8 +63,7 @@ const ChatArea = () => {
         }
     }
 
-    const handleSendMessage = () => {
-        console.log('send message')
+    const getMessageFromDivInputElement = () => {
         let divInputElement = document.getElementById('divInput')
         if (divInputElement) {
             let message = ''
@@ -81,29 +81,41 @@ const ChatArea = () => {
                     }
                 }
             }
-            let senderId = userDetails._id
-            let receiverId = receiverUser._id
-            if (message.length && message !== '&nbsp;') {
-                let data = {
-                    senderId,
-                    receiverId,
-                    content: message.replace('&nbsp;', ''),
-                    type: 'text',
-                    date: new Date(),
-                    status: 0     //0: dang gui, 1: da gui, 2: da nhan, 3: da xem.
-                }
-                let conversationCurrent = conversationSelected
-                conversationCurrent.messages[conversationCurrent.messages.length - 1].showTime = false
-                conversationCurrent.messages.push(data)
-                dispatch({
-                    type: conversationActions.SEND_NEW_MESSAGE,
-                    newConversation: conversationCurrent
-                })
-                sendMessage(data)
-
-            }
             chatInputElement.current.focus()
             chatInputElement.current.innerHTML = ''
+            return message
+        }
+    }
+
+    const handleSendMessage = () => {
+
+        let message = getMessageFromDivInputElement()
+
+        let senderId = userDetails._id
+        let receiverId = receiverUser._id
+        if (message.length && message !== '&nbsp;' && message !== '') {
+            let data = {
+                senderId,
+                receiverId,
+                content: message.replace('&nbsp;', ''),
+                type: 'text',
+                date: new Date(),
+                status: 0     //0: dang gui, 1: da gui, 2: da nhan, 3: da xem.
+            }
+            let conversationSelectedId = conversationSelected._id
+            let conversationCurrent = {}
+            for (let index = 0; index < conversations.length; index++) {
+                if (conversations[index]._id == conversationSelectedId) {
+                    conversationCurrent = conversations[index]
+                }
+            }
+            conversationCurrent.messages[conversationCurrent.messages.length - 1].showTime = false
+            conversationCurrent.messages.push(data)
+            dispatch({
+                type: conversationActions.SEND_NEW_MESSAGE,
+                newConversation: conversationCurrent
+            })
+            sendMessage(data)
         }
     }
 
