@@ -1,4 +1,3 @@
-
 import { conversationActions } from "../actions/conversationAction"
 
 const initState = {

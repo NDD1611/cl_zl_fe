@@ -1,14 +1,13 @@
-
-import Link from 'next/link';
-import InputWithLable from '../../components/auth/inputWithLabel';
+import Link from 'next/link'
+import InputWithLable from '../../components/auth/inputWithLabel'
 import styles from './login.module.scss'
-import { toast } from 'react-toastify';
-import { useState } from 'react';
-import api from '../../api/api';
-import { useDispatch } from 'react-redux';
-import { authActions } from '../../redux/actions/authAction';
-import { useRouter } from 'next/router';
-import LoaderModal from '../../components/common/Modal/LoaderModal';
+import { toast } from 'react-toastify'
+import { useState } from 'react'
+import api from '../../api/api'
+import { useDispatch } from 'react-redux'
+import { authActions } from '../../redux/actions/authAction'
+import { useRouter } from 'next/router'
+import LoaderModal from '../../components/common/Modal/LoaderModal'
 
 const Login = () => {
     const [email, setEmail] = useState('')
@@ -20,6 +19,7 @@ const Login = () => {
     const login = async () => {
         setShowLoader(true)
         const response = await api.login({ email, password })
+        console.log(response)
         if (response.err) {
             toast.error(response?.exception?.response?.data, {
                 position: 'bottom-center'
@@ -37,6 +37,7 @@ const Login = () => {
             router.push('/')
         }
     }
+
     return (
         <>
             {showLoader ? <LoaderModal /> : ''}

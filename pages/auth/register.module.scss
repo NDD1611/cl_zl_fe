@@ -1,11 +1,10 @@
+@import '../../styles/responsive.module.scss';
+
 .title {
     margin-bottom: 20px;
     font-size: 24px;
     font-weight: 600;
 }
-
-@import '../../styles/responsive.module.scss';
-
 
 .mainLayout {
     width: 100vw;
@@ -91,10 +90,6 @@
 
     div {
         width: 88%;
-
-        // input {
-        //     width: 160% !important;
-        // }
 
         svg {
             right: 0px;

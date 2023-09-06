@@ -1,23 +1,21 @@
-
 import styles from './ModalUpdateInfo.module.scss'
-import MainModal from './MainModal';
-import { useEffect, useState, useRef } from 'react';
-import Avatar from '../Avatar';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useSelector, useDispatch } from 'react-redux';
-import { modalActions } from '../../../redux/actions/modalActions';
-import api from '../../../api/api';
+import MainModal from './MainModal'
+import { useEffect, useState, useRef } from 'react'
+import Avatar from '../Avatar'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useSelector, useDispatch } from 'react-redux'
+import { modalActions } from '../../../redux/actions/modalActions'
+import api from '../../../api/api'
 import { toast } from 'react-toastify'
 import addPathToLinkAvatar from '../../../utils/path'
-import { authActions } from '../../../redux/actions/authAction';
-import ExpandDate from './expandDate';
-import { checkLeapYear } from '../../../utils/check';
+import { authActions } from '../../../redux/actions/authAction'
+import ExpandDate from './expandDate'
+import { checkLeapYear } from '../../../utils/check'
 import LoaderModal from './LoaderModal'
-import Cropper from 'cropperjs';
+import Cropper from 'cropperjs'
 import 'cropperjs/dist/cropper.js'
 import 'cropperjs/dist/cropper.css'
-import { faCamera, faChevronDown } from '@fortawesome/free-solid-svg-icons';
-
+import { faCamera, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 
 const ModalUpdateInfo = () => {
     const showModalUpdateInfo = useSelector(state => state.modal.showModalUpdateInfo)
@@ -49,14 +47,12 @@ const ModalUpdateInfo = () => {
     useEffect(() => {
         const userDetailsFromLocal = JSON.parse(localStorage.getItem('userDetails'))
         setUserDetails(userDetailsFromLocal)
-
         if (userDetailsFromLocal.birthday) {
             let date = new Date(userDetailsFromLocal.birthday)
             setSelectDay(date.getDate().toString())
             setSelectMonth((date.getMonth() + 1).toString())
             setSelectYear(date.getFullYear().toString())
         }
-
         const arrYear = []
         for (let i = 1940; i < 2020; i++) {
             arrYear.push(i.toString())
@@ -67,7 +63,6 @@ const ModalUpdateInfo = () => {
         }
         setArrYear(arrYear)
         setArrMonth(arrMonth)
-
         return () => {
             setCropper(null)
         }
@@ -135,7 +130,6 @@ const ModalUpdateInfo = () => {
         if (haveUpdateAvatar) {
             formData.append('avatar', blobImage, 'cropedimage.jpg')
             const response = await api.uploadAvatar(formData)
-
             if (response.err) {
                 toast.error('Đã xảy ra lỗi. Vui lòng thử lại sau')
             } else {
@@ -168,7 +162,6 @@ const ModalUpdateInfo = () => {
             } else {
                 toast.success('Cập nhật thông tin thành công')
                 localStorage.setItem('userDetails', JSON.stringify(userInfo))
-
                 dispatch({
                     type: authActions.SET_USER_DETAIL,
                     userDetails: userInfo,
@@ -250,7 +243,6 @@ const ModalUpdateInfo = () => {
                         />
                     </div>
                     <p className={styles.name}>{userDetails.firstName + ' ' + userDetails.lastName}</p>
-
                     <div className={styles.fullname}>
                         <div>
                             <label>Họ:</label>
@@ -270,7 +262,6 @@ const ModalUpdateInfo = () => {
                     <div className={styles.userInfo}>
                         <p className={styles.titleInfo}>Thông tin cá nhân</p>
                         <p className={styles.sex}>Giới tính</p>
-
                         <div className={styles.inputRadio}>
                             <input
                                 type="radio"
@@ -291,8 +282,6 @@ const ModalUpdateInfo = () => {
                             />
                             <label htmlFor="Female">Nữ</label>
                         </div>
-
-
                         <div className={styles.birthday}>
                             <p>Ngày sinh</p>
                             <div className={styles.dmy}>
@@ -342,9 +331,7 @@ const ModalUpdateInfo = () => {
                             <button className={styles.btnUpdate} onClick={handleUpdateInfoUser}>
                                 Cập nhật
                             </button>
-
                         </div>
-
                     </div>
                 </div>
             </MainModal>

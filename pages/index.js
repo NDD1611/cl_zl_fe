@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react';
-import { logout } from '../utils/auth';
+import { useEffect, useState } from 'react'
+import { logout } from '../utils/auth'
 import styles from './index.module.scss'
-import MainTab from '../components/common/MainTab';
-import TabTwo from '../components/common/tabTwo';
-import HeaderTabTwo from '../components/common/HeaderTabTwo';
-import ConversationList from '../components/common/conversation/ConversationList';
-import TabThree from '../components/common/TabThree';
-import ChatArea from '../components/chatArea/ChatArea';
+import MainTab from '../components/common/MainTab'
+import TabTwo from '../components/common/tabTwo'
+import HeaderTabTwo from '../components/common/HeaderTabTwo'
+import ConversationList from '../components/common/conversation/ConversationList'
+import TabThree from '../components/common/TabThree'
+import ChatArea from '../components/chatArea/ChatArea'
 
 function DashBoasd() {
 
@@ -23,7 +23,7 @@ function DashBoasd() {
 
   if (render)
     return (
-      <div className={styles.dashboash}>
+      <div id="dashboash" className={styles.dashboash}>
         <MainTab></MainTab>
         <TabTwo>
           <HeaderTabTwo></HeaderTabTwo>

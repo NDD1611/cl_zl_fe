@@ -1,4 +1,3 @@
-
 import styles from './HeaderTabTwo.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons'

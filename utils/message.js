@@ -1,4 +1,3 @@
-
 export const addSameDayAndSameAuth = (messages) => {
     for (let i = 1; i < messages.length; i++) {
         let message = messages[i]
@@ -8,7 +7,6 @@ export const addSameDayAndSameAuth = (messages) => {
         } else {
             message.sameAuth = false
         }
-
         let messageDate = new Date(message.date)
         let lastMessageDate = new Date(lastMessage.date)
         let messageDay = messageDate.getDate()
@@ -16,12 +14,9 @@ export const addSameDayAndSameAuth = (messages) => {
         let messageYear = messageDate.getFullYear()
         let messageHour = messageDate.getHours()
         let messageMinute = messageDate.getMinutes()
-
         let lastMessageDay = lastMessageDate.getDate()
         let lastMessageMonth = lastMessageDate.getMonth()
         let lastMessageYear = lastMessageDate.getFullYear()
-
-
         if (messageDay === lastMessageDay && messageMonth === lastMessageMonth && messageYear === lastMessageYear) {
             message.sameDay = true
         } else {
@@ -33,7 +28,6 @@ export const addSameDayAndSameAuth = (messages) => {
         if (messageMinute < 10) {
             messageMinute = '0' + messageMinute
         }
-
         let dateShow = messageHour + ':' + messageMinute + ' ' + messageDay + '/' + messageMonth + '/' + messageYear
         message.dateShow = dateShow
         let hourMinute = messageHour + ':' + messageMinute
@@ -42,7 +36,6 @@ export const addSameDayAndSameAuth = (messages) => {
 }
 
 export const checkShowTimeAndStatusInBottom = (messages) => {
-
     for (let i = 0; i < messages.length; i++) {
         let message = messages[i]
         messages[i].showStatus = false

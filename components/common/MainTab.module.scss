@@ -1,24 +1,33 @@
+@import '../../styles/global.module.scss';
+
 .mainTab {
-    background-color: #0091ff;
+    background-color: $primary-color;
     width: 64px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 
-}
+    .top {
+        padding-top: 30px;
 
-.avatar {
-    margin-bottom: 20px;
+        .avatar {
+            margin-bottom: 20px;
 
-    &:hover {
-        background-color: #0091ff !important;
+            &:hover {
+                background-color: $primary-color !important;
+            }
+        }
+    }
+
+    .bottom {
+        padding-bottom: 30px;
     }
 }
 
 .quare {
     cursor: pointer;
     position: relative;
-    width: 100%;
+    width: 64px;
     height: 64px;
     display: flex;
     align-items: center;
@@ -58,14 +67,6 @@
 
 }
 
-.top {
-    padding-top: 30px;
-}
-
-.bottom {
-    padding-bottom: 30px;
-}
-
 .maintabSelect {
     background-color: #006edc !important;
 }
@@ -77,6 +78,7 @@
     background-color: #fff;
     border: 1px solid #ccc;
     box-shadow: 0 0 10px 0 #ccc;
+    z-index: 9;
 
     div {
         padding: 10px;

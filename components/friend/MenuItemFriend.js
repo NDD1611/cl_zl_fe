@@ -1,12 +1,10 @@
-
-import styles from './MenuItemFriend.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelopeOpen } from '@fortawesome/free-regular-svg-icons'
 import { faUser } from '@fortawesome/free-regular-svg-icons'
 import { useSelector, useDispatch } from 'react-redux'
+import styles from './MenuItemFriend.module.scss'
 import { friendActions } from '../../redux/actions/friendAction'
 import { tabsActions } from '../../redux/actions/tabsAction'
-
 
 const MenuItemFriend = () => {
     const dispatch = useDispatch()

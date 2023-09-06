@@ -1,4 +1,3 @@
-
 import { authActions } from "../actions/authAction"
 
 const initState = {

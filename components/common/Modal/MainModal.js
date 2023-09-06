@@ -1,7 +1,6 @@
-
 import styles from './MainModal.module.scss'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faXmark } from '@fortawesome/free-solid-svg-icons'
 
 const MainModal = (props) => {
     const { title, closeModal, setCloseModal = () => { } } = props
@@ -15,7 +14,6 @@ const MainModal = (props) => {
                             <FontAwesomeIcon icon={faXmark} />
                         </div>
                     </div>
-
                     {props.children}
                 </div>
             </div>

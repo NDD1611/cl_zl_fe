@@ -1,15 +1,15 @@
-import { useEffect } from 'react';
-import { logout } from '../utils/auth';
+import { useEffect } from 'react'
+import { logout } from '../utils/auth'
 import styles from './friend.module.scss'
-import MainTab from '../components/common/MainTab';
-import { useDispatch, useSelector } from 'react-redux';
-import { tabsActions } from '../redux/actions/tabsAction';
-import TabTwo from '../components/common/tabTwo';
-import MenuItemFriend from '../components/friend/MenuItemFriend';
-import HeaderTabTwo from '../components/common/HeaderTabTwo';
-import TabThree from '../components/common/TabThree';
-import PendingInvitation from '../components/friend/PendingInvitation';
-import ListFriend from '../components/friend/ListFriend';
+import MainTab from '../components/common/MainTab'
+import { useDispatch, useSelector } from 'react-redux'
+import { tabsActions } from '../redux/actions/tabsAction'
+import TabTwo from '../components/common/tabTwo'
+import MenuItemFriend from '../components/friend/MenuItemFriend'
+import HeaderTabTwo from '../components/common/HeaderTabTwo'
+import TabThree from '../components/common/TabThree'
+import PendingInvitation from '../components/friend/PendingInvitation'
+import ListFriend from '../components/friend/ListFriend'
 
 const Friend = () => {
     const dispatch = useDispatch()
@@ -45,6 +45,5 @@ const Friend = () => {
         </div>
     )
 }
-
 
 export default Friend

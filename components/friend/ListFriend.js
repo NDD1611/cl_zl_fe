@@ -1,13 +1,12 @@
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUser } from '@fortawesome/free-regular-svg-icons'
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
+import { useSelector, useDispatch } from 'react-redux'
+import { useEffect, useState } from 'react'
 import styles from './ListFriend.module.scss'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser } from '@fortawesome/free-regular-svg-icons';
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
-import { useSelector, useDispatch } from 'react-redux';
 import Avatar from '../common/Avatar'
 import addPathToLinkAvatar from '../../utils/path'
-import { useEffect, useState } from 'react';
-import { tabsActions } from '../../redux/actions/tabsAction';
+import { tabsActions } from '../../redux/actions/tabsAction'
 
 const ListFriend = () => {
     const [showBackbutton, setShowBackButton] = useState(false)
@@ -20,6 +19,7 @@ const ListFriend = () => {
             setShowBackButton(false)
         }
     }, [])
+
     const showTabTwoAndCloseTabThree = () => {
         dispatch({
             type: tabsActions.SET_CLOSE_TAB_THREE
@@ -28,6 +28,7 @@ const ListFriend = () => {
             type: tabsActions.SET_SHOW_TAB_TWO
         })
     }
+
     return (
         <>
             <div className={styles.listFriend}>
@@ -64,6 +65,5 @@ const ListFriend = () => {
         </>
     )
 }
-
 
 export default ListFriend;

@@ -1,17 +1,14 @@
-
-import { useSelector, useDispatch } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEnvelopeOpen } from '@fortawesome/free-regular-svg-icons';
-import { useState, useEffect } from 'react';
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
-
+import { useSelector, useDispatch } from 'react-redux'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEnvelopeOpen } from '@fortawesome/free-regular-svg-icons'
+import { useState, useEffect } from 'react'
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 import styles from './PendingInvitation.module.scss'
-import Avatar from '../common/Avatar';
+import Avatar from '../common/Avatar'
 import addPathToLinkAvatar from '../../utils/path'
-import api from '../../api/api';
-import LoaderModal from '../common/Modal/LoaderModal';
-import { tabsActions } from '../../redux/actions/tabsAction';
-
+import api from '../../api/api'
+import LoaderModal from '../common/Modal/LoaderModal'
+import { tabsActions } from '../../redux/actions/tabsAction'
 
 const PendingInvitation = () => {
     const pendingInvitations = useSelector(state => state.friend.pendingInvitations)
@@ -43,6 +40,7 @@ const PendingInvitation = () => {
             type: tabsActions.SET_SHOW_TAB_TWO
         })
     }
+
     return (
         <>
             {showLoader ? <LoaderModal /> : ''}
@@ -56,7 +54,6 @@ const PendingInvitation = () => {
                     <FontAwesomeIcon className={styles.headerIcon} icon={faEnvelopeOpen} />
                     Lời mời kết bạn
                 </div>
-
                 {pendingInvitations.length === 0 &&
                     <div className={styles.noResult}>
                         <div>
@@ -92,4 +89,5 @@ const PendingInvitation = () => {
         </>
     )
 }
+
 export default PendingInvitation;

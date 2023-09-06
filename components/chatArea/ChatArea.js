@@ -1,18 +1,17 @@
 
-import { useSelector, useDispatch } from 'react-redux';
-import { useState, useEffect, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux'
+import { useState, useEffect, useRef } from 'react'
 import styles from './ChatArea.module.scss'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
-import { faFaceSmile } from '@fortawesome/free-regular-svg-icons';
-import { sendMessage } from '../../reltimeCommunication/socketConnection';
-import Avatar from '../common/Avatar';
-import addPathToLinkAvatar from '../../utils/path';
-import MessageArea from './MessageArea';
-import { conversationActions } from '../../redux/actions/conversationAction';
-import dynamic from 'next/dynamic';
-import { tabsActions } from '../../redux/actions/tabsAction';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPaperPlane, faChevronLeft } from '@fortawesome/free-solid-svg-icons'
+import { faFaceSmile } from '@fortawesome/free-regular-svg-icons'
+import dynamic from 'next/dynamic'
+import { sendMessage } from '../../reltimeCommunication/socketConnection'
+import Avatar from '../common/Avatar'
+import addPathToLinkAvatar from '../../utils/path'
+import MessageArea from './MessageArea'
+import { conversationActions } from '../../redux/actions/conversationAction'
+import { tabsActions } from '../../redux/actions/tabsAction'
 
 const EmojiPicker = dynamic(
     () => {
@@ -27,7 +26,6 @@ const ChatArea = () => {
     const [receiverUser, setReceiverUser] = useState({})
     const [userDetails, setUserDetails] = useState({})
     const [showEmoji, setShowEmoji] = useState(false)
-
     const chatAreaElement = useRef()
     const chatMessageElement = useRef()
     const chatInputElement = useRef()
@@ -37,7 +35,6 @@ const ChatArea = () => {
 
     useEffect(() => {
         setUserDetails(JSON.parse(localStorage.getItem('userDetails')))
-
         document.addEventListener('click', (e) => {
             setShowEmoji(false)
         })
@@ -49,9 +46,7 @@ const ChatArea = () => {
             setReceiverUser(receiverUser)
             if (chatInputElement.current) {
                 chatInputElement.current.innerHTML = ''
-                if (window.innerWidth >= 800) {
-                    chatInputElement.current.focus()
-                }
+                chatInputElement.current.focus()
             }
         }
     }, [conversationSelected])
@@ -86,7 +81,6 @@ const ChatArea = () => {
                     }
                 }
             }
-
             let senderId = userDetails._id
             let receiverId = receiverUser._id
             if (message.length && message !== '&nbsp;') {
@@ -98,7 +92,6 @@ const ChatArea = () => {
                     date: new Date(),
                     status: 0     //0: dang gui, 1: da gui, 2: da nhan, 3: da xem.
                 }
-
                 let conversationCurrent = conversationSelected
                 conversationCurrent.messages[conversationCurrent.messages.length - 1].showTime = false
                 conversationCurrent.messages.push(data)
@@ -113,6 +106,7 @@ const ChatArea = () => {
             chatInputElement.current.innerHTML = ''
         }
     }
+
     const handleKeyDown = (e) => {
         if (e.keyCode === 13) {
             e.preventDefault()
@@ -120,6 +114,7 @@ const ChatArea = () => {
         }
         setWidthHeihgtChatArea()
     }
+
     const setWidthHeihgtChatArea = () => {
         console.log(window.innerHeight)
         let chatMesageArea = document.getElementById('chatMessageArea')
@@ -178,7 +173,6 @@ const ChatArea = () => {
                 conversationSelected &&
                 <div
                     ref={chatMessageElement}
-                    // style={{ height: heightChatMessage }}
                     id='chatMessageArea'
                     className={styles.chatMessage}
                 >
@@ -205,6 +199,7 @@ const ChatArea = () => {
                         {
                             showEmoji ? <EmojiPicker
                                 onEmojiClick={handleEmojiClick}
+                                autoFocusSearch={false}
                             /> : ''
                         }
                     </div>
@@ -218,10 +213,7 @@ const ChatArea = () => {
                             receiverUser ? 'Nhập tin nhắn tới ' + receiverUser.firstName + ' ' + receiverUser.lastName : ''
                         }
                         onKeyDown={(e) => { handleKeyDown(e) }}
-                    >
-
-
-                    </div>
+                    ></div>
                     <div className={styles.rightInputArea}>
                         <button className={styles.btnSendMes} onClick={handleSendMessage}>
                             <FontAwesomeIcon icon={faPaperPlane} />

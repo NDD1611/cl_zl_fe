@@ -39,10 +39,8 @@ const InputWithLable = ({
                 </label>
                 <input onChange={inputOnchange} value={value} id={title} className={`${styles.input}`} placeholder={placeholder} type={type}></input>
                 {
-
                     firstInput && errCheck ? <FontAwesomeIcon className={styles.checkSucces} icon={faCheck} /> : ''
                 }
-
             </div >
         </>
     )

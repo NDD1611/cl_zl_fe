@@ -1,4 +1,3 @@
-
 import { modalActions } from "../actions/modalActions"
 
 const initState = {

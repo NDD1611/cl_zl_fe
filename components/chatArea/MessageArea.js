@@ -1,13 +1,13 @@
 
 import styles from './MessageArea.module.scss'
-import { useSelector, useDispatch } from 'react-redux';
-import { useEffect, useState, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux'
+import { useEffect, useState, useRef } from 'react'
 import Avatar from '../common/Avatar'
-import { addSameDayAndSameAuth, checkShowTimeAndStatusInBottom } from '../../utils/message';
+import { addSameDayAndSameAuth, checkShowTimeAndStatusInBottom } from '../../utils/message'
 import addPathToLinkAvatar from '../../utils/path'
-import { updateStatusMessage } from '../../reltimeCommunication/socketConnection';
-import { conversationActions } from '../../redux/actions/conversationAction';
-import MessageEmoji from '../common/MessageEmoji';
+import { updateStatusMessage } from '../../reltimeCommunication/socketConnection'
+import { conversationActions } from '../../redux/actions/conversationAction'
+import MessageEmoji from '../common/MessageEmoji'
 
 const MessageArea = () => {
     const conversationSelected = useSelector(state => state.conversation.conversationSelected)

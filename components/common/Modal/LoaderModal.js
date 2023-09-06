@@ -1,6 +1,3 @@
-
-
-
 import { InfinitySpin } from 'react-loader-spinner'
 import styles from './LoaderModal.module.scss'
 

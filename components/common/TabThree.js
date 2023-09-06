@@ -1,5 +1,5 @@
 import styles from './TabThree.module.scss'
-import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux'
 
 const TabThree = (props) => {
     const showTabThree = useSelector(state => state.tabs.showTabThree)

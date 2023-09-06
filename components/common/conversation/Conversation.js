@@ -1,12 +1,12 @@
 
 import styles from './Conversation.module.scss'
-import Avatar from '../Avatar';
-import { useSelector, useDispatch } from 'react-redux';
-import { useEffect, useState } from 'react';
+import Avatar from '../Avatar'
+import { useSelector, useDispatch } from 'react-redux'
+import { useEffect, useState } from 'react'
 import addPathToLinkAvatar from '../../../utils/path'
-import { conversationActions } from '../../../redux/actions/conversationAction';
-import { updateReceivedMessageStatus } from '../../../reltimeCommunication/socketConnection';
-import { tabsActions } from '../../../redux/actions/tabsAction';
+import { conversationActions } from '../../../redux/actions/conversationAction'
+import { updateReceivedMessageStatus } from '../../../reltimeCommunication/socketConnection'
+import { tabsActions } from '../../../redux/actions/tabsAction'
 import MessageEmoji from '../MessageEmoji'
 
 const Conversation = ({ conversation }) => {
@@ -37,7 +37,6 @@ const Conversation = ({ conversation }) => {
                 senderId: friend._id
             })
         }
-
     }, [friend])
     useEffect(() => {
         const { participants, messages } = conversation
@@ -81,7 +80,6 @@ const Conversation = ({ conversation }) => {
             type: conversationActions.SET_SELECT_CONVERSATION,
             conversationSelected: conversation
         })
-
         if (window.innerWidth < 800) {
             dispatch({
                 type: tabsActions.SET_CLOSE_TAB_TWO

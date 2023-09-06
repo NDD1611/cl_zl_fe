@@ -3,7 +3,6 @@ import { Emoji } from "emoji-picker-react"
 import styles from './MessageEmoji.module.scss'
 
 const MessageEmoji = ({ text }) => {
-    // https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64/1f604.png
     const [listContents, setListContenst] = useState([])
     useEffect(() => {
         let arra = []
@@ -24,6 +23,7 @@ const MessageEmoji = ({ text }) => {
         }
         setListContenst(arra)
     }, [text])
+
     return (
         <>
             <div className={styles.MessageEmoji}>

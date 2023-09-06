@@ -1,5 +1,3 @@
-
-
 import styles from './ModalDisplayInfo.module.scss'
 import MainModal from './MainModal'
 import Avatar from '../Avatar'
@@ -19,7 +17,6 @@ const ModalDisplayInfo = () => {
     const [day, setDay] = useState('')
     const [month, setMonth] = useState('')
     const [year, setYear] = useState('')
-
 
     useEffect(() => {
         let userDetails = JSON.parse(localStorage.getItem('userDetails'))

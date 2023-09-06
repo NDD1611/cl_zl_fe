@@ -1,4 +1,3 @@
-
 import styles from './expandDate.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheck } from '@fortawesome/free-solid-svg-icons'
@@ -7,6 +6,7 @@ const ExpandDate = ({ dataArr, value, setValue = () => { } }) => {
         e.stopPropagation()
         setValue(value)
     }
+
     return (
         <>
             <div className={styles.expand}>
@@ -17,7 +17,6 @@ const ExpandDate = ({ dataArr, value, setValue = () => { } }) => {
                                 key={element}
                                 className={`${styles.element} ${value === element ? styles.bgBlue : ''}`}
                                 onClick={(e) => { handleSelectValue(e, element) }}
-
                             >
                                 {element}
                                 <FontAwesomeIcon

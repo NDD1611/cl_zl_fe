@@ -1,7 +1,5 @@
-
 import { io } from 'socket.io-client'
 import { logout } from '../utils/auth'
-import api from '../api/api'
 import store from '../redux/store'
 import { authActions } from '../redux/actions/authAction'
 import { friendActions } from '../redux/actions/friendAction'
@@ -19,24 +17,14 @@ export const socketConnectToServer = (userDetails) => {
     socket.on('connect', () => {
         console.log(socket.id)
     })
-
     socket.on("connect_error", async (err) => {
         if (err.message === 'TokenExpire') {
-            // const userDetails = JSON.parse(localStorage.getItem('userDetails'))
-            // const response = await api.refreshToken({ userDetails })
-            // localStorage.setItem('userDetails', JSON.stringify(response.data))
-            // store.dispatch({
-            //     type: authActions.SET_USER_DETAIL,
-            //     userDetails: response.data
-            // })
-            // socketConnectToServer(userDetails)
             logout()
         } else if (err.message !== 'UserConnected') {
             // alert('Vui lòng đăng nhập lại.')
             logout()
         }
-    });
-
+    })
     socket.on('update-friend-invitation', (data) => {
         const { pendingInvitations } = data
         store.dispatch({
@@ -44,7 +32,6 @@ export const socketConnectToServer = (userDetails) => {
             pendingInvitations: pendingInvitations
         })
     })
-
     socket.on('update-conversation', (data) => {
         const { conversations } = data
         store.dispatch({

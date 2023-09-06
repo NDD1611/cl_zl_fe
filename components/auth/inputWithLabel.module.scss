@@ -1,3 +1,5 @@
+@import '../../styles/global.module.scss';
+
 .labelInput {
     width: 100%;
     position: relative;
@@ -10,7 +12,6 @@
     margin-top: 20px;
     font-weight: 600;
     position: relative;
-
 
     .showHidePass {
         position: absolute;
@@ -30,7 +31,7 @@
 }
 
 .input:focus {
-    outline-color: #0091ff;
+    outline-color: $primary-color;
 }
 
 .errMes {
@@ -43,5 +44,4 @@
     position: absolute;
     right: 20px;
     bottom: 10px;
-
 }

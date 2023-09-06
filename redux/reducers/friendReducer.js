@@ -1,4 +1,3 @@
-
 import { friendActions } from "../actions/friendAction"
 
 const initState = {

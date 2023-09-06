@@ -1,28 +1,7 @@
+@import '../styles/responsive.module.scss';
+
 .dashboash {
     display: flex;
     height: 100vh;
     width: 100vw;
-
-}
-
-$mobile-width: 480px;
-$tablet-width: 768px;
-$desktop-width: 1024px;
-
-@mixin mobile {
-    @media (max-width: #{$mobile -width - 1px}) {
-        @content;
-    }
-}
-
-@mixin tablet {
-    @media (min-width: #{$tablet-width}) and (max-width: #{$desktop-width - 1px}) {
-        @content;
-    }
-}
-
-@mixin desktop {
-    @media (min-width: #{$desktop-width}) {
-        @content;
-    }
 }

@@ -1,4 +1,3 @@
-
 import styles from './tabTwo.module.scss'
 import { useSelector } from 'react-redux'
 

@@ -1,17 +1,14 @@
-
 import Link from 'next/link'
-import styles from './register.module.scss'
-import InputWithLable from '../../components/auth/inputWithLabel'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircle } from '@fortawesome/free-solid-svg-icons'
 import { useState, useEffect } from 'react'
-import { validateEmail } from '../../utils/auth'
-import api from '../../api/api'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/navigation'
-
+import styles from './register.module.scss'
+import InputWithLable from '../../components/auth/inputWithLabel'
+import { validateEmail } from '../../utils/auth'
+import api from '../../api/api'
 import LoaderModal from '../../components/common/Modal/LoaderModal'
-
 
 const Register = () => {
     const [email, setEmail] = useState('')
@@ -19,24 +16,19 @@ const Register = () => {
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
-
     const [errEmail, setErrEmail] = useState(false)
     const [errPassword, setErrPassword] = useState(false)
     const [errConfirmPassword, setErrConfirmPassword] = useState(false)
     const [errCheckLastName, setErrCheckLastName] = useState(false)
     const [errCheckFirstName, setErrCheckFirstName] = useState(false)
-
     const [firstInputEmail, setFirstInputEmail] = useState(false)
     const [firstInputPassword, setFirstInputPassword] = useState(false)
     const [firstInputConfirmPassword, setFirstInputConfirmPassword] = useState(false)
     const [firstInputLastName, setFirstInputLastName] = useState(false)
     const [firstInputFirstName, setFirstInputFirstName] = useState(false)
-
-
     const [typeConfirmPassword, setTypeConfirmPassword] = useState('password')
     const [typePassword, setTypePassword] = useState('password')
     const [showLoader, setShowLoader] = useState(false)
-
     const router = useRouter()
 
     const register = async () => {
@@ -66,6 +58,7 @@ const Register = () => {
             setErrEmail(true)
         }
     }
+
     const checkPassword = () => {
         if (password.length < 8) {
             setErrPassword(false)
@@ -73,6 +66,7 @@ const Register = () => {
             setErrPassword(true)
         }
     }
+
     const checkConfirmPassword = () => {
         if (password === confirmPassword) {
             setErrConfirmPassword(true)
@@ -80,6 +74,7 @@ const Register = () => {
             setErrConfirmPassword(false)
         }
     }
+
     const checkLastName = () => {
         if (lastName.length === 0) {
             setErrCheckLastName(false)
@@ -87,6 +82,7 @@ const Register = () => {
             setErrCheckLastName(true)
         }
     }
+
     const checkFirstName = () => {
         if (firstName.length === 0) {
             setErrCheckFirstName(false)
@@ -94,6 +90,7 @@ const Register = () => {
             setErrCheckFirstName(true)
         }
     }
+
     useEffect(() => {
         checkEmail()
         checkPassword()
@@ -118,7 +115,6 @@ const Register = () => {
                         type='text'
                         disableEye='true'
                     />
-
                     <div className={styles.fullName}>
                         <div>
                             <InputWithLable
@@ -133,7 +129,6 @@ const Register = () => {
                                 disableEye='true'
                             />
                         </div>
-
                         <div>
                             <InputWithLable
                                 firstInput={firstInputLastName}
@@ -148,7 +143,6 @@ const Register = () => {
                             />
                         </div>
                     </div>
-
                     <InputWithLable
                         firstInput={firstInputPassword}
                         setFirstInput={setFirstInputPassword}
@@ -169,7 +163,6 @@ const Register = () => {
                         placeholder='••••••••'
                         type={typeConfirmPassword}
                         setTypeInput={setTypeConfirmPassword} />
-
                     <div className={styles.tipPassword}>
                         <div className={errPassword ? styles.iLabel : ''}>
                             <FontAwesomeIcon className={styles.iconCircle} icon={faCircle} />
@@ -180,11 +173,9 @@ const Register = () => {
                             <label>Họ và Tên không được bỏ trống</label>
                         </div>
                     </div>
-
                     <button onClick={register}
                         className={`${styles.btnCreateAccount} ${errEmail && errPassword && errConfirmPassword ? '' : styles.disableButton}`}
                     >Tạo tài khoản</button>
-
                     <div className={styles.footer}>Bạn đã có tài khoản?
                         <Link className={styles.link} href='/auth/login'>  Đăng nhập</Link>
                     </div>

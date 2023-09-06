@@ -1,8 +1,7 @@
 
 import styles from './ConversationList.module.scss'
-import { useSelector } from 'react-redux';
-
-import Conversation from './Conversation';
+import { useSelector } from 'react-redux'
+import Conversation from './Conversation'
 
 const ConversationList = () => {
     const conversations = useSelector(state => state.conversation.conversations)
