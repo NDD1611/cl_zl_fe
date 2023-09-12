@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelopeOpen } from '@fortawesome/free-regular-svg-icons'
 import { useState, useEffect } from 'react'
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
+import { useRouter } from 'next/router'
 import styles from './PendingInvitation.module.scss'
 import Avatar from '../common/Avatar'
 import addPathToLinkAvatar from '../../utils/path'
@@ -11,6 +12,7 @@ import LoaderModal from '../common/Modal/LoaderModal'
 import { tabsActions } from '../../redux/actions/tabsAction'
 
 const PendingInvitation = () => {
+    const router = useRouter()
     const pendingInvitations = useSelector(state => state.friend.pendingInvitations)
     const [showLoader, setShowLoader] = useState(false)
     const [showBackbutton, setShowBackButton] = useState(false)
@@ -24,14 +26,17 @@ const PendingInvitation = () => {
         setShowLoader(true)
         const response = await api.acceptInvitation({ invitationId: invitation._id })
         setShowLoader(false)
+        router.push('/')
     }
+
     useEffect(() => {
-        if (window.innerWidth < 800) {
+        if (window.innerWidth < 700) {
             setShowBackButton(true)
         } else {
             setShowBackButton(false)
         }
     }, [])
+
     const showTabTwoAndCloseTabThree = () => {
         dispatch({
             type: tabsActions.SET_CLOSE_TAB_THREE
@@ -78,7 +83,9 @@ const PendingInvitation = () => {
                                     </div>
                                     <div className={styles.bottomItem}>
                                         <button onClick={() => { handleRejectFriend(invitation) }}>Từ chối</button>
-                                        <button onClick={() => { handleAcceptFriend(invitation) }} className={styles.accept}>Chấp nhận</button>
+                                        <button onClick={() => { handleAcceptFriend(invitation) }} className={styles.accept}>
+                                            Chấp nhận
+                                        </button>
                                     </div>
                                 </div>
                             )

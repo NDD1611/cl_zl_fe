@@ -23,7 +23,7 @@ function DashBoasd() {
 
   if (render)
     return (
-      <div id="dashboash" className={styles.dashboash}>
+      <div id="dashboard" className={styles.dashboard}>
         <MainTab></MainTab>
         <TabTwo>
           <HeaderTabTwo></HeaderTabTwo>

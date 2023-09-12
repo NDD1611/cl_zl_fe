@@ -32,7 +32,8 @@ const MainTab = () => {
             conversations.forEach(conversation => {
                 let messages = conversation.messages
                 messages.forEach(message => {
-                    if (message.receiverId === userId && message.status === '2') {
+                    if ((message.receiverId === userId && message.status === '2')
+                        || (message.status === '2' && message.typeAnnounce === 'acceptFriend')) {
                         count++
                     }
                 })
@@ -61,7 +62,7 @@ const MainTab = () => {
     }, [])
 
     useEffect(() => {
-        if (window.innerWidth < 800) {
+        if (window.innerWidth < 700) {
             dispatch({
                 type: tabsActions.SET_CLOSE_TAB_THREE
             })
@@ -82,7 +83,7 @@ const MainTab = () => {
             type: tabsActions.SET_MAIN_TAB,
             maintabSelect: 'chat'
         })
-        if (window.innerWidth < 800) {
+        if (window.innerWidth < 700) {
             dispatch({
                 type: tabsActions.SET_CLOSE_TAB_THREE
             })
@@ -105,7 +106,7 @@ const MainTab = () => {
             type: tabsActions.SET_MAIN_TAB,
             maintabSelect: 'friend'
         })
-        if (window.innerWidth < 800) {
+        if (window.innerWidth < 700) {
             dispatch({
                 type: tabsActions.SET_CLOSE_TAB_THREE
             })

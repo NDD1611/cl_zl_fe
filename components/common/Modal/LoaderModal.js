@@ -1,13 +1,14 @@
-import { InfinitySpin } from 'react-loader-spinner'
+import { InfinitySpin, Oval } from 'react-loader-spinner'
 import styles from './LoaderModal.module.scss'
 
 const LoaderModal = () => {
     return (
         <>
             <div className={styles.LoaderModal}>
-                <InfinitySpin
-                    width='200'
+                <Oval
+                    width={200}
                     color="#0062cc"
+                    secondaryColor='#ccc'
                 />
             </div>
         </>

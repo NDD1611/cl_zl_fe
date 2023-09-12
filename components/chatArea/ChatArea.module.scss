@@ -86,10 +86,10 @@
         }
 
         .divInputFake {
-            display: block;
+            // display: block;
             padding: 10px;
             word-wrap: break-word;
-            width: 70%;
+            // width: 70%;
             max-height: 200px;
             overflow-y: scroll;
             line-height: 20px;
@@ -137,25 +137,27 @@
         }
 
         .rightInputArea {
-            width: 25%;
+            // width: 25%;
             display: flex;
             justify-content: center;
             align-items: center;
+            gap: 20px;
 
             .buttonShowEmoji {
                 position: relative;
-
+                cursor: pointer;
             }
 
             .btnSendMes {
                 border: none;
                 color: rgb(106, 106, 214);
                 background-color: #fff;
-                padding-right: 20px;
+                // padding-right: 20px;
+                cursor: pointer;
 
-                &:hover {
-                    background-color: #ccc;
-                }
+                // &:hover {
+                //     background-color: #ccc;
+                // }
             }
 
             svg {

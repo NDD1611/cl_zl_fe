@@ -7,13 +7,14 @@ import styles from './ListFriend.module.scss'
 import Avatar from '../common/Avatar'
 import addPathToLinkAvatar from '../../utils/path'
 import { tabsActions } from '../../redux/actions/tabsAction'
+import { Oval } from 'react-loader-spinner'
 
 const ListFriend = () => {
     const [showBackbutton, setShowBackButton] = useState(false)
     const listFriends = useSelector(state => state.friend.listFriends)
     const dispatch = useDispatch()
     useEffect(() => {
-        if (window.innerWidth < 800) {
+        if (window.innerWidth < 700) {
             setShowBackButton(true)
         } else {
             setShowBackButton(false)
@@ -42,6 +43,11 @@ const ListFriend = () => {
                     Danh sách bạn bè
                 </div>
                 <div>
+                    {
+                        listFriends.length === 0 && <div className={styles.noFriend}>
+                            Bạn chưa có bạn bè
+                        </div>
+                    }
                     {
                         listFriends.map((friend) => {
                             return (

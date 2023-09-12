@@ -50,6 +50,12 @@ const ChatArea = () => {
                 chatInputElement.current.focus()
             }
         }
+        let messageArea = document.getElementById('messageArea')
+        let inputDiv = document.getElementById('divInput')
+        if (messageArea && inputDiv) {
+            console.log(parseInt(messageArea.clientWidth * 0.75))
+            inputDiv.style.width = `${parseInt(messageArea.clientWidth * 0.75)}px`
+        }
     }, [conversationSelected])
 
     const handleEmojiClick = (event) => {
@@ -61,6 +67,7 @@ const ChatArea = () => {
             imgElement.className = styles.emojiDivInput
             divInput.appendChild(imgElement)
         }
+        setWidthHeihgtChatArea()
     }
 
     const getMessageFromDivInputElement = () => {
@@ -88,13 +95,12 @@ const ChatArea = () => {
     }
 
     const handleSendMessage = () => {
-
         let message = getMessageFromDivInputElement()
-
         let senderId = userDetails._id
         let receiverId = receiverUser._id
         if (message.length && message !== '&nbsp;' && message !== '') {
             let data = {
+                _id: new Date(),
                 senderId,
                 receiverId,
                 content: message.replace('&nbsp;', ''),
@@ -128,11 +134,23 @@ const ChatArea = () => {
     }
 
     const setWidthHeihgtChatArea = () => {
-        console.log(window.innerHeight)
         let chatMesageArea = document.getElementById('chatMessageArea')
         let inputArea = document.getElementById('inputArea')
         if (chatMesageArea && inputArea) {
             chatMesageArea.style.height = `${window.innerHeight - inputArea.clientHeight - 5}px`
+        }
+        let messageArea = document.getElementById('messageArea')
+        if (messageArea) {
+            messageArea.scrollTop = messageArea.scrollHeight
+        }
+    }
+
+    const setwidthDivInput = () => {
+        let messageArea = document.getElementById('messageArea')
+        let inputDiv = document.getElementById('divInput')
+        if (messageArea && inputDiv) {
+            console.log(parseInt(messageArea.clientWidth * 0.75))
+            inputDiv.height = parseInt(messageArea.clientWidth * 0.75)
         }
     }
 
@@ -161,7 +179,7 @@ const ChatArea = () => {
                     <div className={styles.headerContent}>
                         <div className={styles.headerLeft}>
                             {
-                                window.innerWidth < 800 &&
+                                window.innerWidth < 700 &&
                                 <div className={styles.backButton} onClick={handleBackConversation}>
                                     <FontAwesomeIcon icon={faChevronLeft} />
                                 </div>

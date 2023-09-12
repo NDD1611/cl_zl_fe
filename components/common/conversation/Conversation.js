@@ -67,7 +67,8 @@ const Conversation = ({ conversation }) => {
         let listMessages = conversation.messages
         let count = 0
         for (let message of listMessages) {
-            if (message.status && message.status == 2 && message.receiverId == userDetails._id) {
+            if ((message.status && message.status == 2 && message.receiverId == userDetails._id)
+                || (message.status == 2 && message.typeAnnounce === 'acceptFriend')) {
                 count++
             }
         }
@@ -80,7 +81,7 @@ const Conversation = ({ conversation }) => {
             type: conversationActions.SET_SELECT_CONVERSATION,
             conversationSelected: conversation
         })
-        if (window.innerWidth < 800) {
+        if (window.innerWidth < 700) {
             dispatch({
                 type: tabsActions.SET_CLOSE_TAB_TWO
             })

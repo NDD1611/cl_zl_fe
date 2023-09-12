@@ -53,7 +53,7 @@ const MessageArea = () => {
         if (messageAreaElement.current) {
             messageAreaElement.current.scrollTop = messageAreaElement.current.scrollHeight
         }
-        if (window.innerWidth < 800) {
+        if (window.innerWidth < 700) {
             let listMessageContentElements = document.querySelectorAll(`.${styles.messageArea} .${styles.content}`)
             let widthChatArea = window.innerWidth - 64  // width cua mainTab and TabTwo   
             if (listMessageContentElements) {

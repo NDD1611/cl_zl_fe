@@ -12,7 +12,7 @@ const MenuItemFriend = () => {
     const pendingInvitation = useSelector(state => state.friend.pendingInvitations)
 
     const showTab3AndCloseTabTwo = () => {
-        if (window.innerWidth < 800) {
+        if (window.innerWidth < 700) {
             dispatch({
                 type: tabsActions.SET_SHOW_TAB_THREE
             })
