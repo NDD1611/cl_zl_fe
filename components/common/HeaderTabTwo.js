@@ -13,7 +13,9 @@ const HeaderTabTwo = () => {
                 <div className={styles.input}>
                     <input placeholder='Tìm kiếm' />
                 </div>
-                <div className={styles.iconAddFriend} onClick={() => { dispatch({ type: modalActions.SET_SHOW_MODAL_ADD_FRIEND }) }}>
+                <div className={styles.iconAddFriend} onClick={
+                    () => { dispatch({ type: modalActions.SET_SHOW_MODAL_ADD_FRIEND }) }
+                }>
                     <FontAwesomeIcon icon={faUserPlus} />
                 </div>
 

@@ -5,22 +5,27 @@ import { useState } from 'react'
 import { modalActions } from '../../../redux/actions/modalActions'
 import api from '../../../api/api'
 import { toast } from 'react-toastify'
+import LoaderModal from './LoaderModal'
 
 const ModalAddFriend = () => {
     const showModalAddFriend = useSelector(state => state.modal.showModalAddFriend)
     const dispatch = useDispatch()
     const [email, setEmail] = useState('')
+    const [showLoader, setShowLoader] = useState(false)
     const addFriend = async () => {
         const userDetails = JSON.parse(localStorage.getItem('userDetails'))
+        setShowLoader(true)
         const response = await api.friendInvitation({
             email: email,
             senderId: userDetails._id,
             senderEmail: userDetails.email
         })
         if (response.err) {
+            setShowLoader(false)
             toast.error(response?.exception?.response?.data)
             dispatch({ type: modalActions.SET_HIDE_MODAL_ADD_FRIEND })
         } else {
+            setShowLoader(false)
             toast.success(response?.data)
             dispatch({ type: modalActions.SET_HIDE_MODAL_ADD_FRIEND })
         }
@@ -30,6 +35,7 @@ const ModalAddFriend = () => {
     }
     return (
         <>
+            {showLoader && <LoaderModal></LoaderModal>}
             <MainModal
                 title='Thêm bạn'
                 closeModal={showModalAddFriend}

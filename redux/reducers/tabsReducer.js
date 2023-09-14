@@ -4,7 +4,8 @@ const initState = {
     maintabSelect: 'chat',
     countAnnounceMessage: 0,
     showTabTwo: true,
-    showTabThree: true
+    showTabThree: true,
+    showTabOne: true
 }
 
 const reducer = (state = initState, action) => {
@@ -19,6 +20,11 @@ const reducer = (state = initState, action) => {
                 ...state,
                 countAnnounceMessage: action.countAnnounceMessage
             }
+        case tabsActions.SET_SHOW_TAB_ONE:
+            return {
+                ...state,
+                showTabOne: true
+            }
         case tabsActions.SET_SHOW_TAB_TWO:
             return {
                 ...state,
@@ -28,6 +34,11 @@ const reducer = (state = initState, action) => {
             return {
                 ...state,
                 showTabThree: true
+            }
+        case tabsActions.SET_CLOSE_TAB_ONE:
+            return {
+                ...state,
+                showTabOne: false
             }
         case tabsActions.SET_CLOSE_TAB_TWO:
             return {

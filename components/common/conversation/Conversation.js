@@ -88,6 +88,9 @@ const Conversation = ({ conversation }) => {
             dispatch({
                 type: tabsActions.SET_SHOW_TAB_THREE
             })
+            dispatch({
+                type: tabsActions.SET_CLOSE_TAB_ONE
+            })
         }
     }
 

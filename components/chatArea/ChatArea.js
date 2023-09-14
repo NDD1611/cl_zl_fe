@@ -166,6 +166,9 @@ const ChatArea = () => {
         dispatch({
             type: tabsActions.SET_CLOSE_TAB_THREE
         })
+        dispatch({
+            type: tabsActions.SET_SHOW_TAB_ONE
+        })
     }
 
     return (

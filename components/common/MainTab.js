@@ -23,6 +23,7 @@ const MainTab = () => {
     const pendingInvitation = useSelector(state => state.friend.pendingInvitations)
     const conversations = useSelector(state => state.conversation.conversations)
     const avatarLink = useSelector(state => state.auth.userDetails.avatar)
+    const showTabOne = useSelector(state => state.tabs.showTabOne)
 
     useEffect(() => {
         if (conversations) {
@@ -128,48 +129,48 @@ const MainTab = () => {
         e.stopPropagation()
         setShowToggle(true)
     }
-
-    return (
-        <div className={styles.mainTab}>
-            < ModalDisplayInfo />
-            <ModalUpdateInfo />
-            <div className={styles.top}>
-                <div className={`${styles.avatar} + ${styles.quare}`}>
-                    <Avatar
-                        src={addPathToLinkAvatar(avatarLink)}
-                        width={48}
-                    ></Avatar>
+    if (showTabOne)
+        return (
+            <div className={styles.mainTab}>
+                < ModalDisplayInfo />
+                <ModalUpdateInfo />
+                <div className={styles.top}>
+                    <div className={`${styles.avatar} + ${styles.quare}`}>
+                        <Avatar
+                            src={addPathToLinkAvatar(avatarLink)}
+                            width={48}
+                        ></Avatar>
+                    </div>
+                    <div className={`${styles.quare} ${maintabSelect === 'chat' ? styles.maintabSelect : ''}`} onClick={clickChat}>
+                        <FontAwesomeIcon icon={faComments} />
+                        {countAnnounceMessage != 0
+                            ?
+                            <div className={styles.quantityMessageReceived}>
+                                <span>{countAnnounceMessage}</span>
+                            </div>
+                            : ''
+                        }
+                    </div>
+                    <div className={`${styles.quare} ${maintabSelect === 'friend' ? styles.maintabSelect : ''}`} onClick={clickFriend}>
+                        <FontAwesomeIcon icon={faAddressBook} />
+                        {
+                            pendingInvitation.length !== 0 && <div className={styles.quantityFriendInvitation}>
+                                <span>{pendingInvitation.length}</span>
+                            </div>
+                        }
+                    </div>
                 </div>
-                <div className={`${styles.quare} ${maintabSelect === 'chat' ? styles.maintabSelect : ''}`} onClick={clickChat}>
-                    <FontAwesomeIcon icon={faComments} />
-                    {countAnnounceMessage != 0
-                        ?
-                        <div className={styles.quantityMessageReceived}>
-                            <span>{countAnnounceMessage}</span>
+                <div className={styles.bottom}>
+                    <div className={`${styles.quare}`} onClick={(e) => { handleShowToggle(e) }}>
+                        <FontAwesomeIcon icon={faGear} />
+                        <div className={`${styles.toggleMenu} ${showToggle ? '' : styles.hideToggle}`}>
+                            <div onClick={() => { dispatch({ type: modalActions.SET_SHOW_MODAL_INFO }) }}>Thông tin tài khoản</div>
+                            <div className={styles.logout} onClick={() => { logout() }}>Đăng xuất </div>
                         </div>
-                        : ''
-                    }
-                </div>
-                <div className={`${styles.quare} ${maintabSelect === 'friend' ? styles.maintabSelect : ''}`} onClick={clickFriend}>
-                    <FontAwesomeIcon icon={faAddressBook} />
-                    {
-                        pendingInvitation.length !== 0 && <div className={styles.quantityFriendInvitation}>
-                            <span>{pendingInvitation.length}</span>
-                        </div>
-                    }
-                </div>
-            </div>
-            <div className={styles.bottom}>
-                <div className={`${styles.quare}`} onClick={(e) => { handleShowToggle(e) }}>
-                    <FontAwesomeIcon icon={faGear} />
-                    <div className={`${styles.toggleMenu} ${showToggle ? '' : styles.hideToggle}`}>
-                        <div onClick={() => { dispatch({ type: modalActions.SET_SHOW_MODAL_INFO }) }}>Thông tin tài khoản</div>
-                        <div className={styles.logout} onClick={() => { logout() }}>Đăng xuất </div>
                     </div>
                 </div>
             </div>
-        </div>
-    )
+        )
 }
 
 export default MainTab;
