@@ -26,9 +26,9 @@ const login = async (data) => {
     }
 }
 
-const refreshToken = async (data) => {
+const refreshToken = async (userDetails) => {
     try {
-        let response = await axios.post('/auth/refresh-token', data)
+        let response = await axios.post('/auth/refresh-token', { userDetails: userDetails })
         return response
     } catch (exception) {
         return {
@@ -54,6 +54,18 @@ const uploadAvatar = async (data) => {
     }
 }
 
+const uploadImageMessage = async (data) => {
+    try {
+        let response = await axios.post('/user/upload-image-message', data)
+        return response
+    } catch (exception) {
+        checkErr(exception)
+        return {
+            err: true,
+            exception
+        }
+    }
+}
 const updateUserInfo = async (data) => {
     try {
         let response = await axios.post('/user/update-info', data)
@@ -110,10 +122,49 @@ const checkErr = (exception) => {
         logout()
     }
 }
+const findFriend = async (data) => {
+    try {
+        let response = await axios.post('/friend/find', data)
+        return response
+    } catch (exception) {
+        checkErr(exception)
+        return {
+            err: true,
+            exception
+        }
+    }
+}
+
+const deleteFriend = async (data) => {
+    try {
+        let response = await axios.post('/friend/delete', data)
+        return response
+    } catch (exception) {
+        checkErr(exception)
+        return {
+            err: true,
+            exception
+        }
+    }
+}
+
+let createNewConversation = async (data) => {
+    try {
+        let response = await axios.post('/conversation/create', data)
+        return response
+    } catch (exception) {
+        checkErr(exception)
+        return {
+            err: true,
+            exception
+        }
+    }
+}
 
 export default {
     register, login, refreshToken,
-    uploadAvatar, updateUserInfo,
-    friendInvitation, rejectInvitation, acceptInvitation
+    uploadAvatar, updateUserInfo, uploadImageMessage,
+    friendInvitation, rejectInvitation, acceptInvitation,
+    findFriend, deleteFriend, createNewConversation
 }
 

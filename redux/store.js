@@ -8,6 +8,7 @@ import tabsReducer from './reducers/tabsReducer'
 import modalReducer from './reducers/modalReducer'
 import friendReducer from './reducers/friendReducer'
 import conversationreducer from './reducers/conversationReducer'
+import messageReducer from './reducers/messageReducer'
 
 const rootReducer = combineReducers({
     todo: todoReducer,
@@ -15,7 +16,8 @@ const rootReducer = combineReducers({
     tabs: tabsReducer,
     modal: modalReducer,
     friend: friendReducer,
-    conversation: conversationreducer
+    conversation: conversationreducer,
+    message: messageReducer
 })
 
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)))

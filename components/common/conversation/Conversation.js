@@ -3,14 +3,17 @@ import styles from './Conversation.module.scss'
 import Avatar from '../Avatar'
 import { useSelector, useDispatch } from 'react-redux'
 import { useEffect, useState } from 'react'
-import addPathToLinkAvatar from '../../../utils/path'
+import { addPathToLinkAvatar } from '../../../utils/path'
 import { conversationActions } from '../../../redux/actions/conversationAction'
 import { updateReceivedMessageStatus } from '../../../reltimeCommunication/socketConnection'
 import { tabsActions } from '../../../redux/actions/tabsAction'
 import MessageEmoji from '../MessageEmoji'
+import { faImage } from '@fortawesome/free-regular-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const Conversation = ({ conversation }) => {
     const userDetails = useSelector(state => state.auth.userDetails)
+    const conversationSelected = useSelector(state => state.conversation.conversationSelected)
     const conversations = useSelector(state => state.conversation.conversations)
     const countAnnounceMessage = useSelector(state => state.tabs.countAnnounceMessage)
     const [friend, setFriend] = useState({})
@@ -47,20 +50,31 @@ const Conversation = ({ conversation }) => {
                 }
             })
         }
-        const lastMessage = messages[messages.length - 1]
-        if (lastMessage.isAnnounceFromServer && lastMessage.typeAnnounce === "acceptFriend") {
-            if (userDetails._id === lastMessage.senderId) {
-                let mesTemp = friend.firstName + ' ' + friend.lastName + ' ' + 'đã đồng ý kết bạn'
-                setMessage(mesTemp)
-            } else if (userDetails._id === lastMessage.receiverId) {
-                let mesTemp = 'Bạn vừa kết bạn với ' + friend.firstName + ' ' + friend.lastName
-                setMessage(mesTemp)
-            }
-        } else {
-            if (lastMessage.senderId === userDetails._id) {
-                setMessage('Bạn: ' + lastMessage.content)
-            } else {
-                setMessage(lastMessage.content)
+        if (messages.length) {
+            const lastMessage = messages[messages.length - 1]
+            if (lastMessage.type == 'text') {
+                if (lastMessage.isAnnounceFromServer && lastMessage.typeAnnounce === "acceptFriend") {
+                    if (userDetails._id === lastMessage.senderId) {
+                        let mesTemp = friend.firstName + ' ' + friend.lastName + ' ' + 'đã đồng ý kết bạn'
+                        setMessage({ content: mesTemp, type: 'text' })
+                    } else if (userDetails._id === lastMessage.receiverId) {
+                        let mesTemp = 'Bạn vừa kết bạn với ' + friend.firstName + ' ' + friend.lastName
+                        setMessage({ content: mesTemp, type: 'text' })
+                    }
+                } else {
+                    if (lastMessage.senderId === userDetails._id) {
+                        setMessage({ content: 'Bạn: ' + lastMessage.content, type: 'text' })
+                    } else {
+                        setMessage({ content: lastMessage.content, type: 'text' })
+                    }
+                }
+
+            } else if (lastMessage.type == 'image') {
+                if (lastMessage.senderId === userDetails._id) {
+                    setMessage({ content: 'Bạn: ', type: 'image' })
+                } else {
+                    setMessage({ content: '', type: 'image' })
+                }
             }
         }
 
@@ -73,7 +87,7 @@ const Conversation = ({ conversation }) => {
             }
         }
         setCountMessageReceived(count)
-    }, [message, conversation, conversations])
+    }, [conversation, conversations])
 
     const handleChooseConversation = () => {
         localStorage.setItem('receiverUser', JSON.stringify(friend))
@@ -93,9 +107,8 @@ const Conversation = ({ conversation }) => {
             })
         }
     }
-
     return (
-        <div className={styles.conversationItem} onClick={handleChooseConversation}>
+        <div className={`${styles.conversationItem} ${conversationSelected && conversation._id == conversationSelected._id && styles.selectedConversation}`} onClick={handleChooseConversation}>
             <div className={styles.left}>
                 <Avatar
                     src={addPathToLinkAvatar(friend.avatar)}
@@ -106,15 +119,25 @@ const Conversation = ({ conversation }) => {
                 <div>
                     <div className={styles.name}>{friend.firstName + ' ' + friend.lastName}</div>
                     <div className={styles.message}>
-                        <MessageEmoji text={message} />
+                        {
+                            message.type == 'text' &&
+                            <MessageEmoji text={message.content} />
+                        }
+                        {
+                            message.type == 'image' &&
+                            <div>{message.content}
+                                <FontAwesomeIcon className={styles.iconImage} icon={faImage} />
+                                Hình ảnh
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
             <div className={styles.right}>
                 {
-                    countMessageReceived !== 0 ? <pan className={styles.annouceMessage}>
+                    countMessageReceived !== 0 && <span className={styles.annouceMessage}>
                         {countMessageReceived}
-                    </pan> : ''
+                    </span>
                 }
             </div>
         </div>

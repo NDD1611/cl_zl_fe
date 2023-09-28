@@ -4,58 +4,8 @@
     position: relative;
     margin: 0;
 
-    .headerChatArea {
-        position: absolute;
-        width: 100%;
-        top: 0;
-        left: 0;
-        background-color: #fff;
-
-        .headerContent {
-            padding: 10px;
-
-            .headerLeft {
-                display: flex;
-
-                .backButton {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    padding: 0 20px;
-                }
-
-                .headerAvatar {
-                    padding-right: 10px;
-                    position: relative;
-
-                    .iconUserOnline {
-                        position: absolute;
-                        background-color: green;
-                        padding: 5px;
-                        right: 10px;
-                        bottom: 3px;
-                        border-radius: 50%;
-                    }
-                }
-
-                .headerName {
-                    .name {
-                        font-size: 18px;
-                        margin: 0;
-                        margin-top: 5px;
-                        font-weight: 600;
-                    }
-
-                    .minuteActive {
-                        color: #ccc;
-                        font-size: 16px;
-                        margin-top: 7px;
-                        margin-bottom: 0;
-                    }
-                }
-            }
-
-        }
+    .iconTopDivInput {
+        width: 10%;
     }
 
     .chatOnboard {
@@ -68,104 +18,116 @@
     }
 
     .chatMessage {
-        height: 92%;
         background-color: #eef0f1;
     }
 
     .inputArea {
-        width: 100%;
-        border-top: 1px solid blue;
-        padding-top: 10px;
-        display: flex;
         position: relative;
+
+        .mainInput {
+            width: 100%;
+            border-top: 1px solid blue;
+            padding-top: 10px;
+            display: flex;
+
+            .divInputFake {
+                padding: 10px;
+                word-wrap: break-word;
+                max-height: 150px;
+                overflow-y: scroll;
+                line-height: 20px;
+
+                &::-webkit-scrollbar {
+                    width: 7px;
+                }
+
+                &::-webkit-scrollbar-track {
+                    background: #fff !important;
+                }
+
+                &::-webkit-scrollbar-thumb {
+                    background: #fff;
+                    border-radius: 10px;
+                }
+
+                &::-webkit-scrollbar-thumb:hover {
+                    background: #555;
+                }
+
+                .emojiDivInput {
+                    width: 20px;
+                    height: 20px;
+                    margin-left: 1px;
+                    margin-right: 1px;
+                }
+
+                &:empty:not(:focus):before {
+                    content: attr(data-text);
+                    color: gray;
+                }
+
+                &:empty:focus:before {
+                    content: attr(data-text);
+                    color: gray;
+                }
+
+                &:focus {
+                    outline: none;
+                }
+
+                &::-webkit-scrollbar {
+                    width: 7px;
+                }
+
+                /* Track */
+                &::-webkit-scrollbar-track {
+                    background: #f1f1f1;
+                }
+
+                /* Handle */
+                &::-webkit-scrollbar-thumb {
+                    background: #ccc;
+                    border-radius: 10px;
+                }
+
+                /* Handle on hover */
+                &::-webkit-scrollbar-thumb:hover {
+                    background: #555;
+                }
+            }
+
+            .rightInputArea {
+                // width: 25%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 20px;
+
+                .buttonShowEmoji {
+                    position: relative;
+                    cursor: pointer;
+                }
+
+                .btnSendMes {
+                    border: none;
+                    color: rgb(106, 106, 214);
+                    background-color: #fff;
+                    cursor: pointer;
+                }
+
+                svg {
+                    font-size: 20px;
+                    border: none;
+                    background-color: #fff;
+                    color: blue;
+                }
+            }
+        }
 
         .containerEmojiPicker {
             position: absolute;
             top: -450px;
             right: 10px;
-        }
-
-        .divInputFake {
-            // display: block;
-            padding: 10px;
-            word-wrap: break-word;
-            // width: 70%;
-            max-height: 200px;
-            overflow-y: scroll;
-            line-height: 20px;
-
-            .emojiDivInput {
-                width: 20px;
-                height: 20px;
-                margin-left: 1px;
-                margin-right: 1px;
-            }
-
-            &:empty:not(:focus):before {
-                content: attr(data-text);
-                color: gray;
-            }
-
-            &:empty:focus:before {
-                content: attr(data-text);
-                color: gray;
-            }
-
-            &:focus {
-                outline: none;
-            }
-
-            &::-webkit-scrollbar {
-                width: 7px;
-            }
-
-            /* Track */
-            &::-webkit-scrollbar-track {
-                background: #f1f1f1;
-            }
-
-            /* Handle */
-            &::-webkit-scrollbar-thumb {
-                background: #ccc;
-                border-radius: 10px;
-            }
-
-            /* Handle on hover */
-            &::-webkit-scrollbar-thumb:hover {
-                background: #555;
-            }
-        }
-
-        .rightInputArea {
-            // width: 25%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-
-            .buttonShowEmoji {
-                position: relative;
-                cursor: pointer;
-            }
-
-            .btnSendMes {
-                border: none;
-                color: rgb(106, 106, 214);
-                background-color: #fff;
-                // padding-right: 20px;
-                cursor: pointer;
-
-                // &:hover {
-                //     background-color: #ccc;
-                // }
-            }
-
-            svg {
-                font-size: 20px;
-                border: none;
-                background-color: #fff;
-                color: blue;
-            }
         }
     }
 }

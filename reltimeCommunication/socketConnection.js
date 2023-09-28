@@ -4,6 +4,7 @@ import store from '../redux/store'
 import { authActions } from '../redux/actions/authAction'
 import { friendActions } from '../redux/actions/friendAction'
 import { conversationActions } from '../redux/actions/conversationAction'
+import api from '../api/api'
 
 export let socket = null
 export const socketConnectToServer = (userDetails) => {
@@ -19,9 +20,13 @@ export const socketConnectToServer = (userDetails) => {
     })
     socket.on("connect_error", async (err) => {
         if (err.message === 'TokenExpire') {
-            logout()
+            let userDetails = JSON.parse(localStorage.getItem('userDetails'))
+            let response = await api.refreshToken(userDetails)
+            if (response && response.data) {
+                localStorage.setItem('userDetails', JSON.stringify(response.data.userDetails))
+                socketConnectToServer(response.data.userDetails)
+            }
         } else if (err.message !== 'UserConnected') {
-            // alert('Vui lòng đăng nhập lại.')
             logout()
         }
     })
@@ -80,6 +85,23 @@ export const socketConnectToServer = (userDetails) => {
             activeUsers: activeUsers
         })
     })
+    socket.on('update-friends-user-details', (data) => {
+        const { friends } = data
+        let userDetails = JSON.parse(localStorage.getItem('userDetails'))
+        userDetails.friends = friends
+        localStorage.setItem('userDetails', JSON.stringify(userDetails))
+    })
+    socket.on('update-token', (data) => {
+        let { token } = data
+        let userDetails = JSON.parse(localStorage.getItem('userDetails'))
+        userDetails.token = token
+        localStorage.setItem('userDetails', JSON.stringify(userDetails))
+    })
+
+    setInterval(() => {
+        let userDetails = JSON.parse(localStorage.getItem('userDetails'))
+        socket.emit('check-token-expire', userDetails)
+    }, process.env.NEXT_PUBLIC_TIME_CHECK_TOKEN)
 }
 
 export const sendMessage = (data) => {

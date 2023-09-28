@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import { useSelector, useDispatch } from 'react-redux'
 import { modalActions } from '../../../redux/actions/modalActions'
-import addPathToLinkAvatar from '../../../utils/path'
+import { addPathToLinkAvatar } from '../../../utils/path'
 
 const ModalDisplayInfo = () => {
 
@@ -74,7 +74,6 @@ const ModalDisplayInfo = () => {
                                 Cập nhật thông tin
                             </button>
                         </div>
-
                     </div>
                 </div>
             </MainModal>

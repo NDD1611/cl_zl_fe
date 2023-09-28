@@ -2,7 +2,9 @@ export const addSameDayAndSameAuth = (messages) => {
     for (let i = 1; i < messages.length; i++) {
         let message = messages[i]
         let lastMessage = messages[i - 1]
-        if (message.senderId === lastMessage.senderId) {
+        if (lastMessage.typeAnnounce == 'acceptFriend') {
+            message.sameAuth = false
+        } else if (message.senderId === lastMessage.senderId) {
             message.sameAuth = true
         } else {
             message.sameAuth = false
@@ -36,30 +38,32 @@ export const addSameDayAndSameAuth = (messages) => {
 }
 
 export const checkShowTimeAndStatusInBottom = (messages) => {
-    for (let i = 0; i < messages.length; i++) {
-        let message = messages[i]
-        messages[i].showStatus = false
-        let lastMessage = messages[i - 1]
-        if (message.sameDay === false) {
-            messages[i - 1].showTime = true
+    if (messages.length) {
+        for (let i = 0; i < messages.length; i++) {
+            let message = messages[i]
+            messages[i].showStatus = false
+            let lastMessage = messages[i - 1]
+            if (message.sameDay === false) {
+                messages[i - 1].showTime = true
+            }
+            if (message.sameAuth === false) {
+                messages[i - 1].showTime = true
+            }
         }
-        if (message.sameAuth === false) {
-            messages[i - 1].showTime = true
+        messages[messages.length - 1].showTime = true
+        messages[messages.length - 1].showStatus = true
+        let status = messages[messages.length - 1].status
+        if (status == 0) {
+            messages[messages.length - 1].statusText = 'đang gửi'
         }
-    }
-    messages[messages.length - 1].showTime = true
-    messages[messages.length - 1].showStatus = true
-    let status = messages[messages.length - 1].status
-    if (status == 0) {
-        messages[messages.length - 1].statusText = 'đang gửi'
-    }
-    if (status == 1) {
-        messages[messages.length - 1].statusText = 'đã gửi'
-    }
-    if (status == 2) {
-        messages[messages.length - 1].statusText = 'đã nhận'
-    }
-    if (status == 3) {
-        messages[messages.length - 1].statusText = 'đã xem'
+        if (status == 1) {
+            messages[messages.length - 1].statusText = 'đã gửi'
+        }
+        if (status == 2) {
+            messages[messages.length - 1].statusText = 'đã nhận'
+        }
+        if (status == 3) {
+            messages[messages.length - 1].statusText = 'đã xem'
+        }
     }
 }

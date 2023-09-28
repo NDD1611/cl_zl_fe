@@ -11,7 +11,7 @@ import { useState, useEffect } from 'react'
 import ModalDisplayInfo from './Modal/ModalDisplayInfo'
 import { modalActions } from '../../redux/actions/modalActions'
 import ModalUpdateInfo from './Modal/ModalUpdateInfo'
-import addPathToLinkAvatar from '../../utils/path'
+import { addPathToLinkAvatar } from '../../utils/path'
 import { authActions } from '../../redux/actions/authAction'
 
 const MainTab = () => {
@@ -32,12 +32,14 @@ const MainTab = () => {
             let count = 0
             conversations.forEach(conversation => {
                 let messages = conversation.messages
-                messages.forEach(message => {
-                    if ((message.receiverId === userId && message.status === '2')
-                        || (message.status === '2' && message.typeAnnounce === 'acceptFriend')) {
-                        count++
-                    }
-                })
+                if (messages.length) {
+                    messages.forEach(message => {
+                        if ((message.receiverId === userId && message.status == '2')
+                            || (message.status == '2' && message.typeAnnounce === 'acceptFriend')) {
+                            count++
+                        }
+                    })
+                }
             })
             dispatch({
                 type: tabsActions.SET_COUNT_ANNOUNCE_MESSAGE,

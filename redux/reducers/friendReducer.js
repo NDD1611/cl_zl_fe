@@ -3,7 +3,8 @@ import { friendActions } from "../actions/friendAction"
 const initState = {
     selectItem: 'listFriend',
     listFriends: [],
-    pendingInvitations: []
+    pendingInvitations: [],
+    isFriend: true
 }
 
 const reducer = (state = initState, action) => {
@@ -22,6 +23,16 @@ const reducer = (state = initState, action) => {
             return {
                 ...state,
                 listFriends: action.listFriends
+            }
+        case friendActions.SET_IS_FRIEND:
+            return {
+                ...state,
+                isFriend: true
+            }
+        case friendActions.SET_IS_NOT_FRIEND:
+            return {
+                ...state,
+                isFriend: false
             }
         default:
             return state

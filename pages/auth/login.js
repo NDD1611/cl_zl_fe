@@ -19,7 +19,6 @@ const Login = () => {
     const login = async () => {
         setShowLoader(true)
         const response = await api.login({ email, password })
-        console.log(response)
         if (response.err) {
             toast.error(response?.exception?.response?.data, {
                 position: 'bottom-center'
