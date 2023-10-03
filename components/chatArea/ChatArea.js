@@ -1,6 +1,6 @@
 
 import { useSelector, useDispatch } from 'react-redux'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import styles from './ChatArea.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faImage, faPaperPlane } from '@fortawesome/free-solid-svg-icons'
@@ -25,7 +25,6 @@ const ChatArea = () => {
     const conversationSelected = useSelector(state => state.conversation.conversationSelected)
     const conversations = useSelector(state => state.conversation.conversations)
     const activeUsers = useSelector(state => state.auth.activeUsers)
-    const isFriend = useSelector(state => state.friend.isFriend)
     const [receiverUser, setReceiverUser] = useState({})
     const [userDetails, setUserDetails] = useState({})
     const [showEmoji, setShowEmoji] = useState(false)
@@ -34,17 +33,9 @@ const ChatArea = () => {
     const chatMessageElement = useRef()
     const chatInputElement = useRef()
     const inputAreaElement = useRef()
-    const [paddingTopMessageArea, setPaddingTopMessageArea] = useState(0)
-    const [paddingBottomMessageArea, setPaddingBottomMessageArea] = useState(20)
+    const headerElement = useRef()
 
     const dispatch = useDispatch()
-    useLayoutEffect(() => {
-        if (isFriend) {
-            setPaddingTopMessageArea(80)
-        } else {
-            setPaddingTopMessageArea(130)
-        }
-    }, [isFriend])
     useEffect(() => {
         setUserDetails(JSON.parse(localStorage.getItem('userDetails')))
         document.addEventListener('click', (e) => {
@@ -52,7 +43,6 @@ const ChatArea = () => {
         })
     }, [])
 
-    const [heightMessageArea, setHeightMessageArea] = useState()
     useEffect(() => {
         let receiverUser = JSON.parse(localStorage.getItem('receiverUser'))
         if (receiverUser) {
@@ -65,21 +55,31 @@ const ChatArea = () => {
         if (chatAreaElement) {
             setWidthDivInput(chatAreaElement.current.clientWidth - 150)
         }
-        if (inputAreaElement.current) {
-            let heightInputArea = inputAreaElement.current.clientHeight
-            let heightMessageArea = window.innerHeight - heightInputArea - paddingTopMessageArea - paddingBottomMessageArea - 20 //20 padding-bottom
-            setHeightMessageArea(heightMessageArea)
-        }
 
-        if (inputAreaElement.current) {
-            let resizeObserver = new ResizeObserver((entries) => {
-                let heightInputArea = entries[0].target.clientHeight
-                let heightMessageArea = window.innerHeight - heightInputArea - paddingTopMessageArea - paddingBottomMessageArea - 20
-                setHeightMessageArea(heightMessageArea)
-            })
-            resizeObserver.observe(inputAreaElement.current)
+        let resizeObserver = new ResizeObserver((entries) => {
+            let heightInputArea = entries[0].target
+            let headerContainerElement = document.getElementById('headerContainer')
+            let messageArea = document.getElementById('chatMessageArea')
+            if (headerContainerElement && messageArea) {
+                let height = window.innerHeight - heightInputArea.clientHeight - headerContainerElement.clientHeight
+                messageArea.style.height = height + 'px'
+            }
+        })
+        let inputAreaElement = document.getElementById('inputArea')
+        if (inputAreaElement) {
+            resizeObserver.observe(inputAreaElement)
         }
-    }, [conversationSelected, paddingTopMessageArea])
+    }, [conversationSelected])
+
+    useEffect(() => {
+        let headerContainerElement = document.getElementById('headerContainer')
+        let inputAreaElement = document.getElementById('inputArea')
+        let messageArea = document.getElementById('chatMessageArea')
+        if (headerContainerElement && inputAreaElement && messageArea) {
+            let height = window.innerHeight - inputAreaElement.clientHeight - headerContainerElement.clientHeight
+            messageArea.style.height = height + 'px'
+        }
+    })
 
     const handleEmojiClick = (event) => {
         let divInput = document.getElementById('divInput')
@@ -121,17 +121,19 @@ const ChatArea = () => {
         let senderId = userDetails._id
         let receiverId = receiverUser._id
         if (message.length && message !== '&nbsp;' && message !== '') {
+
+            let conversationSelectedId = conversationSelected._id
             let data = {
                 _id: new Date() + Math.random(),
-                senderId,
+                sender: {
+                    _id: senderId
+                },
                 receiverId,
                 content: message.replace('&nbsp;', ''),
                 type: 'text',
                 date: new Date(),
                 status: '0'     //0: dang gui, 1: da gui, 2: da nhan, 3: da xem.
             }
-
-            let conversationSelectedId = conversationSelected._id
             let conversationCurrent = null
             for (let index = 0; index < conversations.length; index++) {
                 if (conversations[index]._id == conversationSelectedId) {
@@ -148,6 +150,17 @@ const ChatArea = () => {
                 })
                 sendMessage(data)
             } else {
+                let data = {
+                    _id: new Date() + Math.random(),
+                    sender: {
+                        _id: senderId
+                    },
+                    receiverId,
+                    content: message.replace('&nbsp;', ''),
+                    type: 'text',
+                    date: new Date(),
+                    status: '0'     //0: dang gui, 1: da gui, 2: da nhan, 3: da xem.
+                }
                 let response = await api.createNewConversation({
                     participants: [senderId, receiverId],
                     message: data
@@ -181,24 +194,21 @@ const ChatArea = () => {
     const handleStopPropagation = (e) => {
         e.stopPropagation()
     }
-
     return (
         <div id='chatArea' className={styles.ChatArea} ref={chatAreaElement}>
             {
                 conversationSelected === null && <div className={styles.chatOnboard}>Chọn cuộc hội thoại để chat</div>
             }
-            <HeaderChatArea />
+            <div id='headerContainer' ref={headerElement}>
+                <HeaderChatArea />
+            </div>
+
             {
                 conversationSelected &&
                 <div
                     ref={chatMessageElement}
                     id='chatMessageArea'
                     className={styles.chatMessage}
-                    style={{
-                        height: heightMessageArea + 'px',
-                        paddingTop: paddingTopMessageArea + 'px',
-                        paddingBottom: paddingBottomMessageArea + 'px'
-                    }}
                 >
                     <MessageArea />
                 </div>

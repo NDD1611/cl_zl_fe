@@ -36,7 +36,7 @@ const reducer = (state = initState, action) => {
                 if (conversationsCopy[index]._id === conversationId) {
                     for (let i in conversationsCopy[index].messages) {
                         let message = conversationsCopy[index].messages[i]
-                        if (message.senderId === senderId && message.receiverId === receiverId) {
+                        if (message.sender._id === senderId && message.receiverId === receiverId) {
                             if (message.status == 1 || message.status == 0 || message.status == 2) {
                                 conversationsCopy[index].messages[i].status = 3
                             }
@@ -55,7 +55,7 @@ const reducer = (state = initState, action) => {
                 if (conversationsCopy[index]._id === conversationId) {
                     for (let i in conversationsCopy[index].messages) {
                         let message = conversationsCopy[index].messages[i]
-                        if (message.senderId === senderId && message.receiverId === receiverId) {
+                        if (message.sender._id === senderId && message.receiverId === receiverId) {
                             if (message.status == 0) {
                                 conversationsCopy[index].messages[i].status = 1
                             }
@@ -74,7 +74,8 @@ const reducer = (state = initState, action) => {
                 if (conversationsCopy[index]._id === conversationId) {
                     for (let i in conversationsCopy[index].messages) {
                         let message = conversationsCopy[index].messages[i]
-                        if (message.senderId === senderId && message.receiverId === receiverId) {
+                        console.log(message)
+                        if (message.sender._id === senderId && message.receiverId === receiverId) {
                             if (message.status == 1 || message.status == 0) {
                                 conversationsCopy[index].messages[i].status = 2
                             }

@@ -10,7 +10,8 @@ const ContentMessage = ({ message }) => {
     return (
         <>
             {message.type == 'text' &&
-                <div className={styles.content} style={{ maxWidth: maxWidth + 'px' }}>
+                <div className={styles.content}
+                >
                     <MessageEmoji
                         text={message.content}
                     />

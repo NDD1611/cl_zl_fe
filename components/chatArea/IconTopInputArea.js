@@ -23,7 +23,9 @@ const IconTopInputArea = () => {
             let receiverUser = JSON.parse(localStorage.getItem('receiverUser'))
             let data = {
                 _id: new Date(),
-                senderId: userDetails._id,
+                sender: {
+                    _id: userDetails._id
+                },
                 receiverId: receiverUser._id,
                 content: srcBlob,
                 type: 'image',
@@ -52,7 +54,9 @@ const IconTopInputArea = () => {
                 } else {
                     let newdData = {
                         _id: new Date(),
-                        senderId: userDetails._id,
+                        sender: {
+                            _id: userDetails._id
+                        },
                         receiverId: receiverUser._id,
                         content: response.data.path,
                         type: 'image',
@@ -62,14 +66,15 @@ const IconTopInputArea = () => {
                     sendMessage(newdData)
                 }
             } else {
-
                 const res = await api.uploadImageMessage(formData)
                 if (res.err) {
                     toast.error('Đã xảy ra lỗi. Vui lòng thử lại sau')
                 } else {
                     let newdData = {
                         _id: new Date(),
-                        senderId: userDetails._id,
+                        sender: {
+                            _id: userDetails._id
+                        },
                         receiverId: receiverUser._id,
                         content: res.data.path,
                         type: 'image',

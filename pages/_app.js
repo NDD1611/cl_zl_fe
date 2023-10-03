@@ -1,4 +1,5 @@
 import store from '../redux/store'
+import '../styles/global.css'
 import { Provider } from 'react-redux'
 import { ToastContainer } from 'react-toastify'
 import { config } from '@fortawesome/fontawesome-svg-core'

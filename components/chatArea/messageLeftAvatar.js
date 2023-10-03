@@ -1,11 +1,12 @@
 
+import { useSelector } from 'react-redux';
 import { addPathToLinkAvatar } from '../../utils/path';
 import Avatar from '../common/Avatar';
-import ContentMessage from './contentMessage';
 import styles from './messageLeftAvatar.module.scss'
+import MessageEmoji from '../common/MessageEmoji';
 
-const MessageLeftAvatar = ({ message, receiverUser }) => {
-
+const MessageLeftAvatar = ({ message, avatar }) => {
+    const maxWidth = useSelector(state => state.message.maxWidth)
     return (
         <>
             {
@@ -17,11 +18,26 @@ const MessageLeftAvatar = ({ message, receiverUser }) => {
             <div className={styles.messageLeft} >
                 <div className={styles.containerAvatar}>
                     <Avatar
-                        src={receiverUser ? addPathToLinkAvatar(receiverUser.avatar) : ''}
+                        src={avatar ? addPathToLinkAvatar(avatar) : ''}
                         width={30}
                     />
                 </div>
-                <ContentMessage message={message} />
+                {message.type == 'text' &&
+                    <div className={styles.content} style={{ maxWidth: maxWidth + 'px' }}>
+                        <MessageEmoji
+                            text={message.content}
+                        />
+                        <div className={styles.footerDate}>{message.showTime ? message.hourMinute : ''}</div>
+                    </div>
+                }
+                {
+                    message.type == 'image' &&
+                    <div className={styles.contentImage}>
+                        <div className={styles.messageImage}>
+                            <img src={message.content.includes('http') ? message.content : addPathToLinkAvatar(message.content)} />
+                        </div>
+                    </div>
+                }
             </div>
         </>
     )

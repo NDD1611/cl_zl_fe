@@ -11,7 +11,7 @@ const HeaderTabTwo = () => {
         <>
             <div className={styles.HeaderTabTwo}>
                 <div className={styles.input}>
-                    <input placeholder='Tìm kiếm' />
+                    <input disabled placeholder='Tìm kiếm' />
                 </div>
                 <div className={styles.iconAddFriend} onClick={
                     () => { dispatch({ type: modalActions.SET_SHOW_MODAL_FIND_FRIEND }) }

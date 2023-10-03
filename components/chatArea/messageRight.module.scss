@@ -34,17 +34,31 @@
     .contentImage {
         width: fit-content;
         word-wrap: break-word;
-        background-color: #e5efff;
         margin-top: 3px;
         min-width: 100px;
         max-width: 50%;
 
         .messageImage {
             border-radius: 15px;
+            position: relative;
 
             img {
                 width: 100%;
                 border-radius: 15px;
+            }
+
+            .loaderImage {
+                background-color: #ebe5e5fa;
+                opacity: 0.5;
+                color: #fff;
+                position: absolute;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
             }
         }
     }

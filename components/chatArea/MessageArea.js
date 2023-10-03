@@ -57,9 +57,9 @@ const MessageArea = () => {
     useEffect(() => {
         let widthChatArea
         if (window.innerWidth < 700) {
-            widthChatArea = parseInt((window.innerWidth - 64) * 0.7)  // width cua mainTab and TabTwo  
+            widthChatArea = parseInt((window.innerWidth - 64) * 0.8)  // width cua mainTab and TabTwo  
         } else {
-            widthChatArea = parseInt((window.innerWidth - 64 - 344) * 0.7) // width cua mainTab and TabTwo   
+            widthChatArea = parseInt((window.innerWidth - 64 - 344) * 0.8) // width cua mainTab and TabTwo   
         }
         dispatch({
             type: messageActions.SET_MAX_WIDTH_MESSAGE,
@@ -81,8 +81,8 @@ const MessageArea = () => {
             >
                 {
                     messages && messages.map((message, index) => {
-                        if (message.typeAnnounce === "acceptFriend") {
-                            if (message.senderId === userDetails._id) {
+                        if (message.type === "accept_friend") {
+                            if (message.sender._id === userDetails._id) {
                                 return (
                                     <div key={message._id}>
                                         {
@@ -93,11 +93,11 @@ const MessageArea = () => {
                                         }
                                         <div className={styles.acceptFriend}>
                                             <Avatar
-                                                src={receiverUser ? addPathToLinkAvatar(receiverUser.avatar) : ''}
+                                                src={message?.sender?.avatar ? addPathToLinkAvatar(message?.sender?.avatar) : ''}
                                                 width={20}
                                             />
                                             <p>
-                                                {receiverUser ? receiverUser.firstName + ' ' + receiverUser.lastName : ''}
+                                                {message?.sender ? message?.sender?.firstName + ' ' + message?.sender?.lastName : ''}
                                             </p>
                                             <p> đã đồng ý kết bạn</p>
                                         </div>
@@ -116,11 +116,11 @@ const MessageArea = () => {
                                         <div className={styles.acceptFriend}>
                                             <p>bạn vừa mới kết bạn với</p>
                                             <Avatar
-                                                src={receiverUser ? addPathToLinkAvatar(receiverUser.avatar) : ''}
+                                                src={message?.sender?.avatar ? addPathToLinkAvatar(message?.sender?.avatar) : ''}
                                                 width={20}
                                             />
                                             <p>
-                                                {receiverUser ? receiverUser.firstName + ' ' + receiverUser.lastName : ''}
+                                                {message?.sender ? message?.sender?.firstName + ' ' + message?.sender?.lastName : ''}
                                             </p>
                                         </div>
                                         {messages.length - 1 == index && <div className={styles.paddingFooter}></div>}
@@ -130,25 +130,25 @@ const MessageArea = () => {
                         }
 
 
-                        if (index == 0 && message.senderId === receiverUser._id) {
+                        if (index == 0 && message?.sender?._id != userDetails._id) {
                             return (
                                 <div key={message._id} >
                                     <MessageLeftAvatar
                                         message={message}
-                                        receiverUser={receiverUser}
+                                        avatar={message?.sender?.avatar}
                                     />
                                     {messages.length - 1 == index && <div className={styles.paddingFooter}></div>}
                                 </div>
                             )
                         }
 
-                        if (message.senderId === receiverUser._id) {
+                        if (message.sender._id === receiverUser._id) {
                             if (message.sameAuth === false || message.sameDay === false) {
                                 return (
                                     <div key={message._id} >
                                         <MessageLeftAvatar
                                             message={message}
-                                            receiverUser={receiverUser}
+                                            avatar={message?.sender?.avatar}
                                         />
                                         {messages.length - 1 == index && <div className={styles.paddingFooter}></div>}
                                     </div>
@@ -163,7 +163,7 @@ const MessageArea = () => {
                                     </div>
                                 )
                             }
-                        } else if (message.senderId === userDetails._id) {
+                        } else if (message.sender._id === userDetails._id) {
                             return (
                                 <div key={message._id} >
                                     <MessageRight

@@ -1,6 +1,6 @@
 .HeaderTabTwo {
     display: flex;
-    padding: 10px 20px;
+    padding: 10px 10px;
     gap: 10px;
     border-bottom: 1px solid #ccc;
 }
@@ -14,7 +14,7 @@
         border: none;
         background-color: #eaedf0;
         padding: 3px 10px;
-        height: 24px;
+        height: 30px;
         border-radius: 5px;
 
         &:focus {
