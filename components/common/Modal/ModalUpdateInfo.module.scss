@@ -32,6 +32,8 @@
         .btns {
             z-index: 101;
             margin-top: 20px;
+            position: absolute;
+            bottom: 50px;
 
             button {
                 cursor: pointer;

@@ -1,7 +1,7 @@
 import { conversationActions } from "../actions/conversationAction"
 
 const initState = {
-    conversations: [],
+    conversations: null,
     conversationSelected: null
 }
 

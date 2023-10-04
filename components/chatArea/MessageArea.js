@@ -38,7 +38,6 @@ const MessageArea = () => {
 
     useEffect(() => {
         if (userDetails) {
-
             let listMessageStatusEqual2 = []
             messages?.forEach(message => {
                 if (message.sender._id != userDetails._id && message.status == '2') {
@@ -59,6 +58,10 @@ const MessageArea = () => {
                 })
             }
         }
+        let messageAreaElement = document.getElementById('messageArea')
+        if (messageAreaElement) {
+            messageAreaElement.scrollTop = messageAreaElement.scrollHeight
+        }
     }, [messages])
 
     useEffect(() => {
@@ -75,8 +78,9 @@ const MessageArea = () => {
     }, [])
 
     useEffect(() => {
-        if (messageAreaElement.current) {
-            messageAreaElement.current.scrollTop = messageAreaElement.current.scrollHeight
+        let messageAreaElement = document.getElementById('messageArea')
+        if (messageAreaElement) {
+            messageAreaElement.scrollTop = messageAreaElement.scrollHeight
         }
     })
     return (

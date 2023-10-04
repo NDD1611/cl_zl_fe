@@ -20,12 +20,12 @@ const ConversationList = () => {
             }
             {
 
-                conversations.length == 0 && <div className={styles.noListConversation}>
+                conversations?.length == 0 && <div className={styles.noListConversation}>
                     Kết bạn để bắt đầu chat
                 </div>
             }
             {
-                conversations.map((conversation) => {
+                conversations && conversations.map((conversation) => {
                     return <Conversation
                         key={conversation._id}
                         conversation={conversation}
