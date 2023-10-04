@@ -52,29 +52,26 @@ export const socketConnectToServer = (userDetails) => {
         })
     })
     socket.on('update-watched-status-message-in-redux-store', (data) => {
-        const { senderId, receiverId, conversationId } = data
+        const { listMessage, conversationId } = data
         store.dispatch({
             type: conversationActions.SET_STATUS_WATCHED_FOR_MESSAGES,
-            senderId,
-            receiverId,
+            listMessage,
             conversationId
         })
     })
     socket.on('update-sent-status-message-in-redux-store', (data) => {
-        const { senderId, receiverId, conversationId } = data
+        const { listMessage, conversationId } = data
         store.dispatch({
             type: conversationActions.SET_STATUS_SENT_FOR_MESSAGES,
-            senderId,
-            receiverId,
+            listMessage,
             conversationId
         })
     })
     socket.on('update-received-status-message-in-redux-store', (data) => {
-        const { senderId, receiverId, conversationId } = data
+        const { listMessage, conversationId } = data
         store.dispatch({
             type: conversationActions.SET_STATUS_RECEIVED_FOR_MESSAGES,
-            senderId,
-            receiverId,
+            listMessage,
             conversationId
         })
     })
@@ -108,17 +105,15 @@ export const sendMessage = (data) => {
     socket.emit('send-message', data)
 }
 
-export const updateStatusMessage = ({ receiverId, senderId, conversationId }) => {
+export const updateStatusMessage = ({ listMessage, conversationId }) => {
     socket.emit('message-watched', {
-        receiverId,
-        senderId,
+        listMessage,
         conversationId
     })
 }
-export const updateReceivedMessageStatus = ({ receiverId, senderId, conversationId }) => {
+export const updateReceivedMessageStatus = ({ listMessage, conversationId }) => {
     socket.emit('message-received', {
-        receiverId,
-        senderId,
+        listMessage,
         conversationId
     })
 }

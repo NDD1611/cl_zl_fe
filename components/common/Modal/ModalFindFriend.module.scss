@@ -155,23 +155,33 @@
             .btnFind {
                 cursor: pointer;
                 border: none;
+                border-radius: 5px;
                 padding: 10px 20px;
                 background-color: $primary-color;
                 color: #fff;
                 font-weight: 600;
                 margin-right: 10px;
                 margin-bottom: 10px;
+
+                &:hover {
+                    background-color: #0068ff;
+                }
             }
 
             .btnCancel {
                 cursor: pointer;
+                border-radius: 5px;
                 border: none;
                 padding: 10px 20px;
-                background-color: #ccc;
+                background-color: #dfe2e7;
                 color: #000;
                 font-weight: 600;
                 margin-right: 10px;
                 margin-bottom: 10px;
+
+                &:hover {
+                    background-color: #ccc;
+                }
             }
         }
     }

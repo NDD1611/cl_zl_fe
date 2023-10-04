@@ -21,17 +21,6 @@ const IconTopInputArea = () => {
 
             let userDetails = JSON.parse(localStorage.getItem('userDetails'))
             let receiverUser = JSON.parse(localStorage.getItem('receiverUser'))
-            let data = {
-                _id: new Date(),
-                sender: {
-                    _id: userDetails._id
-                },
-                receiverId: receiverUser._id,
-                content: srcBlob,
-                type: 'image',
-                date: new Date(),
-                status: '0'     //0: dang gui, 1: da gui, 2: da nhan, 3: da xem.
-            }
             let conversationSelectedId = conversationSelected._id
             let conversationCurrent = null
             for (let index = 0; index < conversations.length; index++) {
@@ -39,8 +28,19 @@ const IconTopInputArea = () => {
                     conversationCurrent = conversations[index]
                 }
             }
-
+            let dateMessage = new Date().getTime()
             if (conversationCurrent) {
+                let data = {
+                    _id: new Date(),
+                    sender: {
+                        _id: userDetails._id
+                    },
+                    conversation: { _id: conversationSelectedId },
+                    content: srcBlob,
+                    type: 'image',
+                    date: dateMessage,
+                    status: '0'     //0: dang gui, 1: da gui, 2: da nhan, 3: da xem.
+                }
                 conversationCurrent.messages[conversationCurrent.messages.length - 1].showTime = false
                 conversationCurrent.messages.push(data)
                 dispatch({
@@ -58,9 +58,10 @@ const IconTopInputArea = () => {
                             _id: userDetails._id
                         },
                         receiverId: receiverUser._id,
+                        conversation: { _id: conversationSelectedId },
                         content: response.data.path,
                         type: 'image',
-                        date: new Date(),
+                        date: dateMessage,
                         status: '0'     //0: dang gui, 1: da gui, 2: da nhan, 3: da xem.
                     }
                     sendMessage(newdData)
@@ -70,20 +71,15 @@ const IconTopInputArea = () => {
                 if (res.err) {
                     toast.error('Đã xảy ra lỗi. Vui lòng thử lại sau')
                 } else {
-                    let newdData = {
-                        _id: new Date(),
+                    let response = await api.createNewConversation({
                         sender: {
                             _id: userDetails._id
                         },
                         receiverId: receiverUser._id,
                         content: res.data.path,
                         type: 'image',
-                        date: new Date(),
+                        date: dateMessage,
                         status: '0'     //0: dang gui, 1: da gui, 2: da nhan, 3: da xem.
-                    }
-                    let response = await api.createNewConversation({
-                        participants: [userDetails._id, receiverUser._id],
-                        message: newdData
                     })
 
                     if (response.err) {
@@ -96,7 +92,6 @@ const IconTopInputArea = () => {
                         })
                     }
                 }
-
             }
         }
     }

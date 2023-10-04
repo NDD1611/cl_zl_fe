@@ -25,52 +25,55 @@ const Conversation = ({ conversation }) => {
     useEffect(() => {
         // update received message status
         // update in redux 
-        if (friend && userDetails) {
-            dispatch({
-                type: conversationActions.SET_STATUS_RECEIVED_FOR_MESSAGES,
-                conversationId: conversation._id,
-                receiverId: userDetails._id,
-                senderId: friend._id
+        if (userDetails) {
+            let listMessageStatusEqual1 = []
+            conversation?.messages.forEach(message => {
+                if (message.sender._id != userDetails._id && message.status == '1') {
+                    listMessageStatusEqual1.push(message)
+                }
             })
-
-            // update in sender user
-            updateReceivedMessageStatus({
-                conversationId: conversation._id,
-                receiverId: userDetails._id,
-                senderId: friend._id
-            })
+            if (listMessageStatusEqual1.length != 0) {
+                updateReceivedMessageStatus({
+                    conversationId: conversation._id,
+                    listMessage: listMessageStatusEqual1
+                })
+                dispatch({
+                    type: conversationActions.SET_STATUS_RECEIVED_FOR_MESSAGES,
+                    conversationId: conversation._id,
+                    listMessage: listMessageStatusEqual1
+                })
+            }
         }
-    }, [friend])
+    }, [message])
     useEffect(() => {
         const { participants, messages } = conversation
+        let friend = null
         if (participants) {
             participants.forEach((user) => {
                 if (user._id !== userDetails._id) {
                     setFriend(user)
+                    friend = user
                 }
             })
         }
         if (messages.length) {
             const lastMessage = messages[messages.length - 1]
-            if (lastMessage.type == 'text') {
-                if (lastMessage.isAnnounceFromServer && lastMessage.typeAnnounce === "acceptFriend") {
-                    if (userDetails._id === lastMessage.senderId) {
-                        let mesTemp = friend.firstName + ' ' + friend.lastName + ' ' + 'đã đồng ý kết bạn'
-                        setMessage({ content: mesTemp, type: 'text' })
-                    } else if (userDetails._id === lastMessage.receiverId) {
-                        let mesTemp = 'Bạn vừa kết bạn với ' + friend.firstName + ' ' + friend.lastName
-                        setMessage({ content: mesTemp, type: 'text' })
-                    }
+            if (lastMessage.type === "accept_friend") {
+                if (userDetails._id === lastMessage.sender._id) {
+                    let mesTemp = friend.firstName + ' ' + friend.lastName + ' ' + 'đã đồng ý kết bạn'
+                    setMessage({ content: mesTemp, type: 'text' })
                 } else {
-                    if (lastMessage.senderId === userDetails._id) {
-                        setMessage({ content: 'Bạn: ' + lastMessage.content, type: 'text' })
-                    } else {
-                        setMessage({ content: lastMessage.content, type: 'text' })
-                    }
+                    let mesTemp = 'Bạn vừa kết bạn với ' + friend.firstName + ' ' + friend.lastName
+                    setMessage({ content: mesTemp, type: 'text' })
                 }
-
+            } else if (lastMessage.type == 'text') {
+                if (lastMessage.sender._id === userDetails._id) {
+                    setMessage({ content: 'Bạn: ' + lastMessage.content, type: 'text' })
+                } else {
+                    setMessage({ content: lastMessage.content, type: 'text' })
+                }
             } else if (lastMessage.type == 'image') {
-                if (lastMessage.senderId === userDetails._id) {
+                if (lastMessage.sender._id === userDetails._id) {
                     setMessage({ content: 'Bạn: ', type: 'image' })
                 } else {
                     setMessage({ content: '', type: 'image' })
@@ -81,8 +84,8 @@ const Conversation = ({ conversation }) => {
         let listMessages = conversation.messages
         let count = 0
         for (let message of listMessages) {
-            if ((message.status && message.status == 2 && message.receiverId == userDetails._id)
-                || (message.status == 2 && message.typeAnnounce === 'acceptFriend')) {
+            if ((message.status && message.status == '2' && message.sender._id != userDetails._id)
+                || (message.status == 2 && message.type === 'accept_friend')) {
                 count++
             }
         }

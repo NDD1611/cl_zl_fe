@@ -19,7 +19,6 @@
     border: 1px solid #ccc;
     border-radius: 5px;
     width: 400px;
-    height: 80%;
     padding: 20px;
 
     @include mobile {
@@ -87,12 +86,9 @@
 
 .fullName {
     display: flex;
+    gap: 10px;
 
-    div {
-        width: 88%;
-
-        svg {
-            right: 0px;
-        }
+    svg {
+        right: 10px;
     }
 }

@@ -2,9 +2,10 @@
     border: 1px solid #ccc;
     position: absolute;
     height: 200px;
-    width: 95%;
+    width: 100%;
     top: -202px;
     overflow: scroll;
+    overflow-x: hidden;
     box-shadow: 0 0 10px 0 #ccc;
     background-color: #fff;
 
@@ -33,7 +34,7 @@
 
     /* width */
     &::-webkit-scrollbar {
-        width: 10px;
+        width: 5px;
     }
 
     /* Track */
@@ -44,6 +45,7 @@
     /* Handle */
     &::-webkit-scrollbar-thumb {
         background: #888;
+        border-radius: 5px;
     }
 
     /* Handle on hover */

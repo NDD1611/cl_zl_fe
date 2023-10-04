@@ -32,7 +32,6 @@ const Login = () => {
                 type: authActions.SET_USER_DETAIL,
                 userDetails: data
             })
-            setShowLoader(false)
             router.push('/')
         }
     }

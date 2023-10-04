@@ -80,7 +80,6 @@ const ChatArea = () => {
             messageArea.style.height = height + 'px'
         }
     })
-
     const handleEmojiClick = (event) => {
         let divInput = document.getElementById('divInput')
         if (divInput) {
@@ -91,7 +90,6 @@ const ChatArea = () => {
             divInput.appendChild(imgElement)
         }
     }
-
     const getMessageFromDivInputElement = () => {
         let divInputElement = document.getElementById('divInput')
         if (divInputElement) {
@@ -115,13 +113,11 @@ const ChatArea = () => {
             return message
         }
     }
-
     const handleSendMessage = async () => {
         let message = getMessageFromDivInputElement()
         let senderId = userDetails._id
         let receiverId = receiverUser._id
         if (message.length && message !== '&nbsp;' && message !== '') {
-
             let conversationSelectedId = conversationSelected._id
             let data = {
                 _id: new Date() + Math.random(),
@@ -129,9 +125,10 @@ const ChatArea = () => {
                     _id: senderId
                 },
                 receiverId,
+                conversation: { _id: conversationSelectedId },
                 content: message.replace('&nbsp;', ''),
                 type: 'text',
-                date: new Date(),
+                date: new Date().getTime(),
                 status: '0'     //0: dang gui, 1: da gui, 2: da nhan, 3: da xem.
             }
             let conversationCurrent = null
@@ -140,9 +137,10 @@ const ChatArea = () => {
                     conversationCurrent = conversations[index]
                 }
             }
-
             if (conversationCurrent) {
-                conversationCurrent.messages[conversationCurrent.messages.length - 1].showTime = false
+                if (conversationCurrent.messages.length != 0) {
+                    conversationCurrent.messages[conversationCurrent.messages.length - 1].showTime = false
+                }
                 conversationCurrent.messages.push(data)
                 dispatch({
                     type: conversationActions.SEND_NEW_MESSAGE,
@@ -150,20 +148,15 @@ const ChatArea = () => {
                 })
                 sendMessage(data)
             } else {
-                let data = {
-                    _id: new Date() + Math.random(),
+                let response = await api.createNewConversation({
                     sender: {
                         _id: senderId
                     },
                     receiverId,
                     content: message.replace('&nbsp;', ''),
                     type: 'text',
-                    date: new Date(),
+                    date: new Date().getTime(),
                     status: '0'     //0: dang gui, 1: da gui, 2: da nhan, 3: da xem.
-                }
-                let response = await api.createNewConversation({
-                    participants: [senderId, receiverId],
-                    message: data
                 })
 
                 if (response.err) {

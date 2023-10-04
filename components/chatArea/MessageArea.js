@@ -37,29 +37,36 @@ const MessageArea = () => {
     }, [conversationSelected, conversations])
 
     useEffect(() => {
-        if (receiverUser && userDetails) {
-            // emit update sender
-            updateStatusMessage({
-                receiverId: userDetails._id,
-                senderId: receiverUser._id,
-                conversationId: conversationSelected._id
+        if (userDetails) {
+
+            let listMessageStatusEqual2 = []
+            messages?.forEach(message => {
+                if (message.sender._id != userDetails._id && message.status == '2') {
+                    listMessageStatusEqual2.push(message)
+                }
             })
-            //update myself
-            dispatch({
-                type: conversationActions.SET_STATUS_WATCHED_FOR_MESSAGES,
-                receiverId: userDetails._id,
-                senderId: receiverUser._id,
-                conversationId: conversationSelected._id
-            })
+            if (listMessageStatusEqual2.length != 0) {
+                dispatch({
+                    type: conversationActions.SET_STATUS_WATCHED_FOR_MESSAGES,
+                    listMessage: listMessageStatusEqual2,
+                    conversationId: conversationSelected._id
+                })
+                // emit update sender
+
+                updateStatusMessage({
+                    listMessage: listMessageStatusEqual2,
+                    conversationId: conversationSelected._id
+                })
+            }
         }
     }, [messages])
 
     useEffect(() => {
         let widthChatArea
         if (window.innerWidth < 700) {
-            widthChatArea = parseInt((window.innerWidth - 64) * 0.8)  // width cua mainTab and TabTwo  
+            widthChatArea = parseInt((window.innerWidth - 64) * 0.8)  // width of mainTab and TabTwo  
         } else {
-            widthChatArea = parseInt((window.innerWidth - 64 - 344) * 0.8) // width cua mainTab and TabTwo   
+            widthChatArea = parseInt((window.innerWidth - 64 - 344) * 0.8) // width of mainTab and TabTwo   
         }
         dispatch({
             type: messageActions.SET_MAX_WIDTH_MESSAGE,

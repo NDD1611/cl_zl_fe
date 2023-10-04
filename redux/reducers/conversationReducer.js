@@ -30,15 +30,15 @@ const reducer = (state = initState, action) => {
                 conversations: copyConversations
             }
         case conversationActions.SET_STATUS_WATCHED_FOR_MESSAGES:
-            var { senderId, receiverId, conversationId } = action
+            var { listMessage, conversationId } = action
             var conversationsCopy = [...state.conversations]
             for (let index in conversationsCopy) {
                 if (conversationsCopy[index]._id === conversationId) {
                     for (let i in conversationsCopy[index].messages) {
                         let message = conversationsCopy[index].messages[i]
-                        if (message.sender._id === senderId && message.receiverId === receiverId) {
-                            if (message.status == 1 || message.status == 0 || message.status == 2) {
-                                conversationsCopy[index].messages[i].status = 3
+                        for (let mesInList of listMessage) {
+                            if (message.date == mesInList.date) {
+                                message.status = '3'
                             }
                         }
                     }
@@ -49,15 +49,15 @@ const reducer = (state = initState, action) => {
                 conversations: conversationsCopy
             }
         case conversationActions.SET_STATUS_SENT_FOR_MESSAGES:
-            var { senderId, receiverId, conversationId } = action
+            var { listMessage, conversationId } = action
             var conversationsCopy = [...state.conversations]
             for (let index in conversationsCopy) {
                 if (conversationsCopy[index]._id === conversationId) {
                     for (let i in conversationsCopy[index].messages) {
                         let message = conversationsCopy[index].messages[i]
-                        if (message.sender._id === senderId && message.receiverId === receiverId) {
-                            if (message.status == 0) {
-                                conversationsCopy[index].messages[i].status = 1
+                        for (let mesInList of listMessage) {
+                            if (message.date == mesInList.date) {
+                                message.status = '1'
                             }
                         }
                     }
@@ -68,16 +68,15 @@ const reducer = (state = initState, action) => {
                 conversations: conversationsCopy
             }
         case conversationActions.SET_STATUS_RECEIVED_FOR_MESSAGES:
-            var { senderId, receiverId, conversationId } = action
+            var { listMessage, conversationId } = action
             var conversationsCopy = [...state.conversations]
             for (let index in conversationsCopy) {
                 if (conversationsCopy[index]._id === conversationId) {
                     for (let i in conversationsCopy[index].messages) {
                         let message = conversationsCopy[index].messages[i]
-                        console.log(message)
-                        if (message.sender._id === senderId && message.receiverId === receiverId) {
-                            if (message.status == 1 || message.status == 0) {
-                                conversationsCopy[index].messages[i].status = 2
+                        for (let mesInList of listMessage) {
+                            if (message.date == mesInList.date) {
+                                message.status = '2'
                             }
                         }
                     }

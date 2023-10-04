@@ -28,14 +28,13 @@ const MainTab = () => {
     useEffect(() => {
         if (conversations) {
             const userDetails = JSON.parse(localStorage.getItem('userDetails'))
-            let userId = userDetails._id
             let count = 0
             conversations.forEach(conversation => {
                 let messages = conversation.messages
                 if (messages.length) {
                     messages.forEach(message => {
-                        if ((message.receiverId === userId && message.status == '2')
-                            || (message.status == '2' && message.typeAnnounce === 'acceptFriend')) {
+                        if ((message.sender._id != userDetails._id && message.status == '2')
+                            || (message.status == '2' && message.type === 'accept_friend')) {
                             count++
                         }
                     })

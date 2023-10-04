@@ -3,8 +3,22 @@ import { useSelector } from 'react-redux';
 import MessageEmoji from '../common/MessageEmoji';
 import styles from './messageLeft.module.scss'
 import { addPathToLinkAvatar } from '../../utils/path';
+import { useState } from 'react';
 const MessageLeft = ({ message }) => {
     const maxWidth = useSelector(state => state.message.maxWidth)
+    const [widthImg, setWidthImg] = useState(0)
+    const handleLoadImg = (e) => {
+        let img = e.target
+        console.log(img.naturalHeight, img.naturalWidth)
+        let widthImg = img.naturalWidth * 0.3
+        if (widthImg > maxWidth) {
+            setWidthImg(maxWidth)
+        } else if (widthImg < 200) {
+            setWidthImg(200)
+        } else {
+            setWidthImg(widthImg)
+        }
+    }
     return (
         <>
             {
@@ -25,8 +39,8 @@ const MessageLeft = ({ message }) => {
                 {
                     message.type == 'image' &&
                     <div className={styles.contentImage}>
-                        <div className={styles.messageImage}>
-                            <img src={message.content.includes('http') ? message.content : addPathToLinkAvatar(message.content)} />
+                        <div className={styles.messageImage} style={{ maxWidth: widthImg + 'px' }}>
+                            <img onLoad={handleLoadImg} src={message.content.includes('http') ? message.content : addPathToLinkAvatar(message.content)} />
                         </div>
                     </div>
                 }
