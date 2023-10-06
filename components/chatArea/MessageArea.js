@@ -4,10 +4,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useEffect, useState, useRef } from 'react'
 import Avatar from '../common/Avatar'
 import { addSameDayAndSameAuth, checkShowTimeAndStatusInBottom } from '../../utils/message'
-import { addPathToLinkAvatar } from '../../utils/path'
 import { updateStatusMessage } from '../../reltimeCommunication/socketConnection'
 import { conversationActions } from '../../redux/actions/conversationAction'
-import MessageLeftAvatar from './messageLeftAvatar'
 import MessageLeft from './messageLeft'
 import MessageRight from './messageRight'
 import { messageActions } from '../../redux/actions/messageActions'
@@ -78,9 +76,14 @@ const MessageArea = () => {
     }, [])
 
     useEffect(() => {
-        let messageAreaElement = document.getElementById('messageArea')
-        if (messageAreaElement) {
-            messageAreaElement.scrollTop = messageAreaElement.scrollHeight
+        let id = setTimeout(() => {
+            let messageAreaElement = document.getElementById('messageArea')
+            if (messageAreaElement) {
+                messageAreaElement.scrollTop = messageAreaElement.scrollHeight
+            }
+        }, 1000)
+        return () => {
+            clearTimeout(id)
         }
     })
     return (
@@ -90,6 +93,7 @@ const MessageArea = () => {
                 className={styles.messageArea}
                 ref={messageAreaElement}
             >
+                <div style={{ height: '30px' }}></div>
                 {
                     messages && messages.map((message, index) => {
                         if (message.type === "accept_friend") {
@@ -104,7 +108,7 @@ const MessageArea = () => {
                                         }
                                         <div className={styles.acceptFriend}>
                                             <Avatar
-                                                src={message?.sender?.avatar ? addPathToLinkAvatar(message?.sender?.avatar) : ''}
+                                                src={message?.sender?.avatar ? message?.sender?.avatar : ''}
                                                 width={20}
                                             />
                                             <p>
@@ -112,7 +116,6 @@ const MessageArea = () => {
                                             </p>
                                             <p> đã đồng ý kết bạn</p>
                                         </div>
-                                        {messages.length - 1 == index && <div className={styles.paddingFooter}></div>}
                                     </div>
                                 )
                             } else {
@@ -127,65 +130,49 @@ const MessageArea = () => {
                                         <div className={styles.acceptFriend}>
                                             <p>bạn vừa mới kết bạn với</p>
                                             <Avatar
-                                                src={message?.sender?.avatar ? addPathToLinkAvatar(message?.sender?.avatar) : ''}
+                                                src={message?.sender?.avatar ? message?.sender?.avatar : ''}
                                                 width={20}
                                             />
                                             <p>
                                                 {message?.sender ? message?.sender?.firstName + ' ' + message?.sender?.lastName : ''}
                                             </p>
                                         </div>
-                                        {messages.length - 1 == index && <div className={styles.paddingFooter}></div>}
                                     </div>
                                 )
                             }
                         }
 
-
-                        if (index == 0 && message?.sender?._id != userDetails._id) {
-                            return (
-                                <div key={message._id} >
-                                    <MessageLeftAvatar
-                                        message={message}
-                                        avatar={message?.sender?.avatar}
-                                    />
-                                    {messages.length - 1 == index && <div className={styles.paddingFooter}></div>}
-                                </div>
-                            )
-                        }
-
-                        if (message.sender._id === receiverUser._id) {
-                            if (message.sameAuth === false || message.sameDay === false) {
-                                return (
-                                    <div key={message._id} >
-                                        <MessageLeftAvatar
-                                            message={message}
-                                            avatar={message?.sender?.avatar}
-                                        />
-                                        {messages.length - 1 == index && <div className={styles.paddingFooter}></div>}
-                                    </div>
-                                )
-                            } else {
-                                return (
-                                    <div key={message._id} >
-                                        <MessageLeft
-                                            message={message}
-                                        />
-                                        {messages.length - 1 == index && <div className={styles.paddingFooter}></div>}
-                                    </div>
-                                )
-                            }
-                        } else if (message.sender._id === userDetails._id) {
+                        if (message.sender._id === userDetails._id) {
                             return (
                                 <div key={message._id} >
                                     <MessageRight
                                         message={message}
                                     />
-                                    {messages.length - 1 == index && <div className={styles.paddingFooter}></div>}
+                                </div>
+                            )
+                        } else {
+                            console.log(message)
+                            return (
+                                <div key={message._id} className={styles.containerMessageLeft} >
+                                    <div className={styles.containerLeft}>
+                                        {(message.sameAuth === false || message.sameDay === false
+                                            || (index == 0 && message?.sender?._id != userDetails._id)
+                                        ) && <Avatar
+                                                src={message?.sender?.avatar ? message?.sender?.avatar : ''}
+                                                width={30}
+                                            />
+                                        }
+                                    </div>
+                                    <MessageLeft
+                                        message={message}
+                                    />
                                 </div>
                             )
                         }
+
                     })
                 }
+                <div style={{ height: '20px' }}></div>
             </div>
         </>
     )

@@ -26,7 +26,16 @@
         gap: 10px;
     }
 
-    .paddingFooter {
-        padding-bottom: 20px;
+    .containerMessageLeft {
+        display: flex;
+
+        .containerLeft {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 10px;
+            width: 60px;
+            height: 40px;
+        }
     }
 }

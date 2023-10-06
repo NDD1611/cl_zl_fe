@@ -11,7 +11,6 @@ import { useState, useEffect } from 'react'
 import ModalDisplayInfo from './Modal/ModalDisplayInfo'
 import { modalActions } from '../../redux/actions/modalActions'
 import ModalUpdateInfo from './Modal/ModalUpdateInfo'
-import { addPathToLinkAvatar } from '../../utils/path'
 import { authActions } from '../../redux/actions/authAction'
 
 const MainTab = () => {
@@ -24,6 +23,8 @@ const MainTab = () => {
     const conversations = useSelector(state => state.conversation.conversations)
     const avatarLink = useSelector(state => state.auth.userDetails.avatar)
     const showTabOne = useSelector(state => state.tabs.showTabOne)
+    const showTabTwo = useSelector(state => state.tabs.showTabTwo)
+    const showTabThree = useSelector(state => state.tabs.showTabThree)
 
     useEffect(() => {
         if (conversations) {
@@ -64,16 +65,9 @@ const MainTab = () => {
     }, [])
 
     useEffect(() => {
-        if (window.innerWidth < 700) {
+        if (window.innerWidth < 700 && showTabTwo && showTabThree) {
             dispatch({
                 type: tabsActions.SET_CLOSE_TAB_THREE
-            })
-        } else {
-            dispatch({
-                type: tabsActions.SET_SHOW_TAB_THREE
-            })
-            dispatch({
-                type: tabsActions.SET_SHOW_TAB_TWO
             })
         }
         return () => {
@@ -138,7 +132,7 @@ const MainTab = () => {
                 <div className={styles.top}>
                     <div className={`${styles.avatar} + ${styles.quare}`}>
                         <Avatar
-                            src={addPathToLinkAvatar(avatarLink)}
+                            src={avatarLink ? avatarLink : ''}
                             width={48}
                         ></Avatar>
                     </div>

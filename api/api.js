@@ -43,7 +43,7 @@ const refreshToken = async (userDetails) => {
 //secure router
 const uploadAvatar = async (data) => {
     try {
-        let response = await axios.post('/user/upload-avatar', data)
+        let response = await axios.post('/file/upload-avatar', data)
         return response
     } catch (exception) {
         checkErr(exception)
@@ -56,7 +56,7 @@ const uploadAvatar = async (data) => {
 
 const uploadImageMessage = async (data) => {
     try {
-        let response = await axios.post('/user/upload-image-message', data)
+        let response = await axios.post('/file/upload-image-message', data)
         return response
     } catch (exception) {
         checkErr(exception)

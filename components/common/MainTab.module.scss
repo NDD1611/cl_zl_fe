@@ -1,7 +1,5 @@
-@import '../../styles/global.module.scss';
-
 .mainTab {
-    background-color: $primary-color;
+    background-color: #0091ff;
     width: 64px;
     display: flex;
     flex-direction: column;
@@ -14,7 +12,7 @@
             margin-bottom: 20px;
 
             &:hover {
-                background-color: $primary-color !important;
+                background-color: #0091ff !important;
             }
         }
     }

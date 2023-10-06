@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux"
 import styles from './HeaderChatArea.module.scss'
 import Avatar from "../common/Avatar"
 import { useEffect, useState } from "react"
-import { addPathToLinkAvatar } from "../../utils/path"
 import { tabsActions } from "../../redux/actions/tabsAction"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faChevronLeft, faUserPlus } from '@fortawesome/free-solid-svg-icons'
@@ -90,7 +89,7 @@ const HeaderChatArea = () => {
                     }
                     <div className={styles.headerAvatar}>
                         <Avatar
-                            src={addPathToLinkAvatar(receiverUser && receiverUser.avatar)}
+                            src={receiverUser.avatar}
                             width={50}
                         />
                         {activeUsers.includes(receiverUser._id) && <span className={styles.iconUserOnline}></span>}

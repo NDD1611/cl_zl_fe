@@ -1,7 +1,6 @@
 
 
 import { useSelector } from 'react-redux';
-import { addPathToLinkAvatar } from '../../utils/path';
 import MessageEmoji from '../common/MessageEmoji';
 import styles from './contentMessage.module.scss'
 
@@ -22,7 +21,7 @@ const ContentMessage = ({ message }) => {
                 message.type == 'image' &&
                 <div className={styles.contentImage}>
                     <div className={styles.messageImage}>
-                        <img src={message.content.includes('http') ? message.content : addPathToLinkAvatar(message.content)} />
+                        <img src={message.content} />
                     </div>
                 </div>
             }

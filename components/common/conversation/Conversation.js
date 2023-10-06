@@ -3,7 +3,6 @@ import styles from './Conversation.module.scss'
 import Avatar from '../Avatar'
 import { useSelector, useDispatch } from 'react-redux'
 import { useEffect, useState } from 'react'
-import { addPathToLinkAvatar } from '../../../utils/path'
 import { conversationActions } from '../../../redux/actions/conversationAction'
 import { updateReceivedMessageStatus } from '../../../reltimeCommunication/socketConnection'
 import { tabsActions } from '../../../redux/actions/tabsAction'
@@ -114,7 +113,7 @@ const Conversation = ({ conversation }) => {
         <div className={`${styles.conversationItem} ${conversationSelected && conversation._id == conversationSelected._id && styles.selectedConversation}`} onClick={handleChooseConversation}>
             <div className={styles.left}>
                 <Avatar
-                    src={addPathToLinkAvatar(friend.avatar)}
+                    src={friend.avatar ? friend.avatar : ''}
                     width={50}
                 />
             </div>

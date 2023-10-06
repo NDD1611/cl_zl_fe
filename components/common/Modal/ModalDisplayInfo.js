@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import { useSelector, useDispatch } from 'react-redux'
 import { modalActions } from '../../../redux/actions/modalActions'
-import { addPathToLinkAvatar } from '../../../utils/path'
 
 const ModalDisplayInfo = () => {
 
@@ -49,7 +48,7 @@ const ModalDisplayInfo = () => {
                     </div>
                     <div className={styles.avatarInfo}>
                         <Avatar
-                            src={addPathToLinkAvatar(avatarLink)}
+                            src={avatarLink ? avatarLink : ''}
                             width={80}
                         ></Avatar>
                     </div>

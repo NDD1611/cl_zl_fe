@@ -9,7 +9,7 @@ const HeaderTabTwo = () => {
     const dispatch = useDispatch()
     return (
         <>
-            <div className={styles.HeaderTabTwo}>
+            <div id='headerTabTwo' className={styles.HeaderTabTwo}>
                 <div className={styles.input}>
                     <input disabled placeholder='Tìm kiếm' />
                 </div>

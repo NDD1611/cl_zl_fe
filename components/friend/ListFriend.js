@@ -5,9 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useEffect, useState } from 'react'
 import styles from './ListFriend.module.scss'
 import Avatar from '../common/Avatar'
-import { addPathToLinkAvatar } from '../../utils/path'
 import { tabsActions } from '../../redux/actions/tabsAction'
-import { Oval } from 'react-loader-spinner'
 import MainModal from '../common/Modal/MainModal'
 import api from '../../api/api'
 
@@ -71,7 +69,6 @@ const ListFriend = () => {
             friendId: friendId
         }
         let response = await api.deleteFriend(data)
-        console.log(response)
     }
     return (
         <>
@@ -88,7 +85,7 @@ const ListFriend = () => {
                     </div>
                     <div className={styles.avatarInfo}>
                         <Avatar
-                            src={addPathToLinkAvatar(infoFriend && infoFriend.avatar)}
+                            src={infoFriend?.avatar ? infoFriend?.avatar : ''}
                             width={80}
                         ></Avatar>
                     </div>
@@ -135,7 +132,7 @@ const ListFriend = () => {
                                     <div className={styles.left}>
                                         <Avatar
                                             width={50}
-                                            src={addPathToLinkAvatar(friend.avatar ? friend.avatar : '')}
+                                            src={friend.avatar ? friend.avatar : ''}
                                         />
                                         <div className={styles.name}>{friend.firstName + ' ' + friend.lastName}</div>
                                     </div>

@@ -10,17 +10,19 @@ import LoaderModal from './LoaderModal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import Avatar from '../Avatar'
-import { addPathToLinkAvatar } from '../../../utils/path'
+import { useRouter } from 'next/router'
 
 const ModalAddFriend = () => {
     const showModalFindFriend = useSelector(state => state.modal.showModalFindFriend)
     const conversations = useSelector(state => state.conversation.conversations)
     const listFriends = useSelector(state => state.friend.listFriends)
+    const maintabSelect = useSelector(state => state.tabs.maintabSelect)
     const dispatch = useDispatch()
     const [email, setEmail] = useState('')
     const [infoFindFriend, setInfoFindFriend] = useState()
     const [showLoader, setShowLoader] = useState(false)
     const [isFriend, setIsFriend] = useState(false)
+    const router = useRouter()
 
     const addFriend = async () => {
         const userDetails = JSON.parse(localStorage.getItem('userDetails'))
@@ -128,6 +130,14 @@ const ModalAddFriend = () => {
                 type: tabsActions.SET_CLOSE_TAB_ONE
             })
         }
+
+        if (maintabSelect != 'chat') {
+            dispatch({
+                type: tabsActions.SET_MAIN_TAB,
+                maintabSelect: 'chat'
+            })
+            router.push('/')
+        }
     }
     return (
         <>
@@ -155,7 +165,7 @@ const ModalAddFriend = () => {
                             </div>
                             <div className={styles.avatarInfo}>
                                 <Avatar
-                                    src={addPathToLinkAvatar(infoFindFriend.avatar)}
+                                    src={infoFindFriend.avatar ? infoFindFriend.avatar : ''}
                                     width={80}
                                 ></Avatar>
                             </div>
@@ -194,7 +204,7 @@ const ModalAddFriend = () => {
                         <button className={styles.btnFind} onClick={handleFindFriend}>Tìm kiếm</button>
                     </div>
                 </div>
-            </div>
+            </div >
         </>
     )
 }

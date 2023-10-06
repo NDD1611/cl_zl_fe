@@ -6,7 +6,6 @@ import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'next/router'
 import styles from './PendingInvitation.module.scss'
 import Avatar from '../common/Avatar'
-import { addPathToLinkAvatar } from '../../utils/path'
 import api from '../../api/api'
 import LoaderModal from '../common/Modal/LoaderModal'
 import { tabsActions } from '../../redux/actions/tabsAction'
@@ -76,7 +75,7 @@ const PendingInvitation = () => {
                                 <div key={invitation._id} className={styles.pendingInvitationItem}>
                                     <div className={styles.topItem}>
                                         <Avatar
-                                            src={addPathToLinkAvatar(invitation.senderId.avatar)}
+                                            src={invitation?.senderId?.avatar ? invitation?.senderId?.avatar : ''}
                                             width={40}
                                         />
                                         <p className={styles.name}>{invitation.senderId.lastName + ' ' + invitation.senderId.firstName}</p>

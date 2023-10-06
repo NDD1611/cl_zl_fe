@@ -10,45 +10,36 @@
     }
 }
 
-
-.sameAuth {
-    margin-left: 30px;
-}
-
 .messageLeft {
-    display: flex;
     padding-top: 5px;
-    padding-left: 20px;
-}
 
+    .content {
+        word-wrap: break-word;
+        padding: 10px;
+        background-color: #fff;
+        border-radius: 5px;
+        min-width: 100px;
 
-.content {
-    word-wrap: break-word;
-    padding: 10px;
-    background-color: #fff;
-    border-radius: 5px;
-    min-width: 100px;
-
-    .footerDate {
-        display: flex;
-        justify-content: flex-end;
-        color: #555;
+        .footerDate {
+            display: flex;
+            justify-content: flex-end;
+            color: #555;
+        }
     }
-}
 
-.contentImage {
-    width: fit-content;
-    word-wrap: break-word;
-    margin-top: 3px;
-    min-width: 100px;
-    max-width: 30%;
+    .contentImage {
+        width: fit-content;
+        word-wrap: break-word;
+        margin-top: 3px;
+        min-width: 100px;
 
-    .messageImage {
-        border-radius: 15px;
-
-        img {
-            width: 100%;
+        .messageImage {
             border-radius: 15px;
+
+            img {
+                width: 100%;
+                border-radius: 15px;
+            }
         }
     }
 }

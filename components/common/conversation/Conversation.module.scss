@@ -22,7 +22,6 @@
 
     .center {
         flex: 4;
-        overflow-x: hidden;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -35,10 +34,12 @@
         .message {
             padding-top: 5px;
             height: 50%;
+            width: 150px;
             opacity: 0.7;
             font-size: 13px;
             font-weight: 600;
             white-space: nowrap;
+            overflow-x: hidden;
 
             .iconImage {
                 padding: 0 5px;

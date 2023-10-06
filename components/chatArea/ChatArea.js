@@ -28,10 +28,7 @@ const ChatArea = () => {
     const [receiverUser, setReceiverUser] = useState({})
     const [userDetails, setUserDetails] = useState({})
     const [showEmoji, setShowEmoji] = useState(false)
-    const [widthDivInput, setWidthDivInput] = useState()
-    const chatAreaElement = useRef()
     const chatMessageElement = useRef()
-    const chatInputElement = useRef()
     const inputAreaElement = useRef()
     const headerElement = useRef()
 
@@ -47,13 +44,11 @@ const ChatArea = () => {
         let receiverUser = JSON.parse(localStorage.getItem('receiverUser'))
         if (receiverUser) {
             setReceiverUser(receiverUser)
-            if (chatInputElement.current) {
-                chatInputElement.current.innerHTML = ''
-                chatInputElement.current.focus()
+            let divInputElement = document.getElementById('divInput')
+            if (divInputElement) {
+                divInputElement.innerHTML = ''
+                divInputElement.focus()
             }
-        }
-        if (chatAreaElement) {
-            setWidthDivInput(chatAreaElement.current.clientWidth - 150)
         }
 
         let resizeObserver = new ResizeObserver((entries) => {
@@ -79,6 +74,17 @@ const ChatArea = () => {
             let height = window.innerHeight - inputAreaElement.clientHeight - headerContainerElement.clientHeight
             messageArea.style.height = height + 'px'
         }
+
+        let chatAreaElement = document.getElementById('chatArea')
+        let rightInputElement = document.getElementById('rightInput')
+        let divInputElement = document.getElementById('divInput')
+
+        if (chatAreaElement && rightInputElement && divInputElement) {
+            let widthInput = chatAreaElement.clientWidth - rightInputElement.clientWidth
+            console.log(widthInput)
+            divInputElement.style.width = (widthInput - 5) + 'px'
+        }
+
     })
     const handleEmojiClick = (event) => {
         let divInput = document.getElementById('divInput')
@@ -108,8 +114,8 @@ const ChatArea = () => {
                     }
                 }
             }
-            chatInputElement.current.focus()
-            chatInputElement.current.innerHTML = ''
+            divInputElement.focus()
+            divInputElement.innerHTML = ''
             return message
         }
     }
@@ -188,7 +194,7 @@ const ChatArea = () => {
         e.stopPropagation()
     }
     return (
-        <div id='chatArea' className={styles.ChatArea} ref={chatAreaElement}>
+        <div id='chatArea' className={styles.ChatArea}>
             {
                 conversationSelected === null && <div className={styles.chatOnboard}>Chọn cuộc hội thoại để chat</div>
             }
@@ -225,8 +231,6 @@ const ChatArea = () => {
                     </div>
                     <div className={styles.mainInput}>
                         <div
-                            style={{ width: widthDivInput + 'px' }}
-                            ref={chatInputElement}
                             id='divInput'
                             className={styles.divInputFake}
                             contentEditable={true}
@@ -237,16 +241,19 @@ const ChatArea = () => {
                             onKeyDown={(e) => { handleKeyDown(e) }}
                         ></div>
 
-                        <div className={styles.rightInputArea}>
-                            {/* <button className={styles.btnSendMes} onClick={handleSendMessage}>
-                                <FontAwesomeIcon icon={faPaperPlane} />
-                            </button> */}
+                        <div id='rightInput' className={styles.rightInputArea}>
                             <div
                                 className={styles.buttonShowEmoji}
                                 onClick={handleShowEmojiPicker}
                             >
                                 <FontAwesomeIcon icon={faFaceSmile} />
                             </div>
+                            {/* <div
+                                className={styles.buttonShowEmoji}
+                                onClick={handleShowEmojiPicker}
+                            >
+                                <FontAwesomeIcon icon={faFaceSmile} />
+                            </div> */}
                         </div>
                     </div>
                 </div>
