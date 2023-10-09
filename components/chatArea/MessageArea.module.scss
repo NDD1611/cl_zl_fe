@@ -1,3 +1,15 @@
+.dateShow {
+    display: flex;
+    justify-content: center;
+    color: #fff;
+
+    p {
+        background-color: #ccc;
+        padding: 5px;
+        border-radius: 5px;
+    }
+}
+
 .messageArea {
     height: 100%;
     width: 100%;

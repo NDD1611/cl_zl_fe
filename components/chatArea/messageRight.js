@@ -4,14 +4,19 @@ import MessageEmoji from '../common/MessageEmoji';
 import styles from './messageRight.module.scss'
 import { Oval } from 'react-loader-spinner';
 import { useState } from 'react';
-const MessageRight = ({ message }) => {
+import { useLayoutEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import IconFile from './iconFile';
+import MessageFile from './fileMessage';
+
+const Content = ({ message }) => {
     const maxWidth = useSelector(state => state.message.maxWidth)
     const [widthImg, setWidthImg] = useState(0)
-    const [heightImg, setHeightImg] = useState(0)
     const handleLoadImg = (e) => {
         let img = e.target
         let widthImg = img.naturalWidth * 0.3
-        let heightImg = img.naturalHeight * 0.3
+        // let heightImg = img.naturalHeight * 0.3
         if (widthImg > maxWidth) {
             setWidthImg(maxWidth)
         } else if (widthImg < 200) {
@@ -19,12 +24,38 @@ const MessageRight = ({ message }) => {
         } else {
             setWidthImg(widthImg)
         }
-        if (heightImg > 500) {
-            setHeightImg(500)
-        } else {
-            setHeightImg(heightImg)
-        }
     }
+
+    if (message.type == 'text') {
+        return <div className={styles.content} style={{ maxWidth: maxWidth + 'px' }}>
+            <MessageEmoji
+                text={message.content}
+            />
+            <div className={styles.footerDate}>{message.showTime ? message.hourMinute : ''}</div>
+        </div>
+    } else if (message.type == 'image') {
+        return <div className={styles.contentImage} >
+            <div className={styles.messageImage} style={{ maxWidth: widthImg + 'px', maxHeight: '500px' }}>
+                <img onLoad={handleLoadImg} src={message.content} />
+                {
+                    message.status == '0' && <div className={styles.loaderImage}>
+                        <Oval
+                            width={50}
+                            height={50}
+                            color="#0062cc"
+                            secondaryColor="#ccc"
+                        />
+                    </div>
+                }
+            </div>
+        </div>
+    } else {
+        return <MessageFile message={message} />
+    }
+}
+
+
+const MessageRight = ({ message }) => {
     return (
         <>
             {
@@ -34,32 +65,7 @@ const MessageRight = ({ message }) => {
                 </div>
             }
             <div className={styles.messageRight} >
-                {message.type == 'text' &&
-                    <div className={styles.content} style={{ maxWidth: maxWidth + 'px' }}>
-                        <MessageEmoji
-                            text={message.content}
-                        />
-                        <div className={styles.footerDate}>{message.showTime ? message.hourMinute : ''}</div>
-                    </div>
-                }
-                {
-                    message.type == 'image' &&
-                    <div className={styles.contentImage} >
-                        <div className={styles.messageImage} style={{ maxWidth: widthImg + 'px', maxHeight: '500px' }}>
-                            <img onLoad={handleLoadImg} src={message.content} />
-                            {
-                                message.status == '0' && <div className={styles.loaderImage}>
-                                    <Oval
-                                        width={50}
-                                        height={50}
-                                        color="#0062cc"
-                                        secondaryColor="#ccc"
-                                    />
-                                </div>
-                            }
-                        </div>
-                    </div>
-                }
+                <Content message={message} />
             </div>
             <div className={styles.status}>
                 {message.showStatus ?

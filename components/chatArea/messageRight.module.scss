@@ -63,6 +63,41 @@
             }
         }
     }
+
+    .contentFile {
+        display: flex;
+        gap: 20px;
+        padding: 10px;
+        background-color: #e5efff;
+        border-radius: 5px;
+        min-width: 100px;
+        max-width: 60%;
+
+
+        .iconFile {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .rightFile {
+            .fileName {
+                word-break: break-word;
+            }
+
+            .rightBottom {
+                padding-top: 10px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                .download {
+                    cursor: pointer;
+                    color: #000;
+                }
+            }
+        }
+    }
 }
 
 .status {

@@ -1,0 +1,39 @@
+.contentFile {
+    display: flex;
+    gap: 20px;
+    padding: 10px;
+    background-color: #e5efff;
+    border-radius: 5px;
+    min-width: 100px;
+
+    .iconFile {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .rightFile {
+        .fileName {
+            word-break: break-all;
+            margin: 0;
+            max-width: 300px;
+        }
+
+        .rightBottom {
+            padding-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+
+            .size {
+                opacity: 0.5;
+            }
+
+            .download {
+                cursor: pointer;
+                color: #000;
+            }
+        }
+    }
+}

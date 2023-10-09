@@ -81,7 +81,7 @@ const MessageArea = () => {
             if (messageAreaElement) {
                 messageAreaElement.scrollTop = messageAreaElement.scrollHeight
             }
-        }, 1000)
+        }, 50)
         return () => {
             clearTimeout(id)
         }
@@ -151,25 +151,31 @@ const MessageArea = () => {
                                 </div>
                             )
                         } else {
-                            console.log(message)
                             return (
-                                <div key={message._id} className={styles.containerMessageLeft} >
-                                    <div className={styles.containerLeft}>
-                                        {(message.sameAuth === false || message.sameDay === false
-                                            || (index == 0 && message?.sender?._id != userDetails._id)
-                                        ) && <Avatar
-                                                src={message?.sender?.avatar ? message?.sender?.avatar : ''}
-                                                width={30}
-                                            />
-                                        }
+                                <div key={message._id} >
+                                    {
+                                        message.sameDay === false &&
+                                        <div className={styles.dateShow}>
+                                            <p>{message.dateShow}</p>
+                                        </div>
+                                    }
+                                    <div className={styles.containerMessageLeft} >
+                                        <div className={styles.containerLeft}>
+                                            {(message.sameAuth === false || message.sameDay === false
+                                                || (index == 0 && message?.sender?._id != userDetails._id)
+                                            ) && <Avatar
+                                                    src={message?.sender?.avatar ? message?.sender?.avatar : ''}
+                                                    width={30}
+                                                />
+                                            }
+                                        </div>
+                                        <MessageLeft
+                                            message={message}
+                                        />
                                     </div>
-                                    <MessageLeft
-                                        message={message}
-                                    />
                                 </div>
                             )
                         }
-
                     })
                 }
                 <div style={{ height: '20px' }}></div>

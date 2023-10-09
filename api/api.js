@@ -161,10 +161,40 @@ let createNewConversation = async (data) => {
     }
 }
 
+let uploadFile = async (data) => {
+    try {
+        let response = await axios.post('/file/upload-file-message', data)
+        return response
+    } catch (exception) {
+        checkErr(exception)
+        return {
+            err: true,
+            exception
+        }
+    }
+}
+
+let downLoadFile = async (data) => {
+    try {
+        let response = await axios.post('/file/download', data, {
+            headers: {
+                responseType: 'arraybuffer'
+            }
+        })
+        return response
+    } catch (exception) {
+        checkErr(exception)
+        return {
+            err: true,
+            exception
+        }
+    }
+}
+
 export default {
-    register, login, refreshToken,
+    register, login, refreshToken, uploadFile,
     uploadAvatar, updateUserInfo, uploadImageMessage,
     friendInvitation, rejectInvitation, acceptInvitation,
-    findFriend, deleteFriend, createNewConversation
+    findFriend, deleteFriend, createNewConversation, downLoadFile
 }
 

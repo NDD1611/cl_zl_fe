@@ -81,7 +81,6 @@ const ChatArea = () => {
 
         if (chatAreaElement && rightInputElement && divInputElement) {
             let widthInput = chatAreaElement.clientWidth - rightInputElement.clientWidth
-            console.log(widthInput)
             divInputElement.style.width = (widthInput - 5) + 'px'
         }
 

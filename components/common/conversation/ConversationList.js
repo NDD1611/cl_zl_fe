@@ -4,9 +4,31 @@ import { useSelector } from 'react-redux'
 import Conversation from './Conversation'
 import { Oval } from 'react-loader-spinner'
 import { useEffect } from 'react'
+import { useLayoutEffect } from 'react'
+import { useState } from 'react'
 
 const ConversationList = () => {
     const conversations = useSelector(state => state.conversation.conversations)
+    const [conversationsShow, setConversationsShow] = useState([])
+    useLayoutEffect(() => {
+        if (conversations) {
+            let conversationsShow = [...conversations]
+            for (let i = 0; i < conversationsShow.length - 1; i++) {
+                let conversationI = conversationsShow[i]
+                let lastMessageI = conversationI.messages[conversationI.messages.length - 1]
+                for (let j = i + 1; j < conversationsShow.length; j++) {
+                    let conversationJ = conversationsShow[j]
+                    let lastMessageJ = conversationJ.messages[conversationJ.messages.length - 1]
+                    if (lastMessageJ.date > lastMessageI.date) {
+                        let temp = conversationsShow[i]
+                        conversationsShow[i] = conversationsShow[j]
+                        conversationsShow[j] = temp
+                    }
+                }
+            }
+            setConversationsShow(conversationsShow)
+        }
+    }, [conversations])
 
     useEffect(() => {
         let headerTabTwoElement = document.getElementById('headerTabTwo')
@@ -35,8 +57,7 @@ const ConversationList = () => {
                 </div>
             }
             {
-                conversations && conversations.map((conversation) => {
-                    console.log(conversation)
+                conversations && conversationsShow.map((conversation) => {
                     return <Conversation
                         key={conversation._id}
                         conversation={conversation}

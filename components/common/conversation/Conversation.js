@@ -9,6 +9,7 @@ import { tabsActions } from '../../../redux/actions/tabsAction'
 import MessageEmoji from '../MessageEmoji'
 import { faImage } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPaperclip } from '@fortawesome/free-solid-svg-icons'
 
 const Conversation = ({ conversation }) => {
     const userDetails = useSelector(state => state.auth.userDetails)
@@ -18,7 +19,7 @@ const Conversation = ({ conversation }) => {
     const [friend, setFriend] = useState({})
     const [message, setMessage] = useState('')
     const [countMessageReceived, setCountMessageReceived] = useState(0)
-
+    const [fileName, setFileName] = useState('')
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -77,9 +78,18 @@ const Conversation = ({ conversation }) => {
                 } else {
                     setMessage({ content: '', type: 'image' })
                 }
+            } else {
+                if (lastMessage.sender._id === userDetails._id) {
+                    setMessage({ content: 'Bạn: ', type: 'file' })
+                } else {
+                    setMessage({ content: '', type: 'file' })
+                }
+                if (lastMessage && lastMessage.type) {
+                    let fileName = JSON.parse(lastMessage.type).name
+                    setFileName(fileName)
+                }
             }
         }
-
         let listMessages = conversation.messages
         let count = 0
         for (let message of listMessages) {
@@ -130,6 +140,14 @@ const Conversation = ({ conversation }) => {
                             <div>{message.content}
                                 <FontAwesomeIcon className={styles.iconImage} icon={faImage} />
                                 Hình ảnh
+                            </div>
+                        }
+                        {
+                            message.type == 'file' &&
+                            <div>
+                                {message.content}
+                                <FontAwesomeIcon className={styles.iconImage} icon={faPaperclip} />
+                                {fileName}
                             </div>
                         }
                     </div>
