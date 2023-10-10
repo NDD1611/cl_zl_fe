@@ -30,7 +30,7 @@ const Content = ({ message }) => {
         </div>
     } else if (message.type == 'image') {
         return <div className={styles.contentImage}>
-            <div className={styles.messageImage} style={{ maxWidth: widthImg + 'px' }}>
+            <div className={styles.messageImage} style={{ maxWidth: widthImg + 'px', maxHeight: '500px' }}>
                 <img onLoad={handleLoadImg} src={message.content} />
             </div>
         </div>

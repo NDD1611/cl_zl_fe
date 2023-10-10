@@ -28,7 +28,8 @@ const MessageArea = () => {
                 if (conversationId === conversation._id) {
                     addSameDayAndSameAuth(conversation.messages)
                     checkShowTimeAndStatusInBottom(conversation.messages)
-                    setMessages(conversation.messages)
+                    setMessages(JSON.parse(JSON.stringify(conversation.messages)))
+                    console.log('set mes', conversation.messages)
                 }
             })
         }
@@ -60,6 +61,7 @@ const MessageArea = () => {
         if (messageAreaElement) {
             messageAreaElement.scrollTop = messageAreaElement.scrollHeight
         }
+        console.log('change mes')
     }, [messages])
 
     useEffect(() => {

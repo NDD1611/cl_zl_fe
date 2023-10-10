@@ -104,11 +104,11 @@ export const socketConnectToServer = (userDetails) => {
                     conversation.messages.push(message)
                 }
             }
+            store.dispatch({
+                type: conversationActions.SET_CONVERSATION,
+                conversations: conversations
+            })
         }
-        store.dispatch({
-            type: conversationActions.SET_CONVERSATION,
-            conversations: conversations
-        })
     })
 
     setInterval(() => {
