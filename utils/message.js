@@ -1,5 +1,4 @@
 export const addSameDayAndSameAuth = (messages) => {
-    console.log(messages)
     for (let i = 1; i < messages.length; i++) {
         let message = messages[i]
         let lastMessage = messages[i - 1]

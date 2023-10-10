@@ -94,6 +94,22 @@ export const socketConnectToServer = (userDetails) => {
         userDetails.token = token
         localStorage.setItem('userDetails', JSON.stringify(userDetails))
     })
+    socket.on('sendOneMessage', (data) => {
+        let { message } = data
+        let conversations = [...store.getState()?.conversation?.conversations]
+        if (conversations && message) {
+            for (let i = 0; i < conversations.length; i++) {
+                let conversation = conversations[i]
+                if (message.conversation._id == conversation._id) {
+                    conversation.messages.push(message)
+                }
+            }
+        }
+        store.dispatch({
+            type: conversationActions.SET_CONVERSATION,
+            conversations: conversations
+        })
+    })
 
     setInterval(() => {
         let userDetails = JSON.parse(localStorage.getItem('userDetails'))

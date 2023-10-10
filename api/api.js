@@ -1,5 +1,6 @@
 
 import axios from './axios'
+import axiosFile from './axiosSendFile'
 import { logout } from '../utils/auth'
 
 const register = async (data) => {
@@ -163,7 +164,7 @@ let createNewConversation = async (data) => {
 
 let uploadFile = async (data) => {
     try {
-        let response = await axios.post('/file/upload-file-message', data)
+        let response = await axiosFile.post('/file/upload-file-message', data)
         return response
     } catch (exception) {
         checkErr(exception)
@@ -176,7 +177,7 @@ let uploadFile = async (data) => {
 
 let downLoadFile = async (data) => {
     try {
-        let response = await axios.post('/file/download', data, {
+        let response = await axiosFile.post('/file/download', data, {
             headers: {
                 responseType: 'arraybuffer'
             }

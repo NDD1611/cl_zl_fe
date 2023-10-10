@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useLayoutEffect } from "react"
 import styles from './fileMessage.module.scss'
 import IconFile from "./iconFile"
-import { ThreeDots } from "react-loader-spinner"
+import { Oval, ThreeDots } from "react-loader-spinner"
 
 const MessageFile = ({ message }) => {
 
@@ -65,6 +65,16 @@ const MessageFile = ({ message }) => {
             <IconFile ext={ext} />
         </div>
         <div className={styles.rightFile}>
+            {
+                message.status == '0' && <div className={styles.loaderImage}>
+                    <Oval
+                        width={30}
+                        height={30}
+                        color="#0062cc"
+                        secondaryColor="#ccc"
+                    />
+                </div>
+            }
             <p className={styles.fileName} > {fileName} </p>
             <div className={styles.rightBottom}>
                 <div className={styles.size}>{fileSize}</div>
