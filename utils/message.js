@@ -1,8 +1,9 @@
 export const addSameDayAndSameAuth = (messages) => {
+    console.log(messages)
     for (let i = 1; i < messages.length; i++) {
         let message = messages[i]
         let lastMessage = messages[i - 1]
-        if (lastMessage.typeAnnounce == 'acceptFriend') {
+        if (lastMessage.type == 'accept_friend') {
             message.sameAuth = false
         } else if (message.sender._id === lastMessage.sender._id) {
             message.sameAuth = true

@@ -64,6 +64,9 @@ const MessageRight = ({ message }) => {
                     <p>{message.dateShow}</p>
                 </div>
             }
+            {
+                message.sameAuth == false && <div style={{ height: '10px' }}></div>
+            }
             <div className={styles.messageRight} >
                 <Content message={message} />
             </div>
