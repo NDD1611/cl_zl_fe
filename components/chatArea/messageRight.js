@@ -39,12 +39,16 @@ const Content = ({ message }) => {
                 <img onLoad={handleLoadImg} src={message.content} />
                 {
                     message.status == '0' && <div className={styles.loaderImage}>
-                        <Oval
+                        {/* <Oval
                             width={50}
                             height={50}
                             color="#0062cc"
                             secondaryColor="#ccc"
-                        />
+                        /> */}
+                        <div className={styles.backgroundImageLoader}></div>
+                        <div className={styles.circularProgress} id={message.date + 'circularProgress'}>
+                            <span className={styles.progressValue} id={message.date + 'progressValue'}>0%</span>
+                        </div>
                     </div>
                 }
             </div>

@@ -29,7 +29,6 @@ const MessageArea = () => {
                     addSameDayAndSameAuth(conversation.messages)
                     checkShowTimeAndStatusInBottom(conversation.messages)
                     setMessages(JSON.parse(JSON.stringify(conversation.messages)))
-                    console.log('set mes', conversation.messages)
                 }
             })
         }
@@ -110,11 +109,11 @@ const MessageArea = () => {
                                         }
                                         <div className={styles.acceptFriend}>
                                             <Avatar
-                                                src={message?.sender?.avatar ? message?.sender?.avatar : ''}
+                                                src={receiverUser?.avatar}
                                                 width={20}
                                             />
                                             <p>
-                                                {message?.sender ? message?.sender?.firstName + ' ' + message?.sender?.lastName : ''}
+                                                {receiverUser?.firstName + ' ' + receiverUser?.lastName}
                                             </p>
                                             <p> đã đồng ý kết bạn</p>
                                         </div>

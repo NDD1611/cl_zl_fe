@@ -37,3 +37,21 @@
         background-color: #eaedf0;
     }
 }
+
+.iconAddGroup {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 32px;
+    width: 32px;
+
+    span {
+        font-weight: 600;
+        font-size: 13px;
+    }
+
+    &:hover {
+        background-color: #eaedf0;
+    }
+}

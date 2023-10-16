@@ -8,11 +8,16 @@ import Avatar from '../common/Avatar'
 import { tabsActions } from '../../redux/actions/tabsAction'
 import MainModal from '../common/Modal/MainModal'
 import api from '../../api/api'
+import { conversationActions } from '../../redux/actions/conversationAction'
+import { useRouter } from 'next/router'
 
 const ListFriend = () => {
+    const conversations = useSelector(state => state.conversation.conversations)
+    const maintabSelect = useSelector(state => state.tabs.maintabSelect)
     const [showBackbutton, setShowBackButton] = useState(false)
     const listFriends = useSelector(state => state.friend.listFriends)
     const dispatch = useDispatch()
+    const router = useRouter()
     useEffect(() => {
         if (window.innerWidth < 700) {
             setShowBackButton(true)
@@ -69,6 +74,58 @@ const ListFriend = () => {
             friendId: friendId
         }
         let response = await api.deleteFriend(data)
+    }
+    const handleClickSendMesage = async (friend) => {
+        localStorage.setItem('receiverUser', JSON.stringify(friend))
+        let userDetails = JSON.parse(localStorage.getItem('userDetails'))
+        let conversationSelected = null
+        if (conversations) {
+            conversations.forEach(conversation => {
+                let participants = conversation.participants
+                if (participants.length === 2 &&
+                    (participants[0]._id === userDetails._id || participants[0]._id === friend._id)
+                    && (participants[1]._id === userDetails._id || participants[1]._id === friend._id)
+                ) {
+                    conversationSelected = conversation
+                }
+            })
+        }
+
+        if (conversationSelected) {
+            dispatch({
+                type: conversationActions.SET_SELECT_CONVERSATION,
+                conversationSelected: conversationSelected
+            })
+        } else {
+            dispatch({
+                type: conversationActions.SET_SELECT_CONVERSATION,
+                conversationSelected: {
+                    participants: [userDetails._id, friend._id],
+                    messages: [],
+                    date: new Date()
+                }
+            })
+        }
+
+        if (window.innerWidth < 700) {
+            dispatch({
+                type: tabsActions.SET_CLOSE_TAB_TWO
+            })
+            dispatch({
+                type: tabsActions.SET_SHOW_TAB_THREE
+            })
+            dispatch({
+                type: tabsActions.SET_CLOSE_TAB_ONE
+            })
+        }
+
+        if (maintabSelect != 'chat') {
+            dispatch({
+                type: tabsActions.SET_MAIN_TAB,
+                maintabSelect: 'chat'
+            })
+            router.push('/')
+        }
     }
     return (
         <>
@@ -128,6 +185,7 @@ const ListFriend = () => {
                             return (
                                 <div key={friend._id} className={styles.friendItem}
                                     onContextMenu={(e) => { handleMouseRightClick(e, friend._id) }}
+                                    onClick={(e) => { handleClickSendMesage(friend) }}
                                 >
                                     <div className={styles.left}>
                                         <Avatar

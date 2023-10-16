@@ -149,9 +149,9 @@ const deleteFriend = async (data) => {
     }
 }
 
-let createNewConversation = async (data) => {
+let createNewConversation = async (data) => { // have first message
     try {
-        let response = await axios.post('/conversation/create', data)
+        let response = await axios.post('/conversation/create-with-message', data)
         return response
     } catch (exception) {
         checkErr(exception)
@@ -191,11 +191,49 @@ let downLoadFile = async (data) => {
         }
     }
 }
+let testQueryLimit = async () => {
+    try {
+        let response = await axiosFile.get('/test-query-limit')
+        return response
+    } catch (exception) {
+        checkErr(exception)
+        return {
+            err: true,
+            exception
+        }
+    }
+}
+
+let createConversation = async (data) => { // create without message
+    try {
+        let response = await axios.post('/conversation/create-without-message', data)
+        return response
+    } catch (exception) {
+        checkErr(exception)
+        return {
+            err: true,
+            exception
+        }
+    }
+}
+
+let deleteConversation = async (data) => {
+    try {
+        let response = await axios.delete('/conversation/delete', { data })
+        return response
+    } catch (exception) {
+        checkErr(exception)
+        return {
+            err: true,
+            exception
+        }
+    }
+}
 
 export default {
-    register, login, refreshToken, uploadFile,
-    uploadAvatar, updateUserInfo, uploadImageMessage,
+    register, login, refreshToken, uploadFile, createConversation,
+    uploadAvatar, updateUserInfo, uploadImageMessage, deleteConversation,
     friendInvitation, rejectInvitation, acceptInvitation,
-    findFriend, deleteFriend, createNewConversation, downLoadFile
+    findFriend, deleteFriend, createNewConversation, downLoadFile, testQueryLimit
 }
 

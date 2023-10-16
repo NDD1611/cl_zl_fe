@@ -2,7 +2,8 @@ import { conversationActions } from "../actions/conversationAction"
 
 const initState = {
     conversations: null,
-    conversationSelected: null
+    conversationSelected: null,
+    popoverId: ''
 }
 
 const reducer = (state = initState, action) => {
@@ -16,6 +17,11 @@ const reducer = (state = initState, action) => {
             return {
                 ...state,
                 conversationSelected: action.conversationSelected
+            }
+        case conversationActions.SET_POPOVER_ID:
+            return {
+                ...state,
+                popoverId: action.id
             }
         case conversationActions.SEND_NEW_MESSAGE:
             let copyConversations = [...state.conversations]

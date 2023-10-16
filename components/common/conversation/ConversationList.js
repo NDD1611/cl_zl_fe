@@ -15,14 +15,18 @@ const ConversationList = () => {
             let conversationsShow = [...conversations]
             for (let i = 0; i < conversationsShow.length - 1; i++) {
                 let conversationI = conversationsShow[i]
-                let lastMessageI = conversationI.messages[conversationI.messages.length - 1]
-                for (let j = i + 1; j < conversationsShow.length; j++) {
-                    let conversationJ = conversationsShow[j]
-                    let lastMessageJ = conversationJ.messages[conversationJ.messages.length - 1]
-                    if (lastMessageJ.date > lastMessageI.date) {
-                        let temp = conversationsShow[i]
-                        conversationsShow[i] = conversationsShow[j]
-                        conversationsShow[j] = temp
+                if (conversationI.messages.length) {
+                    let lastMessageI = conversationI.messages[conversationI.messages.length - 1]
+                    for (let j = i + 1; j < conversationsShow.length; j++) {
+                        let conversationJ = conversationsShow[j]
+                        if (conversationJ.messages.length) {
+                            let lastMessageJ = conversationJ.messages[conversationJ.messages.length - 1]
+                            if (lastMessageJ.date > lastMessageI.date) {
+                                let temp = conversationsShow[i]
+                                conversationsShow[i] = conversationsShow[j]
+                                conversationsShow[j] = temp
+                            }
+                        }
                     }
                 }
             }

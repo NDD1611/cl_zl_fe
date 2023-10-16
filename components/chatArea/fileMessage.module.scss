@@ -1,4 +1,5 @@
-@import '../../styles//responsive.module.scss';
+@import '../../styles/responsive.module.scss';
+@import '../../styles/global.module.scss';
 
 .contentFile {
     display: flex;
@@ -7,15 +8,18 @@
     background-color: #e5efff;
     border-radius: 5px;
     min-width: 100px;
+    width: 300px;
 
     .iconFile {
         display: flex;
         justify-content: center;
         align-items: center;
+        flex: 1;
     }
 
     .rightFile {
         position: relative;
+        flex: 8;
 
         .loaderImage {
             background-color: #ebe5e5fa;
@@ -40,6 +44,26 @@
                 max-width: 100px;
                 word-break: normal;
                 overflow-x: hidden;
+            }
+        }
+
+        .progress {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            .progressBar {
+                border: 1px solid #ccc;
+                height: 5px;
+                width: 90%;
+                border-radius: 5px;
+
+                .bar {
+                    background-color: $primary-color;
+                    width: 0;
+                    height: 100%;
+                }
             }
         }
 

@@ -3,7 +3,8 @@ import { modalActions } from "../actions/modalActions"
 const initState = {
     showModalFindFriend: false,
     showModalInfo: false,
-    showModalUpdateInfo: false
+    showModalUpdateInfo: false,
+    showModalCreateGroup: false
 }
 
 const reducer = (state = initState, action) => {
@@ -37,6 +38,16 @@ const reducer = (state = initState, action) => {
             return {
                 ...state,
                 showModalUpdateInfo: false
+            }
+        case modalActions.SET_SHOW_MODAL_CREATE_GROUP:
+            return {
+                ...state,
+                showModalCreateGroup: true
+            }
+        case modalActions.SET_HIDE_MODAL_CREATE_GROUP:
+            return {
+                ...state,
+                showModalCreateGroup: false
             }
         default:
             return state

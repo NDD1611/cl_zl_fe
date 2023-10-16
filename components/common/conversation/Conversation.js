@@ -10,6 +10,7 @@ import MessageEmoji from '../MessageEmoji'
 import { faImage } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaperclip } from '@fortawesome/free-solid-svg-icons'
+import api from '../../../api/api'
 
 const Conversation = ({ conversation }) => {
     const userDetails = useSelector(state => state.auth.userDetails)
@@ -119,6 +120,41 @@ const Conversation = ({ conversation }) => {
             })
         }
     }
+    const [popoverX, setPopoverX] = useState(0)
+    const [popoverY, setPopoverY] = useState(0)
+    const popoverId = useSelector(state => state.conversation.popoverId)
+    const handleClickConversation = (e) => {
+        e.stopPropagation()
+        let height = e.target.clientHeight
+        dispatch({
+            type: conversationActions.SET_POPOVER_ID,
+            id: conversation._id
+        })
+        setPopoverX(e.target.getBoundingClientRect().x)
+        setPopoverY(e.target.getBoundingClientRect().y + height)
+    }
+    useEffect(() => {
+        const setPopoverId = () => {
+            dispatch({
+                type: conversationActions.SET_POPOVER_ID,
+                id: ''
+            })
+        }
+        document.addEventListener('click', setPopoverId)
+        return () => {
+            document.removeEventListener('click', setPopoverId)
+        }
+    })
+
+    const deleteConversation = async (e) => {
+        e.stopPropagation()
+        let res = await api.deleteConversation({ conversationId: conversation._id })
+        if (res.err) {
+            console.log(res, 'err')
+        } else {
+            console.log(res)
+        }
+    }
     return (
         <div className={`${styles.conversationItem} ${conversationSelected && conversation._id == conversationSelected._id && styles.selectedConversation}`} onClick={handleChooseConversation}>
             <div className={styles.left}>
@@ -154,12 +190,25 @@ const Conversation = ({ conversation }) => {
                 </div>
             </div>
             <div className={styles.right}>
+                <div className={styles.options}
+                    onClick={handleClickConversation}
+                >
+                    •••
+                </div>
                 {
-                    countMessageReceived !== 0 && <span className={styles.annouceMessage}>
+                    countMessageReceived !== 0 && <div className={styles.annouceMessage}>
                         {countMessageReceived}
-                    </span>
+                    </div>
                 }
             </div>
+            {popoverId == conversation._id &&
+                <div style={{
+                    left: popoverX,
+                    top: popoverY
+                }} className={styles.popover}>
+                    <div className={styles.delete} onClick={deleteConversation} >Xóa hội thoại</div>
+                </div>
+            }
         </div>
     )
 }

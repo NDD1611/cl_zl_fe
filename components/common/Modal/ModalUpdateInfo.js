@@ -15,6 +15,8 @@ import Cropper from 'cropperjs'
 import 'cropperjs/dist/cropper.js'
 import 'cropperjs/dist/cropper.css'
 import { faCamera, faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
+import { initializeApp } from 'firebase/app'
 
 const ModalUpdateInfo = () => {
     const showModalUpdateInfo = useSelector(state => state.modal.showModalUpdateInfo)
@@ -124,32 +126,63 @@ const ModalUpdateInfo = () => {
 
     const handleUpdateInfoUser = async () => {
         setShowLoader(true)
-        let formData = new FormData()
         let birthday = new Date(selectYear, parseInt(selectMonth) - 1, selectDay).toDateString()
         if (haveUpdateAvatar) {
-            formData.append('avatar', blobImage, 'cropedimage.jpg')
-            const response = await api.uploadAvatar(formData)
-            if (response.err) {
-                toast.error('Đã xảy ra lỗi. Vui lòng thử lại sau')
-            } else {
-                const newInfo = {
-                    ...userDetails,
-                    avatar: response.data.avatar,
-                    birthday: birthday
-                }
-                const responseUpdate = await api.updateUserInfo(newInfo)
-                if (responseUpdate.err) {
-                    toast.error('Đã xảy ra lỗi. Vui lòng thử lại sau')
-                } else {
-                    toast.success('Cập nhật thông tin thành công')
-                    localStorage.setItem('userDetails', JSON.stringify(newInfo))
-
-                    dispatch({
-                        type: authActions.SET_USER_DETAIL,
-                        userDetails: newInfo
-                    })
-                }
+            const firebaseConfig = {
+                apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+                authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTHDOMAIN,
+                projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECTID,
+                storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGEBUCKET,
+                messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDERID,
+                appId: process.env.NEXT_PUBLIC_FIREBASE_APPID,
+                measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENTID
             }
+            const app = initializeApp(firebaseConfig);
+            const storage = getStorage();
+            let fileName = Date.now() + '-' + Math.round(Math.random() * 1E9) + '.png'
+            const storageRef = ref(storage, 'file/' + fileName);
+            const uploadTask = uploadBytesResumable(storageRef, blobImage);
+            uploadTask.on('state_changed',
+                (snapshot) => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log(progress)
+                    switch (snapshot.state) {
+                        case 'paused':
+                            console.log('Upload is paused');
+                            break;
+                        case 'running':
+                            console.log('Upload is running');
+                            break;
+                    }
+                },
+                (error) => {
+                    console.log(error)
+                    toast.error('Đã xảy ra lỗi. Vui lòng thử lại sau')
+                    setShowLoader(false)
+                },
+                () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+                        const newInfo = {
+                            ...userDetails,
+                            avatar: downloadURL,
+                            birthday: birthday
+                        }
+                        const responseUpdate = await api.updateUserInfo(newInfo)
+                        if (responseUpdate.err) {
+                            toast.error('Đã xảy ra lỗi. Vui lòng thử lại sau')
+                        } else {
+                            toast.success('Cập nhật thông tin thành công')
+                            localStorage.setItem('userDetails', JSON.stringify(newInfo))
+
+                            dispatch({
+                                type: authActions.SET_USER_DETAIL,
+                                userDetails: newInfo
+                            })
+                        }
+                        setShowLoader(false)
+                    });
+                }
+            )
         } else {
             let userInfo = {
                 ...userDetails,
@@ -166,10 +199,10 @@ const ModalUpdateInfo = () => {
                     userDetails: userInfo,
                 })
             }
+            setShowLoader(false)
         }
         setSrcAfterCropped(null)
         dispatch({ type: modalActions.SET_HIDE_MODAL_UPDATE_INFO })
-        setShowLoader(false)
     }
 
     const handleCloseModalUpdateInfo = () => {
