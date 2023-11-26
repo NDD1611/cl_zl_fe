@@ -1,7 +1,6 @@
 import { tabsActions } from "../actions/tabsAction"
-
 const initState = {
-    maintabSelect: 'chat',
+    maintabSelect: 'Conversations',
     countAnnounceMessage: 0,
     showTabTwo: true,
     showTabThree: true,

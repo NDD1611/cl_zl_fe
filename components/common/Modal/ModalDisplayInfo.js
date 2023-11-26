@@ -5,10 +5,11 @@ import { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import { useSelector, useDispatch } from 'react-redux'
+import { useLingui } from '@lingui/react';
 import { modalActions } from '../../../redux/actions/modalActions'
 
 const ModalDisplayInfo = () => {
-
+    const { i18n } = useLingui();
     const showModalInfo = useSelector(state => state.modal.showModalInfo)
     const avatarLink = useSelector(state => state.auth.userDetails.avatar)
     const dispatch = useDispatch()
@@ -36,7 +37,7 @@ const ModalDisplayInfo = () => {
     return (
         <>
             <MainModal
-                title='Thông tin tài khoản'
+                title={i18n._('Account information')}
                 closeModal={showModalInfo}
                 setCloseModal={handleCloseModalInfo}
             >
@@ -54,23 +55,23 @@ const ModalDisplayInfo = () => {
                     </div>
                     <p className={styles.name}>{userDetails.firstName + ' ' + userDetails.lastName}</p>
                     <div className={styles.userInfo}>
-                        <p>Thông tin cá nhân</p>
+                        <p>{i18n._("Information")}</p>
                         <div>
                             <p>Email</p>
                             <p>{userDetails.email}</p>
                         </div>
                         <div>
-                            <p>Giới tính</p>
-                            <p>{userDetails.sex ? userDetails.sex : 'chưa có thông tin'}</p>
+                            <p>{i18n._("Sex")}</p>
+                            <p>{userDetails.sex ? userDetails.sex : i18n._("No information")}</p>
                         </div>
                         <div>
-                            <p>Ngày sinh</p>
-                            <p>{userDetails.birthday ? day + '/' + month + '/' + year : 'chưa có thông tin'}</p>
+                            <p>{i18n._("Date of birth")}</p>
+                            <p>{userDetails.birthday ? day + '/' + month + '/' + year : i18n._("No information")}</p>
                         </div>
                         <div className={styles.divBtn}>
                             <button className={styles.btnShowModalUpdateInfo} onClick={() => { handleClickUpdateInfo() }} >
                                 <FontAwesomeIcon icon={faPenToSquare} />
-                                Cập nhật thông tin
+                                {i18n._("Update information")}
                             </button>
                         </div>
                     </div>

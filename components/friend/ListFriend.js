@@ -10,11 +10,13 @@ import MainModal from '../common/Modal/MainModal'
 import api from '../../api/api'
 import { conversationActions } from '../../redux/actions/conversationAction'
 import { useRouter } from 'next/router'
+import { useLingui } from '@lingui/react'
 
 const ListFriend = () => {
+    let i18n = useLingui()
     const conversations = useSelector(state => state.conversation.conversations)
     const maintabSelect = useSelector(state => state.tabs.maintabSelect)
-    const [showBackbutton, setShowBackButton] = useState(false)
+    const [showBackButton, setShowBackButton] = useState(false)
     const listFriends = useSelector(state => state.friend.listFriends)
     const dispatch = useDispatch()
     const router = useRouter()
@@ -49,7 +51,8 @@ const ListFriend = () => {
 
     }
 
-    const handleClickShowInfoFriend = (friend) => {
+    const handleClickShowInfoFriend = (e, friend) => {
+        e.stopPropagation();
         let date = new Date(friend.birthday)
         let day = date.getDate().toString()
         let month = (date.getMonth() + 1).toString()
@@ -67,7 +70,8 @@ const ListFriend = () => {
     const handleCloseModalInfo = () => {
         setShowModalInfo(false)
     }
-    const handleDeleteFriend = async (friendId) => {
+    const handleDeleteFriend = async (e, friendId) => {
+        e.stopPropagation();
         let userDetails = JSON.parse(localStorage.getItem('userDetails'))
         let data = {
             userId: userDetails._id,
@@ -75,7 +79,7 @@ const ListFriend = () => {
         }
         let response = await api.deleteFriend(data)
     }
-    const handleClickSendMesage = async (friend) => {
+    const handleClickSendMessage = async (friend) => {
         localStorage.setItem('receiverUser', JSON.stringify(friend))
         let userDetails = JSON.parse(localStorage.getItem('userDetails'))
         let conversationSelected = null
@@ -124,13 +128,14 @@ const ListFriend = () => {
                 type: tabsActions.SET_MAIN_TAB,
                 maintabSelect: 'chat'
             })
-            router.push('/')
+            const { locale } = router
+            router.push('/', '/', { locale: locale })
         }
     }
     return (
         <>
             <MainModal
-                title='Thông tin tài khoản'
+                title={i18n._('Account information')}
                 closeModal={showModalInfo}
                 setCloseModal={handleCloseModalInfo}
             >
@@ -148,67 +153,65 @@ const ListFriend = () => {
                     </div>
                     <p className={styles.name}>{infoFriend && infoFriend.firstName + ' ' + infoFriend.lastName}</p>
                     <div className={styles.userInfo}>
-                        <p>Thông tin cá nhân</p>
+                        <p>{i18n._('Information')}</p>
                         <div>
-                            <p>Email</p>
+                            <p>{i18n._('Email')}</p>
                             <p>{infoFriend ? infoFriend.email : ''}</p>
                         </div>
                         <div>
-                            <p>Giới tính</p>
-                            <p>{infoFriend && (infoFriend.sex ? infoFriend.sex : 'chưa có thông tin')}</p>
+                            <p>{i18n._('Sex')}</p>
+                            <p>{infoFriend && (infoFriend.sex ? infoFriend.sex : i18n._('No information'))}</p>
                         </div>
                         <div>
-                            <p>Ngày sinh</p>
-                            <p>{infoFriend && (infoFriend.birthday ? infoFriend.birthday : 'chưa có thông tin')}</p>
+                            <p>{i18n._('Date of birth')}</p>
+                            <p>{infoFriend && (infoFriend.birthday ? infoFriend.birthday : i18n._('No information'))}</p>
                         </div>
                     </div>
                 </div>
             </MainModal>
             <div className={styles.listFriend}>
                 <div className={styles.headerInvitation}>
-                    {showBackbutton &&
+                    {showBackButton &&
                         <div className={styles.backButton} onClick={showTabTwoAndCloseTabThree}>
                             <FontAwesomeIcon icon={faChevronLeft} />
                         </div>
                     }
                     <FontAwesomeIcon className={styles.headerIcon} icon={faUser} />
-                    Danh sách bạn bè
+                    {i18n._('Friends List')}
                 </div>
                 <div>
                     {
                         listFriends.length === 0 && <div className={styles.noFriend}>
-                            Bạn chưa có bạn bè
+                            {i18n._("You don't have friends yet, connect with friends")}
                         </div>
                     }
                     {
                         listFriends.map((friend) => {
-                            return (
-                                <div key={friend._id} className={styles.friendItem}
-                                    onContextMenu={(e) => { handleMouseRightClick(e, friend._id) }}
-                                    onClick={(e) => { handleClickSendMesage(friend) }}
-                                >
-                                    <div className={styles.left}>
-                                        <Avatar
-                                            width={50}
-                                            src={friend.avatar ? friend.avatar : ''}
-                                        />
-                                        <div className={styles.name}>{friend.firstName + ' ' + friend.lastName}</div>
-                                    </div>
-                                    <div className={styles.right}>
-                                        {/* icon */}
-                                    </div>
-
-                                    {idPopover == friend._id &&
-                                        <div style={{
-                                            left: clientXPopover,
-                                            top: clientYPopover
-                                        }} className={styles.popover}>
-                                            <div onClick={() => { handleClickShowInfoFriend(friend) }} >Xem thông tin</div>
-                                            <div className={styles.delete} onClick={() => { handleDeleteFriend(friend._id) }}>Xóa bạn</div>
-                                        </div>
-                                    }
+                            return <div key={friend._id} className={styles.friendItem}
+                                onContextMenu={(e) => { handleMouseRightClick(e, friend._id) }}
+                                onClick={(e) => { handleClickSendMessage(friend) }}
+                            >
+                                <div className={styles.left}>
+                                    <Avatar
+                                        width={50}
+                                        src={friend.avatar ? friend.avatar : ''}
+                                    />
+                                    <div className={styles.name}>{friend.firstName + ' ' + friend.lastName}</div>
                                 </div>
-                            )
+                                <div className={styles.right}>
+                                    {/* icon */}
+                                </div>
+
+                                {idPopover == friend._id &&
+                                    <div style={{
+                                        left: clientXPopover,
+                                        top: clientYPopover
+                                    }} className={styles.popover}>
+                                        <div onClick={(e) => { handleClickShowInfoFriend(e, friend) }} >{i18n._('Watch information')}</div>
+                                        <div className={styles.delete} onClick={(e) => { handleDeleteFriend(e, friend._id) }}>{i18n._('Delete')}</div>
+                                    </div>
+                                }
+                            </div>
                         })
                     }
                 </div>

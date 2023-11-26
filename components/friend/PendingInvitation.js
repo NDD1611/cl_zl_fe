@@ -9,12 +9,14 @@ import Avatar from '../common/Avatar'
 import api from '../../api/api'
 import LoaderModal from '../common/Modal/LoaderModal'
 import { tabsActions } from '../../redux/actions/tabsAction'
+import { useLingui } from '@lingui/react'
 
 const PendingInvitation = () => {
+    let i18n = useLingui()
     const router = useRouter()
     const pendingInvitations = useSelector(state => state.friend.pendingInvitations)
     const [showLoader, setShowLoader] = useState(false)
-    const [showBackbutton, setShowBackButton] = useState(false)
+    const [showBackButton, setShowBackButton] = useState(false)
     const dispatch = useDispatch()
     const handleRejectFriend = async (invitation) => {
         setShowLoader(true)
@@ -25,7 +27,8 @@ const PendingInvitation = () => {
         setShowLoader(true)
         const response = await api.acceptInvitation({ invitationId: invitation._id })
         setShowLoader(false)
-        router.push('/')
+        const { locale } = router
+        router.push('/', '/', { locale: locale })
     }
 
     useEffect(() => {
@@ -50,13 +53,13 @@ const PendingInvitation = () => {
             {showLoader ? <LoaderModal /> : ''}
             <div className={styles.PendingInvitation}>
                 <div className={styles.headerInvitation}>
-                    {showBackbutton &&
+                    {showBackButton &&
                         <div className={styles.backButton} onClick={showTabTwoAndCloseTabThree}>
                             <FontAwesomeIcon icon={faChevronLeft} />
                         </div>
                     }
                     <FontAwesomeIcon className={styles.headerIcon} icon={faEnvelopeOpen} />
-                    Lời mời kết bạn
+                    {i18n._('Friend request')}
                 </div>
                 {pendingInvitations.length === 0 &&
                     <div className={styles.noResult}>
@@ -64,30 +67,28 @@ const PendingInvitation = () => {
                             <img src='/images/invitation-emptystate.png' />
                         </div>
                         <div>
-                            Bạn không có lời mời kết bạn nào
+                            {i18n._("You don't have any friend requests")}
                         </div>
                     </div>
                 }
                 <div className={styles.centerPending}>
                     {
                         pendingInvitations.map((invitation) => {
-                            return (
-                                <div key={invitation._id} className={styles.pendingInvitationItem}>
-                                    <div className={styles.topItem}>
-                                        <Avatar
-                                            src={invitation?.senderId?.avatar ? invitation?.senderId?.avatar : ''}
-                                            width={40}
-                                        />
-                                        <p className={styles.name}>{invitation.senderId.lastName + ' ' + invitation.senderId.firstName}</p>
-                                    </div>
-                                    <div className={styles.bottomItem}>
-                                        <button onClick={() => { handleRejectFriend(invitation) }}>Từ chối</button>
-                                        <button onClick={() => { handleAcceptFriend(invitation) }} className={styles.accept}>
-                                            Chấp nhận
-                                        </button>
-                                    </div>
+                            return <div key={invitation._id} className={styles.pendingInvitationItem}>
+                                <div className={styles.topItem}>
+                                    <Avatar
+                                        src={invitation?.senderId?.avatar ? invitation?.senderId?.avatar : ''}
+                                        width={40}
+                                    />
+                                    <p className={styles.name}>{invitation.senderId.lastName + ' ' + invitation.senderId.firstName}</p>
                                 </div>
-                            )
+                                <div className={styles.bottomItem}>
+                                    <button onClick={() => { handleRejectFriend(invitation) }}>{i18n._('Refuse')}</button>
+                                    <button onClick={() => { handleAcceptFriend(invitation) }} className={styles.accept}>
+                                        {i18n._('Accept')}
+                                    </button>
+                                </div>
+                            </div>
                         })
                     }
                 </div>

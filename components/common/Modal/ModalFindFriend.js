@@ -11,8 +11,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import Avatar from '../Avatar'
 import { useRouter } from 'next/router'
+import { useLingui } from '@lingui/react'
 
 const ModalAddFriend = () => {
+    let i18n = useLingui()
     const showModalFindFriend = useSelector(state => state.modal.showModalFindFriend)
     const conversations = useSelector(state => state.conversation.conversations)
     const listFriends = useSelector(state => state.friend.listFriends)
@@ -85,7 +87,7 @@ const ModalAddFriend = () => {
         dispatch({ type: modalActions.SET_HIDE_MODAL_FIND_FRIEND })
         setInfoFindFriend(undefined)
     }
-    const handleClickSendMesage = async () => {
+    const handleClickSendMessage = async () => {
         localStorage.setItem('receiverUser', JSON.stringify(infoFindFriend))
         let userDetails = JSON.parse(localStorage.getItem('userDetails'))
         let conversationSelected = null
@@ -136,7 +138,8 @@ const ModalAddFriend = () => {
                 type: tabsActions.SET_MAIN_TAB,
                 maintabSelect: 'chat'
             })
-            router.push('/')
+            const { locale } = router
+            router.push('/', '/', { locale: locale })
         }
     }
     return (
@@ -144,14 +147,15 @@ const ModalAddFriend = () => {
             <div className={`${styles.MainModal} ${showModalFindFriend ? '' : styles.closeModal}`}>
                 <div className={styles.backgroundOpacity}></div>
                 <div className={styles.content}>
-                    <div className={styles.title}>Thêm bạn
+                    <div className={styles.title}>
+                        {i18n._('Add friend')}
                         <div className={styles.closeX} onClick={handleCloseModalFindFriend} >
                             <FontAwesomeIcon icon={faXmark} />
                         </div>
                     </div>
                     {showLoader && <LoaderModal />}
                     <div className={styles.inputEmail}>
-                        <input value={email} placeholder='Email...'
+                        <input value={email} placeholder={i18n._('Email') + '...'}
                             onChange={(e) => { setEmail(e.target.value) }}
                         />
                     </div>
@@ -173,35 +177,35 @@ const ModalAddFriend = () => {
 
                             <div className={styles.addFriendBtns}>
                                 <button className={styles.btnCancel}
-                                    onClick={handleClickSendMesage}>
-                                    Nhắn tin
+                                    onClick={handleClickSendMessage}>
+                                    {i18n._('Send message')}
                                 </button>
                                 {
                                     !isFriend && <button className={styles.btnCancel}
-                                        onClick={addFriend}>Kết bạn</button>
+                                        onClick={addFriend}>{i18n._('Make friend')}</button>
                                 }
                             </div>
                             <div className={styles.userInfo}>
-                                <p>Thông tin cá nhân</p>
+                                <p>{i18n._('Information')}</p>
                                 <div>
-                                    <p>Email</p>
+                                    <p>{i18n._('Email')}</p>
                                     <p>{infoFindFriend.email}</p>
                                 </div>
                                 <div>
-                                    <p>Giới tính</p>
-                                    <p>{infoFindFriend.sex ? infoFindFriend.sex : 'chưa có thông tin'}</p>
+                                    <p>{i18n._('Sex')}</p>
+                                    <p>{infoFindFriend.sex ? infoFindFriend.sex : i18n._('No information')}</p>
                                 </div>
                                 <div>
-                                    <p>Ngày sinh</p>
-                                    <p>{infoFindFriend.birthday ? infoFindFriend.birthday : 'chưa có thông tin'}</p>
+                                    <p>{i18n._('Date of birth')}</p>
+                                    <p>{infoFindFriend.birthday ? infoFindFriend.birthday : i18n._('No information')}</p>
                                 </div>
                             </div>
                         </div>
                     }
 
                     <div className={styles.footerBtn}>
-                        <button className={styles.btnCancel} onClick={handleCloseModalFindFriend}>Hủy</button>
-                        <button className={styles.btnFind} onClick={handleFindFriend}>Tìm kiếm</button>
+                        <button className={styles.btnCancel} onClick={handleCloseModalFindFriend}>{i18n._('Cancel')}</button>
+                        <button className={styles.btnFind} onClick={handleFindFriend}>{i18n._('Find')}</button>
                     </div>
                 </div>
             </div >

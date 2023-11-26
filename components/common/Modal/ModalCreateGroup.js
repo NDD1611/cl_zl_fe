@@ -7,8 +7,9 @@ import { useEffect, useState } from 'react'
 import Avatar from '../Avatar'
 import { faCircle } from '@fortawesome/free-regular-svg-icons'
 import api from '../../../api/api'
-
-const ModalCreatGroup = () => {
+import { useLingui } from '@lingui/react'
+const ModalCreateGroup = () => {
+    let i18n = useLingui()
     const listFriends = useSelector(state => state.friend.listFriends)
     const [groupName, setGroupName] = useState('')
     const [groupSelect, setGroupSelect] = useState([])
@@ -68,18 +69,18 @@ const ModalCreatGroup = () => {
     }
     return (
         <>
-            <div className={styles.ModalCreatGroup}>
+            <div className={styles.ModalCreateGroup}>
                 <div className={styles.backgroundOpacity}></div>
                 <div className={styles.content}>
                     <div className={styles.title}>
-                        Tạo nhóm
+                        {i18n._('Create group')}
                         <div className={styles.closeX} onClick={handleCloseModalCreateGroup} >
                             <FontAwesomeIcon icon={faXmark} />
                         </div>
                     </div>
                     <div className={styles.bodyModal}>
                         <div className={styles.inputEmail}>
-                            <input value={groupName} placeholder='Nhập tên nhóm...'
+                            <input value={groupName} placeholder={i18n._('Group name') + '...'}
                                 onChange={(e) => { setGroupName(e.target.value) }}
                             />
                         </div>
@@ -118,7 +119,10 @@ const ModalCreatGroup = () => {
                                                     <div className={styles.name}>{friend.firstName + ' ' + friend.lastName}</div>
                                                 </div>
                                                 <div>
-                                                    <FontAwesomeIcon className={styles.iconRemove} onClick={(e) => { handleRemoveUserFromGroupSelect(friend) }} icon={faCircleXmark} style={{ color: "#0d65fd", }} />
+                                                    <FontAwesomeIcon className={styles.iconRemove}
+                                                        onClick={(e) => { handleRemoveUserFromGroupSelect(friend) }}
+                                                        icon={faCircleXmark} style={{ color: "#0d65fd", }}
+                                                    />
                                                 </div>
                                             </div>
                                         })
@@ -128,8 +132,8 @@ const ModalCreatGroup = () => {
                         </div>
                     </div>
                     <div className={styles.footerBtn}>
-                        <button className={styles.btnCancel} onClick={handleCloseModalCreateGroup} >Hủy</button>
-                        <button className={`${styles.btnFind} ${!check && styles.opacityHalf}`} onClick={createGroup}>Tạo nhóm</button>
+                        <button className={styles.btnCancel} onClick={handleCloseModalCreateGroup} >{i18n._('Cancel')}</button>
+                        <button className={`${styles.btnFind} ${!check && styles.opacityHalf}`} onClick={createGroup}>{i18n._('Create')}</button>
                     </div>
                 </div>
             </div>
@@ -137,4 +141,4 @@ const ModalCreatGroup = () => {
     )
 }
 
-export default ModalCreatGroup;
+export default ModalCreateGroup;

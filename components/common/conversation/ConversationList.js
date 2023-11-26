@@ -6,8 +6,10 @@ import { Oval } from 'react-loader-spinner'
 import { useEffect } from 'react'
 import { useLayoutEffect } from 'react'
 import { useState } from 'react'
+import { useLingui } from '@lingui/react'
 
 const ConversationList = () => {
+    let i18n = useLingui()
     const conversations = useSelector(state => state.conversation.conversations)
     const [conversationsShow, setConversationsShow] = useState([])
     useLayoutEffect(() => {
@@ -57,7 +59,7 @@ const ConversationList = () => {
             {
 
                 conversations?.length == 0 && <div className={styles.noListConversation}>
-                    Kết bạn để bắt đầu chat
+                    {i18n._('Make friends to start chatting')}
                 </div>
             }
             {

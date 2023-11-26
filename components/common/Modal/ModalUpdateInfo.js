@@ -17,12 +17,14 @@ import 'cropperjs/dist/cropper.css'
 import { faCamera, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 import { initializeApp } from 'firebase/app'
+import { useLingui } from '@lingui/react'
 
 const ModalUpdateInfo = () => {
+    let i18n = useLingui()
     const showModalUpdateInfo = useSelector(state => state.modal.showModalUpdateInfo)
     const [userDetails, setUserDetails] = useState({})
     const [srcPreview, setSrcPreview] = useState()
-    const [showModalropImage, setShowModalCropImage] = useState(false)
+    const [showModalCropImage, setShowModalCropImage] = useState(false)
     const [srcAfterCropped, setSrcAfterCropped] = useState(null)
     const [cropper, setCropper] = useState(null)
     const [blobImage, setBlobImage] = useState(null)
@@ -33,9 +35,9 @@ const ModalUpdateInfo = () => {
     const [selectYear, setSelectYear] = useState('')
     const [selectMonth, setSelectMonth] = useState('')
     const [selectDay, setSelectDay] = useState('')
-    const [showScollYear, setShowScollYear] = useState(false)
-    const [showScollMonth, setShowScollMonth] = useState(false)
-    const [showScollDay, setShowScollDay] = useState(false)
+    const [showScrollYear, setShowScrollYear] = useState(false)
+    const [showScrollMonth, setShowScrollMonth] = useState(false)
+    const [showScrollDay, setShowScrollDay] = useState(false)
     const [showLoader, setShowLoader] = useState(false)
     const user = useSelector(state => state.auth.userDetails)
     const dispatch = useDispatch()
@@ -157,7 +159,7 @@ const ModalUpdateInfo = () => {
                 },
                 (error) => {
                     console.log(error)
-                    toast.error('Đã xảy ra lỗi. Vui lòng thử lại sau')
+                    toast.error(i18n._('An error occurred. Please try again later.'))
                     setShowLoader(false)
                 },
                 () => {
@@ -169,9 +171,9 @@ const ModalUpdateInfo = () => {
                         }
                         const responseUpdate = await api.updateUserInfo(newInfo)
                         if (responseUpdate.err) {
-                            toast.error('Đã xảy ra lỗi. Vui lòng thử lại sau')
+                            toast.error(i18n._('An error occurred. Please try again later.'))
                         } else {
-                            toast.success('Cập nhật thông tin thành công')
+                            toast.success(i18n._('Update information successfully!'))
                             localStorage.setItem('userDetails', JSON.stringify(newInfo))
 
                             dispatch({
@@ -190,9 +192,9 @@ const ModalUpdateInfo = () => {
             }
             const responseUpdate = await api.updateUserInfo(userInfo)
             if (responseUpdate.err) {
-                toast.error('Đã xảy ra lỗi. Vui lòng thử lại sau')
+                toast.error(i18n._('An error occurred. Please try again later.'))
             } else {
-                toast.success('Cập nhật thông tin thành công')
+                toast.success(i18n._('Update information successfully!'))
                 localStorage.setItem('userDetails', JSON.stringify(userInfo))
                 dispatch({
                     type: authActions.SET_USER_DETAIL,
@@ -212,45 +214,45 @@ const ModalUpdateInfo = () => {
     }
     const handleShowYear = (e) => {
         e.stopPropagation()
-        setShowScollYear(true)
-        setShowScollMonth(false)
-        setShowScollDay(false)
+        setShowScrollYear(true)
+        setShowScrollMonth(false)
+        setShowScrollDay(false)
     }
     const handleShowMonth = (e) => {
         e.stopPropagation()
-        setShowScollYear(false)
-        setShowScollMonth(true)
-        setShowScollDay(false)
+        setShowScrollYear(false)
+        setShowScrollMonth(true)
+        setShowScrollDay(false)
     }
     const handleShowDay = (e) => {
         e.stopPropagation()
-        setShowScollYear(false)
-        setShowScollMonth(false)
-        setShowScollDay(true)
+        setShowScrollYear(false)
+        setShowScrollMonth(false)
+        setShowScrollDay(true)
     }
     const handleCloseAllDMY = () => {
-        setShowScollYear(false)
-        setShowScollMonth(false)
-        setShowScollDay(false)
+        setShowScrollYear(false)
+        setShowScrollMonth(false)
+        setShowScrollDay(false)
     }
     return (
         <>
             {showLoader ? <LoaderModal /> : ''}
             <MainModal
-                title='Cập nhật thông tin'
+                title={i18n._('Update information')}
                 closeModal={showModalUpdateInfo}
                 setCloseModal={handleCloseModalUpdateInfo}
             >
                 <div className={styles.contentModalInfo} onClick={handleCloseAllDMY}>
 
-                    <div className={`${styles.modalCropImage} ${showModalropImage ? '' : styles.hideModal}`}>
+                    <div className={`${styles.modalCropImage} ${showModalCropImage ? '' : styles.hideModal}`}>
                         <div className={styles.backgroundModal}></div>
                         <div className={styles.imageCrop}>
                             <img ref={imageElement} id="image" src={srcPreview} onLoad={() => { handleImgLoad() }} />
                         </div>
                         <div className={styles.btns} >
-                            <button className={styles.btnCancelAvatar} onClick={handleCloseCropperImage}>Hủy</button>
-                            <button className={styles.btnAcceptAvatar} onClick={handleAcceptCrop}>Chọn làm ảnh đại diện</button>
+                            <button className={styles.btnCancelAvatar} onClick={handleCloseCropperImage}>Cancel</button>
+                            <button className={styles.btnAcceptAvatar} onClick={handleAcceptCrop}>Select as avatar</button>
                         </div>
                     </div>
 
@@ -277,14 +279,14 @@ const ModalUpdateInfo = () => {
                     <p className={styles.name}>{userDetails.firstName + ' ' + userDetails.lastName}</p>
                     <div className={styles.fullname}>
                         <div>
-                            <label>Họ:</label>
+                            <label>{i18n._('Last name:')}</label>
                             <input
                                 value={userDetails.lastName ? userDetails.lastName : ''}
                                 onChange={(e) => { setUserDetails({ ...userDetails, lastName: e.target.value }) }}
                             />
                         </div>
                         <div>
-                            <label>Tên:</label>
+                            <label>{i18n._('First name:')}</label>
                             <input
                                 value={userDetails.firstName ? userDetails.firstName : ''}
                                 onChange={(e) => { setUserDetails({ ...userDetails, firstName: e.target.value }) }}
@@ -292,8 +294,8 @@ const ModalUpdateInfo = () => {
                         </div>
                     </div>
                     <div className={styles.userInfo}>
-                        <p className={styles.titleInfo}>Thông tin cá nhân</p>
-                        <p className={styles.sex}>Giới tính</p>
+                        <p className={styles.titleInfo}>{i18n._('Information')}</p>
+                        <p className={styles.sex}>{i18n._('Sex')}</p>
                         <div className={styles.inputRadio}>
                             <input
                                 type="radio"
@@ -303,7 +305,7 @@ const ModalUpdateInfo = () => {
                                 checked={userDetails.sex === 'Nam' ? true : false}
                                 onChange={() => { setUserDetails({ ...userDetails, sex: 'Nam' }) }}
                             />
-                            <label htmlFor="male">Nam</label>
+                            <label htmlFor="male">{i18n._('Male')}</label>
                             <input
                                 type="radio"
                                 id="Female"
@@ -312,14 +314,14 @@ const ModalUpdateInfo = () => {
                                 checked={userDetails.sex === 'Nữ' ? true : false}
                                 onChange={() => { setUserDetails({ ...userDetails, sex: 'Nữ' }) }}
                             />
-                            <label htmlFor="Female">Nữ</label>
+                            <label htmlFor="Female">{i18n._('Female')}</label>
                         </div>
                         <div className={styles.birthday}>
-                            <p>Ngày sinh</p>
+                            <p>{i18n._('Date of birth')}</p>
                             <div className={styles.dmy}>
                                 <div className={styles.subdmy}>
                                     {
-                                        showScollDay && <ExpandDate
+                                        showScrollDay && <ExpandDate
                                             dataArr={arrDay}
                                             value={selectDay}
                                             setValue={setSelectDay}
@@ -331,7 +333,7 @@ const ModalUpdateInfo = () => {
                                 </div>
                                 <div className={styles.subdmy}>
                                     {
-                                        showScollMonth && <ExpandDate
+                                        showScrollMonth && <ExpandDate
                                             dataArr={arrMonth}
                                             value={selectMonth}
                                             setValue={setSelectMonth}
@@ -344,7 +346,7 @@ const ModalUpdateInfo = () => {
                                 </div>
                                 <div className={styles.subdmy}>
                                     {
-                                        showScollYear && <ExpandDate
+                                        showScrollYear && <ExpandDate
                                             setValue={setSelectYear}
                                             value={selectYear}
                                             dataArr={arrYear}
@@ -358,10 +360,10 @@ const ModalUpdateInfo = () => {
                         </div>
                         <div className={styles.divBtn}>
                             <button className={styles.btnCancel} onClick={handleCloseModalUpdateInfo}>
-                                Hủy
+                                {i18n._('Cancel')}
                             </button>
                             <button className={styles.btnUpdate} onClick={handleUpdateInfoUser}>
-                                Cập nhật
+                                {i18n._('Update')}
                             </button>
                         </div>
                     </div>

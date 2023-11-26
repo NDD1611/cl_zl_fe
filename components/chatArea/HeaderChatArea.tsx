@@ -1,7 +1,6 @@
 
 import { useSelector, useDispatch } from "react-redux"
 import styles from './HeaderChatArea.module.scss'
-import Avatar from "../common/Avatar"
 import { useEffect, useState } from "react"
 import { tabsActions } from "../../redux/actions/tabsAction"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -11,15 +10,18 @@ import api from '../../api/api'
 import { modalActions } from "../../redux/actions/modalActions"
 import { toast } from "react-toastify"
 import { friendActions } from "../../redux/actions/friendAction"
+import { Avatar, Box, Button, Center, Indicator } from "@mantine/core"
+import { useLingui } from "@lingui/react"
 
 const HeaderChatArea = () => {
+    let i18n = useLingui()
     const dispatch = useDispatch()
-    const conversationSelected = useSelector(state => state.conversation.conversationSelected)
-    const activeUsers = useSelector(state => state.auth.activeUsers)
-    const listFriends = useSelector(state => state.friend.listFriends)
-    const isFriend = useSelector(state => state.friend.isFriend)
-    const [receiverUser, setReceiverUser] = useState({})
-    const [showLodaer, setShowLoader] = useState(false)
+    const conversationSelected = useSelector((state: any) => state.conversation.conversationSelected)
+    const activeUsers = useSelector((state: any) => state.auth.activeUsers)
+    const listFriends = useSelector((state: any) => state.friend.listFriends)
+    const isFriend = useSelector((state: any) => state.friend.isFriend)
+    const [receiverUser, setReceiverUser] = useState<any>({})
+    const [showLoader, setShowLoader] = useState(false)
     useEffect(() => {
         let receiverUser = JSON.parse(localStorage.getItem('receiverUser'))
         if (receiverUser) {
@@ -60,7 +62,7 @@ const HeaderChatArea = () => {
         let receiverUser = JSON.parse(localStorage.getItem('receiverUser'))
         let userDetails = JSON.parse(localStorage.getItem('userDetails'))
         setShowLoader(true)
-        const response = await api.friendInvitation({
+        const response: any = await api.friendInvitation({
             senderId: userDetails._id,
             receiverId: receiverUser._id
         })
@@ -78,7 +80,7 @@ const HeaderChatArea = () => {
     return (
         conversationSelected &&
         <div id='headerChat' className={styles.headerChatArea}>
-            {showLodaer && <LoaderModal />}
+            {showLoader && <LoaderModal />}
             <div className={styles.headerContent}>
                 <div className={styles.headerLeft}>
                     {
@@ -88,28 +90,33 @@ const HeaderChatArea = () => {
                         </div>
                     }
                     <div className={styles.headerAvatar}>
-                        <Avatar
-                            src={receiverUser.avatar}
-                            width={50}
-                        />
-                        {activeUsers.includes(receiverUser._id) && <span className={styles.iconUserOnline}></span>}
+                        <Center>
+                            {
+                                activeUsers.includes(receiverUser._id) ?
+                                    <Indicator size={16} offset={7} position="bottom-end" color="green" withBorder>
+                                        <Avatar src={receiverUser.avatar} size={'lg'} alt='avatar' />
+                                    </Indicator>
+                                    :
+                                    <Avatar src={receiverUser.avatar} size={'lg'} alt='avatar' />
+                            }
+                        </Center>
                     </div>
                     <div className={styles.headerName}>
                         <p className={styles.name}> {receiverUser && receiverUser.firstName + ' ' + receiverUser.lastName}</p>
-                        {activeUsers.includes(receiverUser._id) && isFriend && <p className={styles.minuteActive}>vừa truy cập</p>}
-                        {!isFriend && <p className={styles.stranger}>Người lạ</p>}
+                        {activeUsers.includes(receiverUser._id) && isFriend && <p className={styles.minuteActive}>{i18n._("just accessed")}</p>}
+                        {!isFriend && <p className={styles.stranger}>{i18n._("Stranger")}</p>}
                     </div>
                 </div>
             </div>
             {
                 !isFriend &&
-                <div className={styles.sendInviteFriend}>
-                    <div>
+                <Box component="div" className={styles.sendInviteFriend}>
+                    <Box component="div" p={10}>
                         <FontAwesomeIcon icon={faUserPlus} />
-                        <span>Gửi lời mời kết bạn tới người này</span>
-                    </div>
-                    <div className={styles.sendInvite} onClick={addFriend} >Gửi kết bạn</div>
-                </div>
+                        <span>{i18n._("Send a friend request to this person")}</span>
+                    </Box>
+                    <Button mr={30} p={5} component="div" onClick={addFriend} >{i18n._("Make friend")}</Button>
+                </Box>
             }
         </div>
     )

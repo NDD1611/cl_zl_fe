@@ -1,3 +1,4 @@
+'use client'
 import store from '../redux/store'
 import '../styles/global.css'
 import { Provider } from 'react-redux'
@@ -11,8 +12,29 @@ import { useEffect } from 'react'
 import { socketConnectToServer } from '../reltimeCommunication/socketConnection'
 import { socket } from '../reltimeCommunication/socketConnection'
 config.autoAddCss = false
+import '@mantine/core/styles.css';
+
+import { MantineProvider, createTheme } from '@mantine/core';
+
+import { i18n } from "@lingui/core";
+import { I18nProvider } from "@lingui/react";
+const theme = createTheme({
+    /** Put your mantine theme override here */
+});
+import messagesEn from "../locales/en/messages.json";
+import messagesVi from "../locales/vi/messages.json";
+import { useRouter } from 'next/router'
+
+
+i18n.load({
+    en: messagesEn,
+    vi: messagesVi
+});
 
 export default function app({ Component, pageProps }) {
+    const router = useRouter()
+    const { locale } = router
+    i18n.activate(locale);
     useEffect(() => {
         const userDetails = JSON.parse(localStorage.getItem('userDetails'))
         if ((userDetails && socket === null) || (socket && socket.connected === false)) {
@@ -21,7 +43,11 @@ export default function app({ Component, pageProps }) {
     })
 
     return <Provider store={store}>
-        <Component {...pageProps} />
+        <I18nProvider i18n={i18n}>
+            <MantineProvider theme={theme}>
+                <Component {...pageProps} />
+            </MantineProvider>
+        </I18nProvider>
         <ToastContainer />
     </Provider>
 }

@@ -12,8 +12,10 @@ import { toast } from 'react-toastify'
 import { initializeApp } from "firebase/app";
 import { getStorage, ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { calcFileSize } from '../../utils/message'
+import { useLingui } from '@lingui/react'
 
 const IconTopInputArea = () => {
+    let i18n = useLingui()
     const dispatch = useDispatch()
     const conversationSelected = useSelector(state => state.conversation.conversationSelected)
     const conversations = useSelector(state => state.conversation.conversations)
@@ -73,19 +75,19 @@ const IconTopInputArea = () => {
                     (snapshot) => {
                         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                         let progressBarCircleElement = document.getElementById(dateMessage + 'circularProgress')
-                        let progresCircleValue = document.getElementById(dateMessage + 'progressValue')
-                        if (progressBarCircleElement && progresCircleValue) {
+                        let progressCircleValue = document.getElementById(dateMessage + 'progressValue')
+                        if (progressBarCircleElement && progressCircleValue) {
                             progressBarCircleElement.style.background = `conic-gradient(#0091ff ${progress * 3.6}deg, #ededed 0deg)`
-                            progresCircleValue.innerText = parseInt(progress) + '/%'
+                            progressCircleValue.innerText = parseInt(progress) + '/%'
                         }
                     },
                     (error) => {
                         console.log(error)
-                        toast.error('Đã xảy ra lỗi. Vui lòng thử lại sau')
+                        toast.error(i18n._("An error occurred. Please try again later."))
                     },
                     () => {
                         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                            let newdData = {
+                            let newData = {
                                 _id: dateMessage,
                                 sender: {
                                     _id: userDetails._id
@@ -97,7 +99,7 @@ const IconTopInputArea = () => {
                                 date: dateMessage,
                                 status: '0'     //0: dang gui, 1: da gui, 2: da nhan, 3: da xem.
                             }
-                            sendMessage(newdData)
+                            sendMessage(newData)
                         });
                     }
                 )
@@ -107,7 +109,7 @@ const IconTopInputArea = () => {
                     receiverId: receiverUser._id
                 })
                 if (res.err) {
-                    toast.error('Đã xảy ra lỗi. Vui lòng thử lại sau')
+                    toast.error(i18n._('An error occurred. Please try again later.'))
                 } else {
                     let { conversation } = res.data
                     for (let index in conversation.participants) {
@@ -153,19 +155,19 @@ const IconTopInputArea = () => {
                         (snapshot) => {
                             const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                             let progressBarCircleElement = document.getElementById(dateMessage + 'circularProgress')
-                            let progresCircleValue = document.getElementById(dateMessage + 'progressValue')
-                            if (progressBarCircleElement && progresCircleValue) {
+                            let progressCircleValue = document.getElementById(dateMessage + 'progressValue')
+                            if (progressBarCircleElement && progressCircleValue) {
                                 progressBarCircleElement.style.background = `conic-gradient(#0091ff ${progress * 3.6}deg, #ededed 0deg)`
-                                progresCircleValue.innerText = parseInt(progress) + '/%'
+                                progressCircleValue.innerText = parseInt(progress) + '/%'
                             }
                         },
                         (error) => {
                             console.log(error)
-                            toast.error('Đã xảy ra lỗi. Vui lòng thử lại sau')
+                            toast.error(i18n._('An error occurred. Please try again later.'))
                         },
                         () => {
                             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                                let newdData = {
+                                let newData = {
                                     _id: dateMessage,
                                     sender: {
                                         _id: userDetails._id
@@ -177,7 +179,7 @@ const IconTopInputArea = () => {
                                     date: dateMessage,
                                     status: '0'     //0: dang gui, 1: da gui, 2: da nhan, 3: da xem.
                                 }
-                                sendMessage(newdData)
+                                sendMessage(newData)
                             });
                         }
                     )
@@ -251,7 +253,7 @@ const IconTopInputArea = () => {
                     },
                     (error) => {
                         console.log(error)
-                        toast.error('Đã xảy ra lỗi. Vui lòng thử lại sau')
+                        toast.error(i18n._('An error occurred. Please try again later.'))
                     },
                     () => {
                         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
@@ -278,7 +280,7 @@ const IconTopInputArea = () => {
                     receiverId: receiverUser._id
                 })
                 if (res.err) {
-                    toast.error('Đã xảy ra lỗi. Vui lòng thử lại sau')
+                    toast.error(i18n._('An error occurred. Please try again later.'))
                 } else {
                     let { conversation } = res.data
                     for (let index in conversation.participants) {
@@ -340,7 +342,7 @@ const IconTopInputArea = () => {
                         },
                         (error) => {
                             console.log(error)
-                            toast.error('Đã xảy ra lỗi. Vui lòng thử lại sau')
+                            toast.error(i18n._('An error occurred. Please try again later.'))
                         },
                         () => {
                             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {

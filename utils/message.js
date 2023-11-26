@@ -38,7 +38,7 @@ export const addSameDayAndSameAuth = (messages) => {
         }
 }
 
-export const checkShowTimeAndStatusInBottom = (messages) => {
+export const checkShowTimeAndStatusInBottom = (messages, i18n) => {
     if (messages.length) {
         for (let i = 0; i < messages.length; i++) {
             let message = messages[i]
@@ -55,16 +55,16 @@ export const checkShowTimeAndStatusInBottom = (messages) => {
         messages[messages.length - 1].showStatus = true
         let status = messages[messages.length - 1].status
         if (status == 0) {
-            messages[messages.length - 1].statusText = 'đang gửi'
+            messages[messages.length - 1].statusText = i18n._('sending')
         }
         if (status == 1) {
-            messages[messages.length - 1].statusText = 'đã gửi'
+            messages[messages.length - 1].statusText = i18n._('sent')
         }
         if (status == 2) {
-            messages[messages.length - 1].statusText = 'đã nhận'
+            messages[messages.length - 1].statusText = i18n._('received')
         }
         if (status == 3) {
-            messages[messages.length - 1].statusText = 'đã xem'
+            messages[messages.length - 1].statusText = i18n._('watched')
         }
     }
 }

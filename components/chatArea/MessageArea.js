@@ -9,9 +9,11 @@ import { conversationActions } from '../../redux/actions/conversationAction'
 import MessageLeft from './messageLeft'
 import MessageRight from './messageRight'
 import { messageActions } from '../../redux/actions/messageActions'
-
+import { useLingui } from '@lingui/react'
+import { useRouter } from 'next/router'
 
 const MessageArea = () => {
+    let i18n = useLingui()
     const conversationSelected = useSelector(state => state.conversation.conversationSelected)
     const conversations = useSelector(state => state.conversation.conversations)
     const [messages, setMessages] = useState([])
@@ -19,6 +21,8 @@ const MessageArea = () => {
     const [userDetails, setUserDetails] = useState({})
     const messageAreaElement = useRef()
     const dispatch = useDispatch()
+    const router = useRouter()
+    let { locale } = router
     useEffect(() => {
         setReceiverUser(JSON.parse(localStorage.getItem('receiverUser')))
         setUserDetails(JSON.parse(localStorage.getItem('userDetails')))
@@ -27,12 +31,12 @@ const MessageArea = () => {
             conversations.forEach((conversation) => {
                 if (conversationId === conversation._id) {
                     addSameDayAndSameAuth(conversation.messages)
-                    checkShowTimeAndStatusInBottom(conversation.messages)
+                    checkShowTimeAndStatusInBottom(conversation.messages, i18n)
                     setMessages(JSON.parse(JSON.stringify(conversation.messages)))
                 }
             })
         }
-    }, [conversationSelected, conversations])
+    }, [conversationSelected, conversations, locale])
 
     useEffect(() => {
         if (userDetails) {
@@ -60,7 +64,6 @@ const MessageArea = () => {
         if (messageAreaElement) {
             messageAreaElement.scrollTop = messageAreaElement.scrollHeight
         }
-        console.log('change mes')
     }, [messages])
 
     useEffect(() => {
@@ -115,7 +118,7 @@ const MessageArea = () => {
                                             <p>
                                                 {receiverUser?.firstName + ' ' + receiverUser?.lastName}
                                             </p>
-                                            <p> đã đồng ý kết bạn</p>
+                                            <p> {i18n._("has agreed to make friends")}</p>
                                         </div>
                                     </div>
                                 )
@@ -129,7 +132,7 @@ const MessageArea = () => {
                                             </div>
                                         }
                                         <div className={styles.acceptFriend}>
-                                            <p>bạn vừa mới kết bạn với</p>
+                                            <p>{i18n._("you just made friends with")}</p>
                                             <Avatar
                                                 src={message?.sender?.avatar ? message?.sender?.avatar : ''}
                                                 width={20}

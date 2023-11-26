@@ -3,9 +3,9 @@ import { Emoji } from "emoji-picker-react"
 import styles from './MessageEmoji.module.scss'
 
 const MessageEmoji = ({ text }) => {
-    const [listContents, setListContenst] = useState([])
+    const [listContents, setListContent] = useState([])
     useEffect(() => {
-        let arra = []
+        let array = []
         let textCopy = text
         while (textCopy != '') {
             let indexEmoji = textCopy.indexOf('&#x')
@@ -13,15 +13,15 @@ const MessageEmoji = ({ text }) => {
                 let strFront = textCopy.slice(0, indexEmoji)
                 let strMiddle = textCopy.slice(indexEmoji, indexEmoji + 9)
                 let strRear = textCopy.slice(indexEmoji + 9, textCopy.length)
-                arra.push(strFront)
-                arra.push(strMiddle)
+                array.push(strFront)
+                array.push(strMiddle)
                 textCopy = strRear
             } else {
-                arra.push(textCopy)
+                array.push(textCopy)
                 textCopy = ''
             }
         }
-        setListContenst(arra)
+        setListContent(array)
     }, [text])
 
     return (

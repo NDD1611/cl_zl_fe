@@ -34,6 +34,7 @@ const MainTab = () => {
                 let messages = conversation.messages
                 if (messages.length) {
                     messages.forEach(message => {
+                        console.log(message)
                         if ((message.sender._id != userDetails._id && message.status == '2')
                             || (message.status == '2' && message.type === 'accept_friend')) {
                             count++
@@ -94,7 +95,8 @@ const MainTab = () => {
                 type: tabsActions.SET_SHOW_TAB_TWO
             })
         }
-        router.push('/')
+        const { locale } = router
+        router.push('/', '/', { locale: locale })
     }
 
     const clickFriend = () => {
@@ -117,7 +119,8 @@ const MainTab = () => {
                 type: tabsActions.SET_SHOW_TAB_TWO
             })
         }
-        router.push('/friend')
+        const { locale } = router
+        router.push('/friend', '/friend', { locale: locale })
     }
 
     const handleShowToggle = (e) => {
@@ -159,8 +162,8 @@ const MainTab = () => {
                     <div className={`${styles.quare}`} onClick={(e) => { handleShowToggle(e) }}>
                         <FontAwesomeIcon icon={faGear} />
                         <div className={`${styles.toggleMenu} ${showToggle ? '' : styles.hideToggle}`}>
-                            <div onClick={() => { dispatch({ type: modalActions.SET_SHOW_MODAL_INFO }) }}>Thông tin tài khoản</div>
-                            <div className={styles.logout} onClick={() => { logout() }}>Đăng xuất </div>
+                            <div onClick={() => { dispatch({ type: modalActions.SET_SHOW_MODAL_INFO }) }}>{i18n._('Account information')}</div>
+                            <div className={styles.logout} onClick={() => { logout() }}>{i18n._('Logout')}</div>
                         </div>
                     </div>
                 </div>

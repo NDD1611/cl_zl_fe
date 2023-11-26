@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import MessageEmoji from '../common/MessageEmoji';
 import styles from './messageLeft.module.scss'
 import { useState } from 'react';
-import { useLayoutEffect } from 'react';
 import MessageFile from './fileMessage';
 
 const Content = ({ message }) => {

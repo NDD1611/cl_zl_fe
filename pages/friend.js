@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import { logout } from '../utils/auth'
 import styles from './friend.module.scss'
-import MainTab from '../components/common/MainTab'
 import { useDispatch, useSelector } from 'react-redux'
 import { tabsActions } from '../redux/actions/tabsAction'
 import TabTwo from '../components/common/tabTwo'
@@ -10,6 +9,7 @@ import HeaderTabTwo from '../components/common/HeaderTabTwo'
 import TabThree from '../components/common/TabThree'
 import PendingInvitation from '../components/friend/PendingInvitation'
 import ListFriend from '../components/friend/ListFriend'
+import { Navbar } from '../components/NavBars/Navbar'
 
 const Friend = () => {
     const dispatch = useDispatch()
@@ -19,7 +19,7 @@ const Friend = () => {
         if (window.location.pathname === '/friend') {
             dispatch({
                 type: tabsActions.SET_MAIN_TAB,
-                maintabSelect: 'friend'
+                maintabSelect: 'friends'
             })
         }
         const userDetails = JSON.parse(localStorage.getItem('userDetails'))
@@ -29,7 +29,7 @@ const Friend = () => {
     }, [])
     return (
         <div className={styles.friend}>
-            <MainTab></MainTab>
+            <Navbar></Navbar>
             <TabTwo>
                 <HeaderTabTwo></HeaderTabTwo>
                 <MenuItemFriend></MenuItemFriend>

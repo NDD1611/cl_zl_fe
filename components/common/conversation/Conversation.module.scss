@@ -84,7 +84,7 @@
         justify-content: space-around;
 
         .options {
-            display: none;
+            display: flex;
             padding: 3px;
             align-items: center;
             justify-content: center;
@@ -95,7 +95,7 @@
             }
         }
 
-        .annouceMessage {
+        .announceMessage {
             background-color: red;
             border-radius: 50%;
             width: 13px;

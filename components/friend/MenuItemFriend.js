@@ -5,8 +5,10 @@ import { useSelector, useDispatch } from 'react-redux'
 import styles from './MenuItemFriend.module.scss'
 import { friendActions } from '../../redux/actions/friendAction'
 import { tabsActions } from '../../redux/actions/tabsAction'
+import { useLingui } from '@lingui/react'
 
 const MenuItemFriend = () => {
+    let i18n = useLingui()
     const dispatch = useDispatch()
     const selectItem = useSelector(state => state.friend.selectItem)
     const pendingInvitation = useSelector(state => state.friend.pendingInvitations)
@@ -43,7 +45,7 @@ const MenuItemFriend = () => {
                     <div className={styles.Icon}>
                         <FontAwesomeIcon icon={faUser} />
                     </div>
-                    <p>Danh sách bạn bè</p>
+                    <p>{i18n._('Friends List')}</p>
                 </div>
                 <div className={`${styles.Item} ${selectItem === 'friendInvitation' ? styles.selectItem : ''}`} onClick={() => {
                     dispatch({
@@ -56,7 +58,7 @@ const MenuItemFriend = () => {
                     <div className={styles.Icon}>
                         <FontAwesomeIcon icon={faEnvelopeOpen} />
                     </div>
-                    <p>Lời mời kết bạn</p>
+                    <p>{i18n._('Friend request')}</p>
                     {
                         pendingInvitation.length !== 0 && <div className={styles.quantityFriendInvitation}>
                             <span>{pendingInvitation.length}</span>

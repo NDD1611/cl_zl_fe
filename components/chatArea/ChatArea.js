@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useState, useEffect, useRef, useMemo } from 'react'
 import styles from './ChatArea.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faImage, faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import { faFaceSmile } from '@fortawesome/free-regular-svg-icons'
 import dynamic from 'next/dynamic'
 import { sendMessage } from '../../reltimeCommunication/socketConnection'
@@ -11,8 +10,9 @@ import MessageArea from './MessageArea'
 import { conversationActions } from '../../redux/actions/conversationAction'
 import HeaderChatArea from './HeaderChatArea'
 import api from '../../api/api'
-import { useLayoutEffect } from 'react'
 import IconTopInputArea from './IconTopInputArea'
+import { useLingui } from '@lingui/react';
+
 
 const EmojiPicker = dynamic(
     () => {
@@ -22,6 +22,7 @@ const EmojiPicker = dynamic(
 );
 
 const ChatArea = () => {
+    const { i18n } = useLingui();
     const conversationSelected = useSelector(state => state.conversation.conversationSelected)
     const conversations = useSelector(state => state.conversation.conversations)
     const activeUsers = useSelector(state => state.auth.activeUsers)
@@ -56,7 +57,7 @@ const ChatArea = () => {
             let headerContainerElement = document.getElementById('headerContainer')
             let messageArea = document.getElementById('chatMessageArea')
             if (headerContainerElement && messageArea) {
-                let height = window.innerHeight - heightInputArea.clientHeight - headerContainerElement.clientHeight
+                let height = window.innerHeight - heightInputArea.clientHeight - headerContainerElement.clientHeight - 10
                 messageArea.style.height = height + 'px'
             }
         })
@@ -72,7 +73,7 @@ const ChatArea = () => {
         let messageArea = document.getElementById('chatMessageArea')
         if (headerContainerElement && inputAreaElement && messageArea) {
             let height = window.innerHeight - inputAreaElement.clientHeight - headerContainerElement.clientHeight
-            messageArea.style.height = height + 'px'
+            messageArea.style.height = (height - 5) + 'px'
         }
 
         let chatAreaElement = document.getElementById('chatArea')
@@ -165,7 +166,7 @@ const ChatArea = () => {
                 })
 
                 if (response.err) {
-                    alert('Lỗi server. vui lòng truy cập lại sau.')
+                    alert(i18n._("An error occurred. Please try again later."))
                 } else {
                     let { conversation } = response?.data
                     dispatch({
@@ -195,7 +196,7 @@ const ChatArea = () => {
     return (
         <div id='chatArea' className={styles.ChatArea}>
             {
-                conversationSelected === null && <div className={styles.chatOnboard}>Chọn cuộc hội thoại để chat</div>
+                conversationSelected === null && <div className={styles.chatOnboard}>{i18n._("Select a conversation to chat")}</div>
             }
             <div id='headerContainer' ref={headerElement}>
                 <HeaderChatArea />
@@ -235,7 +236,7 @@ const ChatArea = () => {
                             contentEditable={true}
                             suppressContentEditableWarning={true}
                             data-text={
-                                receiverUser ? 'Nhập tin nhắn tới ' + receiverUser.firstName + ' ' + receiverUser.lastName : ''
+                                receiverUser ? i18n._("Send message to ") + receiverUser.firstName + ' ' + receiverUser.lastName : ''
                             }
                             onKeyDown={(e) => { handleKeyDown(e) }}
                         ></div>

@@ -1,5 +1,5 @@
 
-import styles from './Conversation.module.scss'
+import classes from './Conversation.module.scss'
 import Avatar from '../Avatar'
 import { useSelector, useDispatch } from 'react-redux'
 import { useEffect, useState } from 'react'
@@ -11,18 +11,24 @@ import { faImage } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaperclip } from '@fortawesome/free-solid-svg-icons'
 import api from '../../../api/api'
-
+import { Box, Menu, rem } from '@mantine/core'
+import { IconDots, IconTrash } from '@tabler/icons-react'
+import { useLingui } from '@lingui/react'
+import { useRouter } from 'next/router'
 const Conversation = ({ conversation }) => {
-    const userDetails = useSelector(state => state.auth.userDetails)
-    const conversationSelected = useSelector(state => state.conversation.conversationSelected)
-    const conversations = useSelector(state => state.conversation.conversations)
-    const countAnnounceMessage = useSelector(state => state.tabs.countAnnounceMessage)
-    const [friend, setFriend] = useState({})
-    const [message, setMessage] = useState('')
+    let i18n = useLingui()
+    const userDetails = useSelector((state: any) => state.auth.userDetails)
+    const conversationSelected = useSelector((state: any) => state.conversation.conversationSelected)
+    const conversations = useSelector((state: any) => state.conversation.conversations)
+    const countAnnounceMessage = useSelector((state: any) => state.tabs.countAnnounceMessage)
+    const [friend, setFriend] = useState<any | {}>({})
+    const [message, setMessage] = useState<any | null>({})
     const [countMessageReceived, setCountMessageReceived] = useState(0)
     const [fileName, setFileName] = useState('')
     const dispatch = useDispatch()
 
+    const router = useRouter()
+    let { locale } = router
     useEffect(() => {
         // update received message status
         // update in redux 
@@ -61,27 +67,27 @@ const Conversation = ({ conversation }) => {
             const lastMessage = messages[messages.length - 1]
             if (lastMessage.type === "accept_friend") {
                 if (userDetails._id === lastMessage.sender._id) {
-                    let mesTemp = friend.firstName + ' ' + friend.lastName + ' ' + 'đã đồng ý kết bạn'
+                    let mesTemp = friend.firstName + ' ' + friend.lastName + ' ' + i18n._('has agreed to make friends')
                     setMessage({ content: mesTemp, type: 'text' })
                 } else {
-                    let mesTemp = 'Bạn vừa kết bạn với ' + friend.firstName + ' ' + friend.lastName
+                    let mesTemp = i18n._('you just made friends with') + ' ' + friend.firstName + ' ' + friend.lastName
                     setMessage({ content: mesTemp, type: 'text' })
                 }
             } else if (lastMessage.type == 'text') {
                 if (lastMessage.sender._id === userDetails._id) {
-                    setMessage({ content: 'Bạn: ' + lastMessage.content, type: 'text' })
+                    setMessage({ content: i18n._('You:') + ' ' + lastMessage.content, type: 'text' })
                 } else {
                     setMessage({ content: lastMessage.content, type: 'text' })
                 }
             } else if (lastMessage.type == 'image') {
                 if (lastMessage.sender._id === userDetails._id) {
-                    setMessage({ content: 'Bạn: ', type: 'image' })
+                    setMessage({ content: i18n._('You:') + ' ', type: 'image' })
                 } else {
                     setMessage({ content: '', type: 'image' })
                 }
             } else {
                 if (lastMessage.sender._id === userDetails._id) {
-                    setMessage({ content: 'Bạn: ', type: 'file' })
+                    setMessage({ content: i18n._('You:') + ' ', type: 'file' })
                 } else {
                     setMessage({ content: '', type: 'file' })
                 }
@@ -100,7 +106,7 @@ const Conversation = ({ conversation }) => {
             }
         }
         setCountMessageReceived(count)
-    }, [conversation, conversations])
+    }, [conversation, conversations, locale])
 
     const handleChooseConversation = () => {
         localStorage.setItem('receiverUser', JSON.stringify(friend))
@@ -122,7 +128,7 @@ const Conversation = ({ conversation }) => {
     }
     const [popoverX, setPopoverX] = useState(0)
     const [popoverY, setPopoverY] = useState(0)
-    const popoverId = useSelector(state => state.conversation.popoverId)
+    const popoverId = useSelector((state: any) => state.conversation.popoverId)
     const handleClickConversation = (e) => {
         e.stopPropagation()
         let height = e.target.clientHeight
@@ -148,7 +154,7 @@ const Conversation = ({ conversation }) => {
 
     const deleteConversation = async (e) => {
         e.stopPropagation()
-        let res = await api.deleteConversation({ conversationId: conversation._id })
+        let res: any = await api.deleteConversation({ conversationId: conversation._id })
         if (res.err) {
             console.log(res, 'err')
         } else {
@@ -156,17 +162,24 @@ const Conversation = ({ conversation }) => {
         }
     }
     return (
-        <div className={`${styles.conversationItem} ${conversationSelected && conversation._id == conversationSelected._id && styles.selectedConversation}`} onClick={handleChooseConversation}>
-            <div className={styles.left}>
+        <div
+            className={`${classes.conversationItem} ${conversationSelected && conversation._id == conversationSelected._id && classes.selectedConversation}`}
+            onClick={handleChooseConversation}
+        >
+            <div className={classes.left}>
                 <Avatar
                     src={friend.avatar ? friend.avatar : ''}
                     width={50}
                 />
             </div>
-            <div className={styles.center}>
+            < div className={classes.center} >
                 <div>
-                    <div className={styles.name}>{friend.firstName + ' ' + friend.lastName}</div>
-                    <div className={styles.message}>
+                    <div
+                        className={classes.name}
+                    >
+                        {friend.firstName + ' ' + friend.lastName}
+                    </div>
+                    < div className={classes.message} >
                         {
                             message.type == 'text' &&
                             <MessageEmoji text={message.content} />
@@ -174,7 +187,7 @@ const Conversation = ({ conversation }) => {
                         {
                             message.type == 'image' &&
                             <div>{message.content}
-                                <FontAwesomeIcon className={styles.iconImage} icon={faImage} />
+                                < FontAwesomeIcon className={classes.iconImage} icon={faImage} />
                                 Hình ảnh
                             </div>
                         }
@@ -182,33 +195,36 @@ const Conversation = ({ conversation }) => {
                             message.type == 'file' &&
                             <div>
                                 {message.content}
-                                <FontAwesomeIcon className={styles.iconImage} icon={faPaperclip} />
+                                < FontAwesomeIcon className={classes.iconImage} icon={faPaperclip} />
                                 {fileName}
                             </div>
                         }
                     </div>
                 </div>
             </div>
-            <div className={styles.right}>
-                <div className={styles.options}
-                    onClick={handleClickConversation}
-                >
-                    •••
-                </div>
-                {
-                    countMessageReceived !== 0 && <div className={styles.annouceMessage}>
-                        {countMessageReceived}
-                    </div>
-                }
+            < div className={classes.right} >
+                <Menu trigger="hover" openDelay={100} closeDelay={400} shadow="md" width={200} position='right'>
+                    <Menu.Target>
+                        <Box component='div' style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}>
+                            <IconDots style={{ width: rem(25), height: rem(25) }} />
+                        </Box>
+                    </Menu.Target>
+
+                    <Menu.Dropdown >
+                        <Menu.Item
+                            color="red"
+                            leftSection={<IconTrash style={{ width: rem(14), height: rem(14) }} />}
+                            onClick={deleteConversation}
+                        >
+                            {i18n._('Delete conversation')}
+                        </Menu.Item>
+                    </Menu.Dropdown>
+                </Menu>
             </div>
-            {popoverId == conversation._id &&
-                <div style={{
-                    left: popoverX,
-                    top: popoverY
-                }} className={styles.popover}>
-                    <div className={styles.delete} onClick={deleteConversation} >Xóa hội thoại</div>
-                </div>
-            }
         </div>
     )
 }

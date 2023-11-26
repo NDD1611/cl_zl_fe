@@ -4,16 +4,21 @@ import { faUserGroup, faUserPlus } from '@fortawesome/free-solid-svg-icons'
 import { useDispatch, useSelector } from 'react-redux'
 import { modalActions } from '../../redux/actions/modalActions'
 import ModalFindFriend from './Modal/ModalFindFriend'
-import ModalCreatGroup from './Modal/ModalCreateGroup'
+import ModalCreateGroup from './Modal/ModalCreateGroup'
+import { Tooltip } from '@mantine/core'
+import { useLingui } from '@lingui/react'
 
 const HeaderTabTwo = () => {
     const dispatch = useDispatch()
-    const showModalCreateGroup = useSelector(state => state.modal.showModalCreateGroup)
+    let i18n = useLingui()
+    const showModalCreateGroup = useSelector((state: any) => state.modal.showModalCreateGroup)
     return (
         <>
             <div id='headerTabTwo' className={styles.HeaderTabTwo}>
                 <div className={styles.input}>
-                    <input disabled placeholder='Tìm kiếm' />
+                    <Tooltip label={'Coming soon'}>
+                        <input disabled placeholder={i18n._('Search') + '...'} />
+                    </Tooltip>
                 </div>
                 <div className={styles.iconAddFriend}
                     onClick={
@@ -34,7 +39,7 @@ const HeaderTabTwo = () => {
                 <ModalFindFriend></ModalFindFriend>
                 {
                     showModalCreateGroup &&
-                    <ModalCreatGroup></ModalCreatGroup>
+                    <ModalCreateGroup></ModalCreateGroup>
                 }
             </div>
         </>
