@@ -1,6 +1,11 @@
 @import '../../styles/responsive.module.scss';
 @import '../../styles/global.module.scss';
 
+.root {
+    padding: 0;
+    padding: 0 5px;
+}
+
 .contentFile {
     display: flex;
     gap: 20px;

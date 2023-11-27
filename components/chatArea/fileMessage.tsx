@@ -1,13 +1,13 @@
-import { faDownload } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+
 import { useState } from "react"
 import { useLayoutEffect } from "react"
 import styles from './fileMessage.module.scss'
 import IconFile from "./iconFile"
-import { Oval, ThreeDots } from "react-loader-spinner"
 import { initializeApp } from "firebase/app"
 import { getBlob, getStorage, ref } from "firebase/storage"
 import { calcFileSize } from "../../utils/message"
+import { IconDownload } from "@tabler/icons-react"
+import { Button } from "@mantine/core"
 
 const MessageFile = ({ message }) => {
 
@@ -111,29 +111,22 @@ const MessageFile = ({ message }) => {
                     <div className={styles.size}>{fileSize + fileSizeType}</div>
                     <div>
                         {
-                            !showLoader &&
-                            // <span className={styles.download}
-                            //     onClick={downloadFile}
-                            // >
-                            //     <FontAwesomeIcon icon={faDownload} />
-                            // </span>
-                            <span className={styles.download}
-                                onClick={downloadFileFirebase}
-                            >
-                                <FontAwesomeIcon icon={faDownload} />
-                            </span>
-                        }
-                        {
-                            showLoader && <ThreeDots
-                                height="30"
-                                width="30"
-                                radius="9"
-                                color="#0091ff"
-                                ariaLabel="three-dots-loading"
-                                wrapperStyle={{}}
-                                wrapperClassName=""
-                                visible={true}
-                            />
+                            showLoader ?
+                                <Button
+                                    classNames={styles}
+                                    onClick={downloadFileFirebase}
+                                    loading
+                                    loaderProps={{ type: 'dots' }}
+                                >
+                                    <IconDownload size={20} color="#fff" />
+                                </Button>
+                                :
+                                <Button
+                                    classNames={styles}
+                                    onClick={downloadFileFirebase}
+                                >
+                                    <IconDownload size={20} color="#fff" />
+                                </Button>
                         }
                     </div>
                 </div>
