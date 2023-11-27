@@ -257,7 +257,6 @@ const IconTopInputArea = () => {
                     },
                     () => {
                         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                            // console.log('File available at', downloadURL);
                             let newData = {
                                 _id: dateMessage,
                                 sender: {

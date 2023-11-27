@@ -21,6 +21,7 @@ import { modalActions } from '../../redux/actions/modalActions';
 import ModalDisplayInfo from '../common/Modal/ModalDisplayInfo'
 import ModalUpdateInfo from '../common/Modal/ModalUpdateInfo'
 import { useLingui } from '@lingui/react';
+import { useDisclosure } from '@mantine/hooks';
 interface NavbarLinkProps {
     icon: typeof IconHome2;
     label: string;
@@ -29,10 +30,11 @@ interface NavbarLinkProps {
 }
 
 function NavbarLink({ icon: Icon, label, active, onClick }: NavbarLinkProps) {
+    const { i18n } = useLingui();
     const countAnnounceMessage = useSelector((state: any) => state.tabs.countAnnounceMessage)
     const pendingInvitation = useSelector((state: any) => state.friend.pendingInvitations)
     return (
-        <Tooltip label={label} position="right" transitionProps={{ duration: 0 }}>
+        <Tooltip label={i18n._(label)} position="right" transitionProps={{ duration: 0 }}>
             <UnstyledButton onClick={onClick} className={classes.link} data-active={active || undefined}>
                 <Icon style={{ width: rem(25), height: rem(25) }} stroke={1.5} />
                 {label === 'Conversations' && <Box>{countAnnounceMessage !== 0 && countAnnounceMessage}</Box>}
@@ -42,43 +44,37 @@ function NavbarLink({ icon: Icon, label, active, onClick }: NavbarLinkProps) {
     );
 }
 
-export const mockdata = [
-    { icon: IconBrandWechat, label: 'Conversations' },
-    { icon: IconUserSquareRounded, label: 'friends' },
-    { icon: IconDeviceDesktopAnalytics, label: 'Coming soon 1' },
-    { icon: IconCalendarStats, label: 'Coming soon 2' },
-];
-
 export function Navbar() {
     const maintabSelect = useSelector((state: any) => state.tabs.maintabSelect)
     const userDetails = useSelector((state: any) => state.auth.userDetails)
     const showTabTwo = useSelector((state: any) => state.tabs.showTabTwo)
     const showTabThree = useSelector((state: any) => state.tabs.showTabThree)
     const conversations = useSelector((state: any) => state.conversation.conversations)
+    const countAnnounceMessage = useSelector((state: any) => state.tabs.countAnnounceMessage)
+    const pendingInvitation = useSelector((state: any) => state.friend.pendingInvitations)
     const dispatch = useDispatch()
     const { i18n } = useLingui();
     const router = useRouter()
+    const [opened, { open, close }] = useDisclosure(false);
     const handleNavbarClick = (mainTabSelect: string) => {
-        dispatch({
-            type: tabsActions.SET_MAIN_TAB,
-            maintabSelect: mainTabSelect
-        })
-        if (mainTabSelect === mockdata[0].label) {
+
+        if (mainTabSelect === 'Conversations') {
+            dispatch({
+                type: tabsActions.SET_MAIN_TAB,
+                maintabSelect: mainTabSelect
+            })
             const { locale } = router
             router.push('/', '/', { locale: locale })
-        } else if (mainTabSelect === mockdata[1].label) {
+
+        } else if (mainTabSelect === 'friends') {
+            dispatch({
+                type: tabsActions.SET_MAIN_TAB,
+                maintabSelect: mainTabSelect
+            })
             const { locale } = router
             router.push('/friend', '/friend', { locale: locale })
         }
     }
-    const links = mockdata.map((link, index) => (
-        <NavbarLink
-            {...link}
-            key={index}
-            active={maintabSelect === link.label}
-            onClick={() => handleNavbarClick(link.label)}
-        />
-    ));
 
     useEffect(() => {
         let userDetailsData = JSON.parse(localStorage.getItem('userDetails'))
@@ -116,14 +112,35 @@ export function Navbar() {
     }, [conversations])
     return (
         <nav className={classes.navbar}>
-            < ModalDisplayInfo></ModalDisplayInfo>
+            < ModalDisplayInfo ></ModalDisplayInfo>
             <ModalUpdateInfo />
             <Center>
                 <Avatar src={userDetails.avatar} size={'lg'} alt='avatar' />
             </Center>
             <div className={classes.navbarMain}>
                 <Stack justify="center" gap={0}>
-                    {links}
+                    <Tooltip label={i18n._('Conversations')} position="right" transitionProps={{ duration: 0 }}>
+                        <UnstyledButton onClick={() => handleNavbarClick('Conversations')} className={classes.link} data-active={maintabSelect === 'Conversations' || undefined}>
+                            <IconBrandWechat style={{ width: rem(25), height: rem(25) }} stroke={1.5} />
+                            {<Box>{countAnnounceMessage !== 0 && countAnnounceMessage}</Box>}
+                        </UnstyledButton>
+                    </Tooltip>
+                    <Tooltip label={i18n._('friends')} position="right" transitionProps={{ duration: 0 }}>
+                        <UnstyledButton onClick={() => handleNavbarClick('friends')} className={classes.link} data-active={maintabSelect === 'friends' || undefined}>
+                            <IconUserSquareRounded style={{ width: rem(25), height: rem(25) }} stroke={1.5} />
+                            {<Box>{pendingInvitation.length !== 0 && pendingInvitation.length}</Box>}
+                        </UnstyledButton>
+                    </Tooltip>
+                    <Tooltip label={i18n._('Coming soon')} position="right" transitionProps={{ duration: 0 }}>
+                        <UnstyledButton onClick={() => { }} className={classes.link} data-active={maintabSelect === 'coming soon' || undefined}>
+                            <IconDeviceDesktopAnalytics style={{ width: rem(25), height: rem(25) }} stroke={1.5} />
+                        </UnstyledButton>
+                    </Tooltip>
+                    <Tooltip label={i18n._('Coming soon')} position="right" transitionProps={{ duration: 0 }}>
+                        <UnstyledButton onClick={() => { }} className={classes.link} data-active={maintabSelect === 'coming soon' || undefined}>
+                            <IconCalendarStats style={{ width: rem(25), height: rem(25) }} stroke={1.5} />
+                        </UnstyledButton>
+                    </Tooltip>
                 </Stack>
             </div>
 

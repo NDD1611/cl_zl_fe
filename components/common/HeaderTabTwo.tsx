@@ -16,7 +16,7 @@ const HeaderTabTwo = () => {
         <>
             <div id='headerTabTwo' className={styles.HeaderTabTwo}>
                 <div className={styles.input}>
-                    <Tooltip label={'Coming soon'}>
+                    <Tooltip label={i18n._('Coming soon')}>
                         <input disabled placeholder={i18n._('Search') + '...'} />
                     </Tooltip>
                 </div>

@@ -18,12 +18,13 @@ import { faCamera, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 import { initializeApp } from 'firebase/app'
 import { useLingui } from '@lingui/react'
+import { Button, Modal } from '@mantine/core'
 
 const ModalUpdateInfo = () => {
     let i18n = useLingui()
-    const showModalUpdateInfo = useSelector(state => state.modal.showModalUpdateInfo)
-    const [userDetails, setUserDetails] = useState({})
-    const [srcPreview, setSrcPreview] = useState()
+    const showModalUpdateInfo = useSelector((state: any) => state.modal.showModalUpdateInfo)
+    const [userDetails, setUserDetails] = useState<any>({})
+    const [srcPreview, setSrcPreview] = useState<string>()
     const [showModalCropImage, setShowModalCropImage] = useState(false)
     const [srcAfterCropped, setSrcAfterCropped] = useState(null)
     const [cropper, setCropper] = useState(null)
@@ -34,18 +35,18 @@ const ModalUpdateInfo = () => {
     const [arrDay, setArrDay] = useState([])
     const [selectYear, setSelectYear] = useState('')
     const [selectMonth, setSelectMonth] = useState('')
-    const [selectDay, setSelectDay] = useState('')
+    const [selectDay, setSelectDay] = useState<any>('')
     const [showScrollYear, setShowScrollYear] = useState(false)
     const [showScrollMonth, setShowScrollMonth] = useState(false)
     const [showScrollDay, setShowScrollDay] = useState(false)
     const [showLoader, setShowLoader] = useState(false)
-    const user = useSelector(state => state.auth.userDetails)
+    const user = useSelector((state: any) => state.auth.userDetails)
     const dispatch = useDispatch()
 
     const [file, setFile] = useState(null)
 
     const imageElement = useRef()
-    const inputElement = useRef()
+    const inputElement = useRef<HTMLInputElement | null>()
 
     useEffect(() => {
         const userDetailsFromLocal = JSON.parse(localStorage.getItem('userDetails'))
@@ -122,13 +123,17 @@ const ModalUpdateInfo = () => {
 
     const handleCloseCropperImage = () => {
         setShowModalCropImage(false)
-        inputElement.current.value = ''
-        cropper.destroy()
+        if (inputElement.current) {
+            inputElement.current.value = ''
+        }
+        if (cropper) {
+            cropper.destroy()
+        }
     }
 
     const handleUpdateInfoUser = async () => {
         setShowLoader(true)
-        let birthday = new Date(selectYear, parseInt(selectMonth) - 1, selectDay).toDateString()
+        let birthday = new Date(parseInt(selectYear), parseInt(selectMonth) - 1, parseInt(selectDay)).toDateString()
         if (haveUpdateAvatar) {
             const firebaseConfig = {
                 apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -169,7 +174,7 @@ const ModalUpdateInfo = () => {
                             avatar: downloadURL,
                             birthday: birthday
                         }
-                        const responseUpdate = await api.updateUserInfo(newInfo)
+                        const responseUpdate: any = await api.updateUserInfo(newInfo)
                         if (responseUpdate.err) {
                             toast.error(i18n._('An error occurred. Please try again later.'))
                         } else {
@@ -190,7 +195,7 @@ const ModalUpdateInfo = () => {
                 ...userDetails,
                 birthday: birthday
             }
-            const responseUpdate = await api.updateUserInfo(userInfo)
+            const responseUpdate: any = await api.updateUserInfo(userInfo)
             if (responseUpdate.err) {
                 toast.error(i18n._('An error occurred. Please try again later.'))
             } else {
@@ -208,9 +213,11 @@ const ModalUpdateInfo = () => {
     }
 
     const handleCloseModalUpdateInfo = () => {
-        inputElement.current.value = ''
-        setSrcAfterCropped(null)
-        dispatch({ type: modalActions.SET_HIDE_MODAL_UPDATE_INFO })
+        if (inputElement.current) {
+            inputElement.current.value = ''
+            setSrcAfterCropped(null)
+            dispatch({ type: modalActions.SET_HIDE_MODAL_UPDATE_INFO })
+        }
     }
     const handleShowYear = (e) => {
         e.stopPropagation()
@@ -235,67 +242,50 @@ const ModalUpdateInfo = () => {
         setShowScrollMonth(false)
         setShowScrollDay(false)
     }
-    return (
-        <>
-            {showLoader ? <LoaderModal /> : ''}
-            <MainModal
-                title={i18n._('Update information')}
-                closeModal={showModalUpdateInfo}
-                setCloseModal={handleCloseModalUpdateInfo}
-            >
-                <div className={styles.contentModalInfo} onClick={handleCloseAllDMY}>
+    return <>
+        <Modal size={'md'} opened={showModalUpdateInfo} onClose={handleCloseModalUpdateInfo} title={i18n._('Update information')}>
+            <div className={styles.contentModalInfo} onClick={handleCloseAllDMY}>
+                <div className={styles.image}>
+                    <img src='/images/backgroundProfile.jpg' />
+                </div>
 
-                    <div className={`${styles.modalCropImage} ${showModalCropImage ? '' : styles.hideModal}`}>
-                        <div className={styles.backgroundModal}></div>
-                        <div className={styles.imageCrop}>
-                            <img ref={imageElement} id="image" src={srcPreview} onLoad={() => { handleImgLoad() }} />
-                        </div>
-                        <div className={styles.btns} >
-                            <button className={styles.btnCancelAvatar} onClick={handleCloseCropperImage}>Cancel</button>
-                            <button className={styles.btnAcceptAvatar} onClick={handleAcceptCrop}>Select as avatar</button>
-                        </div>
-                    </div>
-
-                    <div className={styles.image}>
-                        <img src='/images/backgroundProfile.jpg' />
-                    </div>
-
-                    <div className={styles.avatarInfo}>
-                        <Avatar
-                            src={srcAfterCropped ? srcAfterCropped : userDetails.avatar}
-                            width={80}
-                        ></Avatar>
-                        <label htmlFor='inputAvatar' className={styles.camera}>
-                            <FontAwesomeIcon icon={faCamera} />
-                        </label>
+                <div className={styles.avatarInfo}>
+                    <Avatar
+                        src={srcAfterCropped ? srcAfterCropped : userDetails.avatar}
+                        width={80}
+                    ></Avatar>
+                    <label htmlFor='inputAvatar' className={styles.camera}>
+                        <FontAwesomeIcon icon={faCamera} />
+                    </label>
+                    <input
+                        ref={inputElement}
+                        className={styles.inputHide}
+                        type='file' id="inputAvatar"
+                        accept='.jpg, .png'
+                        onChange={handleInputImageChange}
+                    />
+                </div>
+                <p className={styles.name}>{userDetails.firstName + ' ' + userDetails.lastName}</p>
+                <div className={styles.fullname}>
+                    <div>
+                        <label>{i18n._('Last name:')}</label>
                         <input
-                            ref={inputElement}
-                            className={styles.inputHide}
-                            type='file' id="inputAvatar"
-                            accept='.jpg, .png'
-                            onChange={handleInputImageChange}
+                            value={userDetails.lastName ? userDetails.lastName : ''}
+                            onChange={(e) => { setUserDetails({ ...userDetails, lastName: e.target.value }) }}
                         />
                     </div>
-                    <p className={styles.name}>{userDetails.firstName + ' ' + userDetails.lastName}</p>
-                    <div className={styles.fullname}>
-                        <div>
-                            <label>{i18n._('Last name:')}</label>
-                            <input
-                                value={userDetails.lastName ? userDetails.lastName : ''}
-                                onChange={(e) => { setUserDetails({ ...userDetails, lastName: e.target.value }) }}
-                            />
-                        </div>
-                        <div>
-                            <label>{i18n._('First name:')}</label>
-                            <input
-                                value={userDetails.firstName ? userDetails.firstName : ''}
-                                onChange={(e) => { setUserDetails({ ...userDetails, firstName: e.target.value }) }}
-                            />
-                        </div>
+                    <div>
+                        <label>{i18n._('First name:')}</label>
+                        <input
+                            value={userDetails.firstName ? userDetails.firstName : ''}
+                            onChange={(e) => { setUserDetails({ ...userDetails, firstName: e.target.value }) }}
+                        />
                     </div>
-                    <div className={styles.userInfo}>
-                        <p className={styles.titleInfo}>{i18n._('Information')}</p>
-                        <p className={styles.sex}>{i18n._('Sex')}</p>
+                </div>
+                <div className={styles.userInfo}>
+                    <p className={styles.titleInfo}>{i18n._('Information')}</p>
+                    <div className={styles.sexContainer}>
+                        <p className={styles.sex}>{i18n._('Sex') + ':'}</p>
                         <div className={styles.inputRadio}>
                             <input
                                 type="radio"
@@ -316,61 +306,75 @@ const ModalUpdateInfo = () => {
                             />
                             <label htmlFor="Female">{i18n._('Female')}</label>
                         </div>
-                        <div className={styles.birthday}>
-                            <p>{i18n._('Date of birth')}</p>
-                            <div className={styles.dmy}>
-                                <div className={styles.subdmy}>
-                                    {
-                                        showScrollDay && <ExpandDate
-                                            dataArr={arrDay}
-                                            value={selectDay}
-                                            setValue={setSelectDay}
-                                        />
-                                    }
-                                    <div className={styles.clickFake} onClick={(e) => { handleShowDay(e) }}></div>
-                                    <input disabled value={selectDay} />
-                                    <FontAwesomeIcon className={styles.arrowDown} icon={faChevronDown} />
-                                </div>
-                                <div className={styles.subdmy}>
-                                    {
-                                        showScrollMonth && <ExpandDate
-                                            dataArr={arrMonth}
-                                            value={selectMonth}
-                                            setValue={setSelectMonth}
-                                        />
-                                    }
+                    </div>
+                    <div className={styles.birthday}>
+                        <p>{i18n._('Date of birth')}</p>
+                        <div className={styles.dmy}>
+                            <div className={styles.subdmy}>
+                                {
+                                    showScrollDay && <ExpandDate
+                                        dataArr={arrDay}
+                                        value={selectDay}
+                                        setValue={setSelectDay}
+                                    />
+                                }
+                                <div className={styles.clickFake} onClick={(e) => { handleShowDay(e) }}></div>
+                                <input disabled value={selectDay} />
+                                <FontAwesomeIcon className={styles.arrowDown} icon={faChevronDown} />
+                            </div>
+                            <div className={styles.subdmy}>
+                                {
+                                    showScrollMonth && <ExpandDate
+                                        dataArr={arrMonth}
+                                        value={selectMonth}
+                                        setValue={setSelectMonth}
+                                    />
+                                }
 
-                                    <div className={styles.clickFake} onClick={(e) => { handleShowMonth(e) }}></div>
-                                    <input disabled value={selectMonth} />
-                                    <FontAwesomeIcon className={styles.arrowDown} icon={faChevronDown} />
-                                </div>
-                                <div className={styles.subdmy}>
-                                    {
-                                        showScrollYear && <ExpandDate
-                                            setValue={setSelectYear}
-                                            value={selectYear}
-                                            dataArr={arrYear}
-                                        />
-                                    }
-                                    <div className={styles.clickFake} onClick={(e) => { handleShowYear(e) }}></div>
-                                    <input disabled value={selectYear} />
-                                    <FontAwesomeIcon className={styles.arrowDown} icon={faChevronDown} />
-                                </div>
+                                <div className={styles.clickFake} onClick={(e) => { handleShowMonth(e) }}></div>
+                                <input disabled value={selectMonth} />
+                                <FontAwesomeIcon className={styles.arrowDown} icon={faChevronDown} />
+                            </div>
+                            <div className={styles.subdmy}>
+                                {
+                                    showScrollYear && <ExpandDate
+                                        setValue={setSelectYear}
+                                        value={selectYear}
+                                        dataArr={arrYear}
+                                    />
+                                }
+                                <div className={styles.clickFake} onClick={(e) => { handleShowYear(e) }}></div>
+                                <input disabled value={selectYear} />
+                                <FontAwesomeIcon className={styles.arrowDown} icon={faChevronDown} />
                             </div>
                         </div>
-                        <div className={styles.divBtn}>
-                            <button className={styles.btnCancel} onClick={handleCloseModalUpdateInfo}>
-                                {i18n._('Cancel')}
-                            </button>
+                    </div>
+                    <div className={styles.divBtn}>
+                        <button className={styles.btnCancel} onClick={handleCloseModalUpdateInfo}>
+                            {i18n._('Cancel')}
+                        </button>
+
+                        {showLoader ?
+                            <Button loading>{i18n._('Update')}</Button> :
                             <button className={styles.btnUpdate} onClick={handleUpdateInfoUser}>
                                 {i18n._('Update')}
                             </button>
-                        </div>
+                        }
                     </div>
                 </div>
-            </MainModal>
-        </>
-    )
+            </div>
+        </Modal>
+        <Modal className={styles.ModalCropImage} opened={showModalCropImage} onClose={handleCloseCropperImage} fullScreen>
+            <div className={styles.imageCrop}>
+                <img ref={imageElement} id="image" src={srcPreview} onLoad={() => { handleImgLoad() }} />
+            </div>
+            <div className={styles.btns} >
+                <Button color='gray' className={styles.btnCancelAvatar} onClick={handleCloseCropperImage}>{i18n._('Cancel')}</Button>
+                <Button className={styles.btnAcceptAvatar} onClick={handleAcceptCrop}>{i18n._('Select as avatar')}</Button>
+            </div>
+        </Modal>
+    </>
+
 }
 
 export default ModalUpdateInfo;

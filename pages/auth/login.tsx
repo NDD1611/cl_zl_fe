@@ -37,7 +37,6 @@ const AuthenticationForm = (props: PaperProps) => {
 
     const handleSubmitForm = async () => {
         if (type === 'login') {
-            console.log(form.values, type)
             setShowLoader(true)
             const response: any = await api.login({
                 email: form.values.email,
@@ -86,7 +85,6 @@ const AuthenticationForm = (props: PaperProps) => {
 
     return (
         <div className={styles.authentication}>
-            {showLoader ? <LoaderModal /> : ''}
             <Paper w={450} radius="md" p="xl" withBorder {...props}>
                 <Text size="lg" fw={500}>
                     {type}
@@ -119,7 +117,7 @@ const AuthenticationForm = (props: PaperProps) => {
                         <TextInput
                             required
                             label="Email"
-                            placeholder="hello@mantine.dev"
+                            placeholder="test@gmail.com"
                             value={form.values.email}
                             onChange={(event) => form.setFieldValue('email', event.currentTarget.value)}
                             error={form.errors.email && 'Invalid email'}
@@ -159,9 +157,13 @@ const AuthenticationForm = (props: PaperProps) => {
                                 ? i18n._('You already have an account? Login')
                                 : i18n._("You don't have an account? Register")}
                         </Anchor>
-                        <Button type="submit" radius="xl">
-                            {upperFirst(type)}
-                        </Button>
+                        {showLoader ?
+                            <Button loading type="submit" radius="xl">
+                                {upperFirst(type)}
+                            </Button> :
+                            <Button type="submit" radius="xl">
+                                {upperFirst(type)}
+                            </Button>}
                     </Group>
                 </form>
             </Paper>

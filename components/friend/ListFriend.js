@@ -123,10 +123,10 @@ const ListFriend = () => {
             })
         }
 
-        if (maintabSelect != 'chat') {
+        if (maintabSelect != 'Conversations') {
             dispatch({
                 type: tabsActions.SET_MAIN_TAB,
-                maintabSelect: 'chat'
+                maintabSelect: 'Conversations'
             })
             const { locale } = router
             router.push('/', '/', { locale: locale })
