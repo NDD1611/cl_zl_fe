@@ -1,6 +1,5 @@
 
 import classes from './Conversation.module.scss'
-import Avatar from '../Avatar'
 import { useSelector, useDispatch } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { conversationActions } from '../../../redux/actions/conversationAction'
@@ -15,6 +14,7 @@ import { Box, Menu, rem } from '@mantine/core'
 import { IconDots, IconTrash } from '@tabler/icons-react'
 import { useLingui } from '@lingui/react'
 import { useRouter } from 'next/router'
+import { Avatar } from '@mantine/core'
 const Conversation = ({ conversation }) => {
     let i18n = useLingui()
     const userDetails = useSelector((state: any) => state.auth.userDetails)
@@ -168,8 +168,8 @@ const Conversation = ({ conversation }) => {
         >
             <div className={classes.left}>
                 <Avatar
-                    src={friend.avatar ? friend.avatar : ''}
-                    width={50}
+                    src={friend.avatar}
+                    size={'md'}
                 />
             </div>
             < div className={classes.center} >

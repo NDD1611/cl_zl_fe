@@ -2,7 +2,6 @@
 import styles from './MessageArea.module.scss'
 import { useSelector, useDispatch } from 'react-redux'
 import { useEffect, useState, useRef } from 'react'
-import Avatar from '../common/Avatar'
 import { addSameDayAndSameAuth, checkShowTimeAndStatusInBottom } from '../../utils/message'
 import { updateStatusMessage } from '../../reltimeCommunication/socketConnection'
 import { conversationActions } from '../../redux/actions/conversationAction'
@@ -11,14 +10,15 @@ import MessageRight from './messageRight'
 import { messageActions } from '../../redux/actions/messageActions'
 import { useLingui } from '@lingui/react'
 import { useRouter } from 'next/router'
+import { Avatar } from '@mantine/core'
 
 const MessageArea = () => {
     let i18n = useLingui()
-    const conversationSelected = useSelector(state => state.conversation.conversationSelected)
-    const conversations = useSelector(state => state.conversation.conversations)
+    const conversationSelected = useSelector((state: any) => state.conversation.conversationSelected)
+    const conversations = useSelector((state: any) => state.conversation.conversations)
     const [messages, setMessages] = useState([])
-    const [receiverUser, setReceiverUser] = useState({})
-    const [userDetails, setUserDetails] = useState({})
+    const [receiverUser, setReceiverUser] = useState<any>({})
+    const [userDetails, setUserDetails] = useState<any>({})
     const messageAreaElement = useRef()
     const dispatch = useDispatch()
     const router = useRouter()
@@ -69,9 +69,9 @@ const MessageArea = () => {
     useEffect(() => {
         let widthChatArea
         if (window.innerWidth < 700) {
-            widthChatArea = parseInt((window.innerWidth - 64) * 0.8)  // width of mainTab and TabTwo  
+            widthChatArea = Math.floor((window.innerWidth - 64) * 0.8)  // width of mainTab and TabTwo  
         } else {
-            widthChatArea = parseInt((window.innerWidth - 64 - 344) * 0.8) // width of mainTab and TabTwo   
+            widthChatArea = Math.floor((window.innerWidth - 64 - 344) * 0.8) // width of mainTab and TabTwo   
         }
         dispatch({
             type: messageActions.SET_MAX_WIDTH_MESSAGE,
@@ -113,7 +113,8 @@ const MessageArea = () => {
                                         <div className={styles.acceptFriend}>
                                             <Avatar
                                                 src={receiverUser?.avatar}
-                                                width={20}
+                                                size={'md'}
+
                                             />
                                             <p>
                                                 {receiverUser?.firstName + ' ' + receiverUser?.lastName}
@@ -134,8 +135,8 @@ const MessageArea = () => {
                                         <div className={styles.acceptFriend}>
                                             <p>{i18n._("you just made friends with")}</p>
                                             <Avatar
-                                                src={message?.sender?.avatar ? message?.sender?.avatar : ''}
-                                                width={20}
+                                                src={message?.sender?.avatar}
+                                                size={'md'}
                                             />
                                             <p>
                                                 {message?.sender ? message?.sender?.firstName + ' ' + message?.sender?.lastName : ''}
@@ -168,8 +169,8 @@ const MessageArea = () => {
                                             {(message.sameAuth === false || message.sameDay === false
                                                 || (index == 0 && message?.sender?._id != userDetails._id)
                                             ) && <Avatar
-                                                    src={message?.sender?.avatar ? message?.sender?.avatar : ''}
-                                                    width={30}
+                                                    src={message?.sender?.avatar}
+                                                    size={'md'}
                                                 />
                                             }
                                         </div>

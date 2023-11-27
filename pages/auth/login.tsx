@@ -59,7 +59,7 @@ const AuthenticationForm = (props: PaperProps) => {
                 router.push('/', '/', { locale: locale })
             }
 
-        } else {
+        } else if (type === 'register') {
             setShowLoader(true)
             const response: any = await api.register({
                 email: form.values.email,
@@ -76,8 +76,7 @@ const AuthenticationForm = (props: PaperProps) => {
                 toast.success(response?.data, {
                     position: 'bottom-center'
                 })
-                const { locale } = router
-                router.push('/auth/login', '/auth/login', { locale: locale })
+                toggle()
                 setShowLoader(false)
             }
         }

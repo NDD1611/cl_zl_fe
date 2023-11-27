@@ -63,15 +63,17 @@
 
     .avatarInfo {
         position: absolute;
-        top: 110px;
-        left: calc(50% - 40px);
+        top: 120px;
+        background-color: #fff;
+        border-radius: 50%;
+        left: calc(50% - 35px);
 
         .camera {
             width: 25px;
             height: 25px;
             position: absolute;
-            right: 0;
-            bottom: 0;
+            right: -5px;
+            bottom: -5px;
             border-radius: 50%;
             border: 1px solid #ccc;
             display: flex;

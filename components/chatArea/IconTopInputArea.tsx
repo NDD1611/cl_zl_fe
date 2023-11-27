@@ -13,12 +13,13 @@ import { initializeApp } from "firebase/app";
 import { getStorage, ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { calcFileSize } from '../../utils/message'
 import { useLingui } from '@lingui/react'
+import { IconPaperclip, IconPhoto } from '@tabler/icons-react'
 
 const IconTopInputArea = () => {
     let i18n = useLingui()
     const dispatch = useDispatch()
-    const conversationSelected = useSelector(state => state.conversation.conversationSelected)
-    const conversations = useSelector(state => state.conversation.conversations)
+    const conversationSelected = useSelector((state: any) => state.conversation.conversationSelected)
+    const conversations = useSelector((state: any) => state.conversation.conversations)
 
     const firebaseConfig = {
         apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -78,7 +79,7 @@ const IconTopInputArea = () => {
                         let progressCircleValue = document.getElementById(dateMessage + 'progressValue')
                         if (progressBarCircleElement && progressCircleValue) {
                             progressBarCircleElement.style.background = `conic-gradient(#0091ff ${progress * 3.6}deg, #ededed 0deg)`
-                            progressCircleValue.innerText = parseInt(progress) + '/%'
+                            progressCircleValue.innerText = Math.floor(progress) + '/%'
                         }
                     },
                     (error) => {
@@ -104,7 +105,7 @@ const IconTopInputArea = () => {
                     }
                 )
             } else {
-                let res = await api.createConversation({
+                let res: any = await api.createConversation({
                     senderId: userDetails._id,
                     receiverId: receiverUser._id
                 })
@@ -158,7 +159,7 @@ const IconTopInputArea = () => {
                             let progressCircleValue = document.getElementById(dateMessage + 'progressValue')
                             if (progressBarCircleElement && progressCircleValue) {
                                 progressBarCircleElement.style.background = `conic-gradient(#0091ff ${progress * 3.6}deg, #ededed 0deg)`
-                                progressCircleValue.innerText = parseInt(progress) + '/%'
+                                progressCircleValue.innerText = Math.floor(progress) + '/%'
                             }
                         },
                         (error) => {
@@ -237,7 +238,7 @@ const IconTopInputArea = () => {
                     (snapshot) => {
                         if (count > 0) {
                             const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                            let progressBarElement = document.getElementById(dateMessage)
+                            let progressBarElement = document.getElementById(dateMessage.toString())
                             let infoSizeElement = document.getElementById(dateMessage + 'filesize')
                             if (progressBarElement && infoSizeElement) {
                                 let { size, sizeType } = calcFileSize(file.size)
@@ -274,7 +275,7 @@ const IconTopInputArea = () => {
                     }
                 )
             } else {
-                let res = await api.createConversation({
+                let res: any = await api.createConversation({
                     senderId: userDetails._id,
                     receiverId: receiverUser._id
                 })
@@ -325,7 +326,7 @@ const IconTopInputArea = () => {
                         (snapshot) => {
                             if (count > 0) {
                                 const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                                let progressBarElement = document.getElementById(dateMessage)
+                                let progressBarElement = document.getElementById(dateMessage.toString())
                                 let infoSizeElement = document.getElementById(dateMessage + 'filesize')
                                 if (progressBarElement && infoSizeElement) {
                                     let { size, sizeType } = calcFileSize(file.size)
@@ -368,13 +369,13 @@ const IconTopInputArea = () => {
     return (
         <div className={styles.iconTopInput}>
             <label htmlFor='inputImage' className={styles.oneIcon}>
-                <FontAwesomeIcon icon={faImage} />
+                <IconPhoto />
                 <input id='inputImage' type='file' accept='image/*' className={styles.inputImage}
                     onChange={handleSendImage}
                 />
             </label>
             <label htmlFor='inputFile' className={styles.oneIcon}>
-                <FontAwesomeIcon icon={faPaperclip} />
+                <IconPaperclip />
                 {/* <input id='inputFile' type='file' className={styles.inputImage}
                     onChange={handleChangeInputFile}
                 /> */}

@@ -1,233 +1,185 @@
 @import '../../../styles/global.module.scss';
 
-.ModalCreatGroup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 97;
 
-    .backgroundOpacity {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        z-index: 98;
-        background-color: #ccc;
-        opacity: 0.3;
+.content {
+    max-width: 100%;
+    background-color: #fff;
+    z-index: 99;
+    border-radius: 5px;
+
+    .title {
+        position: relative;
+        border-bottom: 1px solid #ccc;
+        font-size: 16px;
+        font-weight: 600;
+        padding: 20px;
     }
 
-    .content {
-        width: 460px;
-        max-width: 90%;
-        background-color: #fff;
-        border: 1px solid #ccc;
-        z-index: 99;
-        box-shadow: 0 0 10px 0 #ccc;
-        border-radius: 5px;
+    .bodyModal {
+        padding: 10px;
 
-        .title {
-            position: relative;
-            border-bottom: 1px solid #ccc;
-            font-size: 16px;
-            font-weight: 600;
-            padding: 20px;
+        .inputEmail {
+            margin: 20px 0;
+            padding: 0 20px;
 
-            .closeX {
-                position: absolute;
-                top: 10px;
-                right: 10px;
-                width: 30px;
-                height: 30px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
+            input {
+                width: 100%;
+                border: none;
+                border-bottom: 1px solid #ccc;
 
-                svg {
-                    font-size: 25px;
-                    font-weight: 100;
-                }
-
-                &:hover {
-                    background-color: #ccc;
-                    border-radius: 50%;
+                &:focus {
+                    outline: none;
+                    border-bottom: 1px solid blue;
                 }
             }
         }
 
-        .bodyModal {
-            padding: 10px;
+        .listFriend {
+            height: 60vh;
+            display: flex;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
 
-            .inputEmail {
-                margin: 20px 0;
-                padding: 0 20px;
+            .listLeft {
+                height: 100%;
+                overflow-y: scroll;
+                width: 60%;
 
-                input {
-                    width: 100%;
-                    border: none;
-                    border-bottom: 1px solid #ccc;
-
-                    &:focus {
-                        outline: none;
-                        border-bottom: 1px solid blue;
-                    }
-                }
-            }
-
-            .listFriend {
-                height: 450px;
-                display: flex;
-                border-top: 1px solid #ccc;
-                padding-top: 10px;
-
-                .listLeft {
-                    height: 100%;
-                    overflow-y: scroll;
-                    width: 60%;
-
-                    &::-webkit-scrollbar {
-                        width: 7px;
-                    }
-
-                    &::-webkit-scrollbar-track {
-                        background: #fff !important;
-                    }
-
-                    &::-webkit-scrollbar-thumb {
-                        background: #ccc;
-                        border-radius: 10px;
-                    }
-
-                    &::-webkit-scrollbar-thumb:hover {
-                        background: #555;
-                    }
-
-                    .friendItem {
-                        display: flex;
-                        gap: 10px;
-                        padding: 10px;
-                        cursor: pointer;
-
-                        &:hover {
-                            background-color: #f3f5f6;
-                        }
-
-                        .check {
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                        }
-
-                        .name {
-                            font-size: 20px;
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                        }
-                    }
+                &::-webkit-scrollbar {
+                    width: 7px;
                 }
 
-                .listFriendSelect {
-                    height: 100%;
-                    overflow-y: scroll;
-                    width: 40%;
-                    border: 1px solid #ccc;
-                    border-radius: 5px;
-                    padding: 5px;
+                &::-webkit-scrollbar-track {
+                    background: #fff !important;
+                }
+
+                &::-webkit-scrollbar-thumb {
+                    background: #ccc;
+                    border-radius: 10px;
+                }
+
+                &::-webkit-scrollbar-thumb:hover {
+                    background: #555;
+                }
+
+                .friendItem {
                     display: flex;
-                    flex-direction: column;
-                    align-items: center;
+                    gap: 10px;
+                    padding: 10px;
+                    cursor: pointer;
 
-                    &::-webkit-scrollbar {
-                        width: 7px;
+                    &:hover {
+                        background-color: #f3f5f6;
                     }
 
-                    &::-webkit-scrollbar-track {
-                        background: #fff !important;
-                    }
-
-                    &::-webkit-scrollbar-thumb {
-                        background: #ccc;
-                        border-radius: 10px;
-                    }
-
-                    &::-webkit-scrollbar-thumb:hover {
-                        background: #555;
-                    }
-
-                    .friendSelect {
+                    .check {
                         display: flex;
-                        width: fit-content;
-                        gap: 30px;
                         justify-content: center;
                         align-items: center;
-                        background-color: #e5efff;
-                        padding: 5px;
-                        margin-top: 5px;
-                        border-radius: 15px;
+                    }
 
-                        .selectLeft {
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                            gap: 10px;
-                        }
+                    .name {
+                        font-size: 20px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                    }
+                }
+            }
 
-                        .iconRemove {
-                            cursor: pointer;
-                        }
+            .listFriendSelect {
+                height: 100%;
+                overflow-y: scroll;
+                width: 40%;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                padding: 5px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                &::-webkit-scrollbar {
+                    width: 7px;
+                }
+
+                &::-webkit-scrollbar-track {
+                    background: #fff !important;
+                }
+
+                &::-webkit-scrollbar-thumb {
+                    background: #ccc;
+                    border-radius: 10px;
+                }
+
+                &::-webkit-scrollbar-thumb:hover {
+                    background: #555;
+                }
+
+                .friendSelect {
+                    display: flex;
+                    width: fit-content;
+                    gap: 30px;
+                    justify-content: center;
+                    align-items: center;
+                    background-color: #e5efff;
+                    padding: 5px;
+                    margin-top: 5px;
+                    border-radius: 15px;
+
+                    .selectLeft {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        gap: 10px;
+                    }
+
+                    .iconRemove {
+                        cursor: pointer;
                     }
                 }
             }
         }
+    }
 
-        .footerBtn {
-            display: flex;
-            justify-content: flex-end;
+    .footerBtn {
+        display: flex;
+        justify-content: flex-end;
 
-            .opacityHalf {
-                opacity: 0.5;
+        .opacityHalf {
+            opacity: 0.5;
 
-                &:hover {
-                    background-color: $primary-color !important;
-                }
+            &:hover {
+                background-color: $primary-color !important;
             }
+        }
 
-            .btnFind {
-                cursor: pointer;
-                border: none;
-                border-radius: 5px;
-                padding: 10px 20px;
-                background-color: $primary-color;
-                color: #fff;
-                font-weight: 600;
-                margin-right: 10px;
-                margin-bottom: 10px;
+        .btnFind {
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            background-color: $primary-color;
+            color: #fff;
+            font-weight: 600;
+            margin-right: 10px;
 
-                &:hover {
-                    background-color: #0068ff;
-                }
+            &:hover {
+                background-color: #0068ff;
             }
+        }
 
-            .btnCancel {
-                cursor: pointer;
-                border-radius: 5px;
-                border: none;
-                padding: 10px 20px;
-                background-color: #dfe2e7;
-                color: #000;
-                font-weight: 600;
-                margin-right: 10px;
-                margin-bottom: 10px;
+        .btnCancel {
+            cursor: pointer;
+            border-radius: 5px;
+            border: none;
+            padding: 10px 20px;
+            background-color: #dfe2e7;
+            color: #000;
+            font-weight: 600;
+            margin-right: 10px;
 
-                &:hover {
-                    background-color: #ccc;
-                }
+            &:hover {
+                background-color: #ccc;
             }
         }
     }

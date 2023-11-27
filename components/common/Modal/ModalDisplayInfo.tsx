@@ -1,13 +1,11 @@
 import styles from './ModalDisplayInfo.module.scss'
-import MainModal from './MainModal'
-import Avatar from '../Avatar'
 import { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import { useSelector, useDispatch } from 'react-redux'
 import { useLingui } from '@lingui/react';
 import { modalActions } from '../../../redux/actions/modalActions'
-import { Modal } from '@mantine/core'
+import { Avatar, Modal } from '@mantine/core'
 
 const ModalDisplayInfo = () => {
     const { i18n } = useLingui();
@@ -44,8 +42,8 @@ const ModalDisplayInfo = () => {
             </div>
             <div className={styles.avatarInfo}>
                 <Avatar
-                    src={avatarLink ? avatarLink : ''}
-                    width={80}
+                    src={avatarLink}
+                    size={'lg'} alt='avatar'
                 ></Avatar>
             </div>
             <p className={styles.name}>{userDetails.firstName + ' ' + userDetails.lastName}</p>

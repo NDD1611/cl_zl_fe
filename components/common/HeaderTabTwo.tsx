@@ -7,11 +7,11 @@ import ModalFindFriend from './Modal/ModalFindFriend'
 import ModalCreateGroup from './Modal/ModalCreateGroup'
 import { Tooltip } from '@mantine/core'
 import { useLingui } from '@lingui/react'
+import { IconUserPlus, IconUsersGroup } from '@tabler/icons-react'
 
 const HeaderTabTwo = () => {
     const dispatch = useDispatch()
     let i18n = useLingui()
-    const showModalCreateGroup = useSelector((state: any) => state.modal.showModalCreateGroup)
     return (
         <>
             <div id='headerTabTwo' className={styles.HeaderTabTwo}>
@@ -25,22 +25,18 @@ const HeaderTabTwo = () => {
                         () => { dispatch({ type: modalActions.SET_SHOW_MODAL_FIND_FRIEND }) }
                     }
                 >
-                    <FontAwesomeIcon icon={faUserPlus} />
+                    <IconUserPlus size={20} />
                 </div>
-                {/* <div className={styles.iconAddGroup}
+                <div className={styles.iconAddGroup}
                     onClick={
                         () => { dispatch({ type: modalActions.SET_SHOW_MODAL_CREATE_GROUP }) }
                     }
                 >
-                    <FontAwesomeIcon icon={faUserGroup} />
-                    <span>+</span>
-                </div> */}
+                    <IconUsersGroup size={20} />
+                </div>
 
                 <ModalFindFriend></ModalFindFriend>
-                {
-                    showModalCreateGroup &&
-                    <ModalCreateGroup></ModalCreateGroup>
-                }
+                <ModalCreateGroup></ModalCreateGroup>
             </div>
         </>
     )

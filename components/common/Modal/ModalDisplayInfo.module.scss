@@ -12,9 +12,11 @@
     }
 
     .avatarInfo {
+        background-color: #fff;
         position: absolute;
-        top: 110px;
-        left: calc(50% - 40px);
+        border-radius: 50%;
+        top: 120px;
+        left: calc(50% - 30px);
     }
 
     .name {

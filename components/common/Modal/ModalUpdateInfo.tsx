@@ -1,7 +1,5 @@
 import styles from './ModalUpdateInfo.module.scss'
-import MainModal from './MainModal'
 import { useEffect, useState, useRef } from 'react'
-import Avatar from '../Avatar'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useSelector, useDispatch } from 'react-redux'
 import { modalActions } from '../../../redux/actions/modalActions'
@@ -10,7 +8,6 @@ import { toast } from 'react-toastify'
 import { authActions } from '../../../redux/actions/authAction'
 import ExpandDate from './expandDate'
 import { checkLeapYear } from '../../../utils/check'
-import LoaderModal from './LoaderModal'
 import Cropper from 'cropperjs'
 import 'cropperjs/dist/cropper.js'
 import 'cropperjs/dist/cropper.css'
@@ -18,7 +15,7 @@ import { faCamera, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 import { initializeApp } from 'firebase/app'
 import { useLingui } from '@lingui/react'
-import { Button, Modal } from '@mantine/core'
+import { Avatar, Button, Modal } from '@mantine/core'
 
 const ModalUpdateInfo = () => {
     let i18n = useLingui()
@@ -165,6 +162,7 @@ const ModalUpdateInfo = () => {
                 (error) => {
                     console.log(error)
                     toast.error(i18n._('An error occurred. Please try again later.'))
+                    dispatch({ type: modalActions.SET_HIDE_MODAL_UPDATE_INFO })
                     setShowLoader(false)
                 },
                 () => {
@@ -186,6 +184,7 @@ const ModalUpdateInfo = () => {
                                 userDetails: newInfo
                             })
                         }
+                        dispatch({ type: modalActions.SET_HIDE_MODAL_UPDATE_INFO })
                         setShowLoader(false)
                     });
                 }
@@ -206,10 +205,10 @@ const ModalUpdateInfo = () => {
                     userDetails: userInfo,
                 })
             }
+            dispatch({ type: modalActions.SET_HIDE_MODAL_UPDATE_INFO })
             setShowLoader(false)
         }
         setSrcAfterCropped(null)
-        dispatch({ type: modalActions.SET_HIDE_MODAL_UPDATE_INFO })
     }
 
     const handleCloseModalUpdateInfo = () => {
@@ -250,10 +249,10 @@ const ModalUpdateInfo = () => {
                 </div>
 
                 <div className={styles.avatarInfo}>
-                    <Avatar
-                        src={srcAfterCropped ? srcAfterCropped : userDetails.avatar}
-                        width={80}
-                    ></Avatar>
+                    <Avatar src={srcAfterCropped ? srcAfterCropped : userDetails.avatar}
+                        size={'lg'} alt='avatar'
+                    >
+                    </Avatar>
                     <label htmlFor='inputAvatar' className={styles.camera}>
                         <FontAwesomeIcon icon={faCamera} />
                     </label>

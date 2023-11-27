@@ -12,6 +12,7 @@ import { toast } from "react-toastify"
 import { friendActions } from "../../redux/actions/friendAction"
 import { Avatar, Box, Button, Center, Indicator } from "@mantine/core"
 import { useLingui } from "@lingui/react"
+import { IconUserPlus } from "@tabler/icons-react"
 
 const HeaderChatArea = () => {
     let i18n = useLingui()
@@ -112,8 +113,8 @@ const HeaderChatArea = () => {
                 !isFriend &&
                 <Box component="div" className={styles.sendInviteFriend}>
                     <Box component="div" p={10}>
-                        <FontAwesomeIcon icon={faUserPlus} />
-                        <span>{i18n._("Send a friend request to this person")}</span>
+                        <IconUserPlus size={20} />
+                        <Box component="span" ml={10}>{i18n._("Send a friend request to this person")}</Box>
                     </Box>
                     <Button mr={30} p={5} component="div" onClick={addFriend} >{i18n._("Make friend")}</Button>
                 </Box>
