@@ -4,20 +4,24 @@ import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 import { useSelector, useDispatch } from 'react-redux'
 import { useEffect, useState } from 'react'
 import styles from './ListFriend.module.scss'
-import Avatar from '../common/Avatar'
 import { tabsActions } from '../../redux/actions/tabsAction'
-import MainModal from '../common/Modal/MainModal'
 import api from '../../api/api'
 import { conversationActions } from '../../redux/actions/conversationAction'
 import { useRouter } from 'next/router'
 import { useLingui } from '@lingui/react'
+import { Avatar, Box, Divider, Menu, Modal, rem } from '@mantine/core'
+import { IconDots, IconEye, IconTrash, IconUser } from '@tabler/icons-react'
+import LoaderModal from '../common/Modal/LoaderModal'
+import { toast } from 'react-toastify'
+import { toastMessage } from '../../utils/toast'
 
 const ListFriend = () => {
     let i18n = useLingui()
-    const conversations = useSelector(state => state.conversation.conversations)
-    const maintabSelect = useSelector(state => state.tabs.maintabSelect)
+    const conversations = useSelector((state: any) => state.conversation.conversations)
+    const maintabSelect = useSelector((state: any) => state.tabs.maintabSelect)
     const [showBackButton, setShowBackButton] = useState(false)
-    const listFriends = useSelector(state => state.friend.listFriends)
+    const listFriends = useSelector((state: any) => state.friend.listFriends)
+    const [showLoader, setShowLoader] = useState(false)
     const dispatch = useDispatch()
     const router = useRouter()
     useEffect(() => {
@@ -57,7 +61,7 @@ const ListFriend = () => {
         let day = date.getDate().toString()
         let month = (date.getMonth() + 1).toString()
         let year = date.getFullYear()
-        let birthday = day + '/' + `${month < 10 ? 0 : ''}` + month + '/' + year
+        let birthday = day + '/' + `${parseInt(month) < 10 ? 0 : ''}` + month + '/' + year
         setInfoFriend({
             ...friend,
             birthday
@@ -65,19 +69,28 @@ const ListFriend = () => {
         setIdPopover(undefined)
         setShowModalInfo(true)
     }
-    const [infoFriend, setInfoFriend] = useState()
+    const [infoFriend, setInfoFriend] = useState<any>()
     const [showModalInfo, setShowModalInfo] = useState(false)
     const handleCloseModalInfo = () => {
         setShowModalInfo(false)
     }
     const handleDeleteFriend = async (e, friendId) => {
         e.stopPropagation();
+        setShowLoader(true)
         let userDetails = JSON.parse(localStorage.getItem('userDetails'))
         let data = {
             userId: userDetails._id,
             friendId: friendId
         }
-        let response = await api.deleteFriend(data)
+        let res: any = await api.deleteFriend(data)
+        if (res.err) {
+            setShowLoader(false)
+            toast.error(toastMessage(res?.exception?.response?.data?.code, i18n))
+        } else {
+            setShowLoader(false)
+            toast.success(toastMessage(res?.response?.data?.code, i18n))
+        }
+        setShowLoader(false)
     }
     const handleClickSendMessage = async (friend) => {
         localStorage.setItem('receiverUser', JSON.stringify(friend))
@@ -134,11 +147,8 @@ const ListFriend = () => {
     }
     return (
         <>
-            <MainModal
-                title={i18n._('Account information')}
-                closeModal={showModalInfo}
-                setCloseModal={handleCloseModalInfo}
-            >
+            {showLoader && <LoaderModal />}
+            <Modal opened={showModalInfo} onClose={handleCloseModalInfo} title={i18n._('Account information')}>
                 <div className={styles.contentModalInfo}>
                     <div className={styles.image}>
                         <img
@@ -146,10 +156,7 @@ const ListFriend = () => {
                         />
                     </div>
                     <div className={styles.avatarInfo}>
-                        <Avatar
-                            src={infoFriend?.avatar ? infoFriend?.avatar : ''}
-                            width={80}
-                        ></Avatar>
+                        <Avatar src={infoFriend?.avatar} color='blue' size={'lg'} />
                     </div>
                     <p className={styles.name}>{infoFriend && infoFriend.firstName + ' ' + infoFriend.lastName}</p>
                     <div className={styles.userInfo}>
@@ -168,7 +175,8 @@ const ListFriend = () => {
                         </div>
                     </div>
                 </div>
-            </MainModal>
+            </Modal>
+
             <div className={styles.listFriend}>
                 <div className={styles.headerInvitation}>
                     {showBackButton &&
@@ -176,7 +184,9 @@ const ListFriend = () => {
                             <FontAwesomeIcon icon={faChevronLeft} />
                         </div>
                     }
-                    <FontAwesomeIcon className={styles.headerIcon} icon={faUser} />
+                    <Box mr={10}>
+                        <IconUser size={20} />
+                    </Box>
                     {i18n._('Friends List')}
                 </div>
                 <div>
@@ -187,31 +197,57 @@ const ListFriend = () => {
                     }
                     {
                         listFriends.map((friend) => {
-                            return <div key={friend._id} className={styles.friendItem}
-                                onContextMenu={(e) => { handleMouseRightClick(e, friend._id) }}
-                                onClick={(e) => { handleClickSendMessage(friend) }}
-                            >
-                                <div className={styles.left}>
-                                    <Avatar
-                                        width={50}
-                                        src={friend.avatar ? friend.avatar : ''}
-                                    />
-                                    <div className={styles.name}>{friend.firstName + ' ' + friend.lastName}</div>
-                                </div>
-                                <div className={styles.right}>
-                                    {/* icon */}
-                                </div>
-
-                                {idPopover == friend._id &&
-                                    <div style={{
-                                        left: clientXPopover,
-                                        top: clientYPopover
-                                    }} className={styles.popover}>
-                                        <div onClick={(e) => { handleClickShowInfoFriend(e, friend) }} >{i18n._('Watch information')}</div>
-                                        <div className={styles.delete} onClick={(e) => { handleDeleteFriend(e, friend._id) }}>{i18n._('Delete')}</div>
+                            return <Box px={20}>
+                                <div key={friend._id} className={styles.friendItem}
+                                    onContextMenu={(e) => { handleMouseRightClick(e, friend._id) }}
+                                    onClick={(e) => { handleClickSendMessage(friend) }}
+                                >
+                                    <div className={styles.left}>
+                                        <Avatar src={friend.avatar} color='blue' size={'md'} />
+                                        <div className={styles.name}>{friend.firstName + ' ' + friend.lastName}</div>
                                     </div>
-                                }
-                            </div>
+                                    <div className={styles.right}>
+                                        {/* icon */}
+                                    </div>
+                                    <Menu trigger="hover" openDelay={100} closeDelay={400} shadow="md" width={200} position='left' >
+                                        <Menu.Target >
+                                            <Box component='div'
+                                                style={{
+                                                    display: 'flex',
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center'
+                                                }}
+                                                mr={20}
+                                            >
+                                                <IconDots onClick={(e) => { e.stopPropagation() }} style={{ width: rem(25), height: rem(25) }} />
+                                            </Box>
+                                        </Menu.Target>
+
+                                        <Menu.Dropdown >
+                                            <Menu.Item
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    handleClickShowInfoFriend(e, friend)
+                                                }}
+                                                leftSection={<IconEye size={14} />}
+                                            >
+                                                {i18n._('Watch information')}
+                                            </Menu.Item>
+                                            <Menu.Item
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    handleDeleteFriend(e, friend._id)
+                                                }}
+                                                color='red'
+                                                leftSection={<IconTrash size={14} />}
+                                            >
+                                                {i18n._('Delete')}
+                                            </Menu.Item>
+                                        </Menu.Dropdown>
+                                    </Menu>
+                                </div>
+                                <Divider />
+                            </Box>
                         })
                     }
                 </div>

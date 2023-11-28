@@ -10,11 +10,12 @@ import api from '../../api/api'
 import LoaderModal from '../common/Modal/LoaderModal'
 import { tabsActions } from '../../redux/actions/tabsAction'
 import { useLingui } from '@lingui/react'
+import { Button } from '@mantine/core'
 
 const PendingInvitation = () => {
     let i18n = useLingui()
     const router = useRouter()
-    const pendingInvitations = useSelector(state => state.friend.pendingInvitations)
+    const pendingInvitations = useSelector((state: any) => state.friend.pendingInvitations)
     const [showLoader, setShowLoader] = useState(false)
     const [showBackButton, setShowBackButton] = useState(false)
     const dispatch = useDispatch()
@@ -83,10 +84,18 @@ const PendingInvitation = () => {
                                     <p className={styles.name}>{invitation.senderId.lastName + ' ' + invitation.senderId.firstName}</p>
                                 </div>
                                 <div className={styles.bottomItem}>
-                                    <button onClick={() => { handleRejectFriend(invitation) }}>{i18n._('Refuse')}</button>
-                                    <button onClick={() => { handleAcceptFriend(invitation) }} className={styles.accept}>
-                                        {i18n._('Accept')}
-                                    </button>
+                                    {
+                                        showLoader ?
+                                            <>
+                                                <Button loading variant="filled" color="gray" onClick={() => { handleRejectFriend(invitation) }}>{i18n._('Refuse')}</Button>
+                                                <Button loading variant="filled" onClick={() => { handleAcceptFriend(invitation) }} >{i18n._('Accept')}</Button>
+                                            </>
+                                            :
+                                            <>
+                                                <Button variant="filled" color="gray" onClick={() => { handleRejectFriend(invitation) }}>{i18n._('Refuse')}</Button>
+                                                <Button variant="filled" onClick={() => { handleAcceptFriend(invitation) }} >{i18n._('Accept')}</Button>
+                                            </>
+                                    }
                                 </div>
                             </div>
                         })

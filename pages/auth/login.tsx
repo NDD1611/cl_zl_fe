@@ -5,16 +5,18 @@ import api from '../../api/api'
 import { useDispatch } from 'react-redux'
 import { authActions } from '../../redux/actions/authAction'
 import { useRouter } from 'next/router'
-import LoaderModal from '../../components/common/Modal/LoaderModal'
 import { useToggle, upperFirst } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
-import { TextInput, PasswordInput, Text, Paper, Group, PaperProps, Button, Checkbox, Anchor, Stack, } from '@mantine/core';
+import { TextInput, PasswordInput, Text, Paper, Group, PaperProps, Button, Checkbox, Anchor, Stack, Box, Flex, } from '@mantine/core';
 import styles from './login.module.scss'
 import { useLingui } from '@lingui/react'
-
+import { SwitchLanguage } from '../../components/NavBars/Navbar'
+import { toastMessage } from '../../utils/toast'
 const AuthenticationForm = (props: PaperProps) => {
     let i18n = useLingui()
     const [type, toggle] = useToggle(['login', 'register']);
+    i18n._('login')
+    i18n._('register')
     const [showLoader, setShowLoader] = useState(false)
     const dispatch = useDispatch()
     const router = useRouter()
@@ -38,18 +40,18 @@ const AuthenticationForm = (props: PaperProps) => {
     const handleSubmitForm = async () => {
         if (type === 'login') {
             setShowLoader(true)
-            const response: any = await api.login({
+            const res: any = await api.login({
                 email: form.values.email,
                 password: form.values.password
             })
-            if (response.err) {
-                toast.error(response?.exception?.response?.data, {
+            if (res.err) {
+                toast.error(toastMessage(res?.exception?.response?.data?.code, i18n), {
                     position: 'bottom-center'
                 })
                 setShowLoader(false)
             } else {
-                // toast.success('Bạn đã đăng nhập thành công')
-                const data = response.data
+
+                const data = res?.response?.data?.userDetails
                 localStorage.setItem('userDetails', JSON.stringify(data))
                 dispatch({
                     type: authActions.SET_USER_DETAIL,
@@ -61,19 +63,19 @@ const AuthenticationForm = (props: PaperProps) => {
 
         } else if (type === 'register') {
             setShowLoader(true)
-            const response: any = await api.register({
+            const res: any = await api.register({
                 email: form.values.email,
                 password: form.values.password,
                 firstName: form.values.firstName,
                 lastName: form.values.lastName
             })
-            if (response?.err) {
-                toast.error(response?.exception?.response?.data, {
+            if (res?.err) {
+                toast.error(toastMessage(res.exception?.response?.data?.code, i18n), {
                     position: 'bottom-center'
                 })
                 setShowLoader(false)
             } else {
-                toast.success(response?.data, {
+                toast.success(toastMessage(res?.response?.data?.code, i18n), {
                     position: 'bottom-center'
                 })
                 toggle()
@@ -85,12 +87,14 @@ const AuthenticationForm = (props: PaperProps) => {
     return (
         <div className={styles.authentication}>
             <Paper w={450} radius="md" p="xl" withBorder {...props}>
-                <Text size="lg" fw={500}>
-                    {type}
-                </Text>
-
-                <Group grow mb="md" mt="md">
-                </Group>
+                <Flex
+                    justify={'space-between'}
+                >
+                    <Text size="lg" fw={500}>
+                        {i18n._(type)}
+                    </Text>
+                    <SwitchLanguage />
+                </Flex>
 
                 <form onSubmit={form.onSubmit(() => { handleSubmitForm() })}>
                     <Stack>
@@ -158,10 +162,10 @@ const AuthenticationForm = (props: PaperProps) => {
                         </Anchor>
                         {showLoader ?
                             <Button loading type="submit" radius="xl">
-                                {upperFirst(type)}
+                                {upperFirst(i18n._(type))}
                             </Button> :
                             <Button type="submit" radius="xl">
-                                {upperFirst(type)}
+                                {upperFirst(i18n._(type))}
                             </Button>}
                     </Group>
                 </form>

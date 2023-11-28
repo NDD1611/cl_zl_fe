@@ -65,8 +65,8 @@ const ModalCreateGroup = () => {
         // if (check) {
         //     console.log(groupName, groupSelect)
         // }
-        let res: any = await api.testQueryLimit()
-        console.log(res.data[0])
+        // let res: any = await api.testQueryLimit()
+        console.log('create')
 
     }
     return <>

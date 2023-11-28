@@ -44,6 +44,43 @@ function NavbarLink({ icon: Icon, label, active, onClick }: NavbarLinkProps) {
     );
 }
 
+export const SwitchLanguage = () => {
+    const { i18n } = useLingui();
+    const router = useRouter()
+    return <Menu shadow="md" width={200} position='right'>
+        <Menu.Target >
+            <Box component='div'
+                mb={15}
+                style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                }}>
+                <Avatar style={{ cursor: 'pointer' }} size={'sm'} src={i18n._("/images/en.png")} alt='image flag' />
+            </Box>
+        </Menu.Target>
+
+        <Menu.Dropdown >
+            <Menu.Item
+                onClick={() => {
+                    const { pathname, asPath, query } = router
+                    router.push({ pathname, query }, asPath, { locale: 'en' })
+                }}
+            >
+                English
+            </Menu.Item>
+            <Menu.Item
+                onClick={() => {
+                    const { pathname, asPath, query } = router
+                    router.push({ pathname, query }, asPath, { locale: 'vi' })
+                }}
+            >
+                Tiếng Việt
+            </Menu.Item>
+        </Menu.Dropdown>
+    </Menu>
+}
+
 export function Navbar() {
     const maintabSelect = useSelector((state: any) => state.tabs.maintabSelect)
     const userDetails = useSelector((state: any) => state.auth.userDetails)
@@ -145,38 +182,7 @@ export function Navbar() {
             </div>
 
             <Stack justify="center" gap={0}>
-                {/* <NavbarLink icon={IconSwitchHorizontal} label="Change account" /> */}<Menu shadow="md" width={200} position='right'>
-                    <Menu.Target >
-                        <Box component='div'
-                            mb={15}
-                            style={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center'
-                            }}>
-                            <Avatar style={{ cursor: 'pointer' }} size={'sm'} src={i18n._("/images/en.png")} alt='image flag' />
-                        </Box>
-                    </Menu.Target>
-
-                    <Menu.Dropdown >
-                        <Menu.Item
-                            onClick={() => {
-                                const { pathname, asPath, query } = router
-                                router.push({ pathname, query }, asPath, { locale: 'en' })
-                            }}
-                        >
-                            English
-                        </Menu.Item>
-                        <Menu.Item
-                            onClick={() => {
-                                const { pathname, asPath, query } = router
-                                router.push({ pathname, query }, asPath, { locale: 'vi' })
-                            }}
-                        >
-                            Tiếng Việt
-                        </Menu.Item>
-                    </Menu.Dropdown>
-                </Menu>
+                <SwitchLanguage />
                 <Menu shadow="md" width={200} position='right'>
                     <Menu.Target >
                         <Box component='div' style={{

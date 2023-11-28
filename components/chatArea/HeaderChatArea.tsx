@@ -13,6 +13,7 @@ import { friendActions } from "../../redux/actions/friendAction"
 import { Avatar, Box, Button, Center, Indicator } from "@mantine/core"
 import { useLingui } from "@lingui/react"
 import { IconUserPlus } from "@tabler/icons-react"
+import { toastMessage } from "../../utils/toast"
 
 const HeaderChatArea = () => {
     let i18n = useLingui()
@@ -60,20 +61,21 @@ const HeaderChatArea = () => {
     }
 
     const addFriend = async () => {
+        console.log('make friend')
         let receiverUser = JSON.parse(localStorage.getItem('receiverUser'))
         let userDetails = JSON.parse(localStorage.getItem('userDetails'))
         setShowLoader(true)
-        const response: any = await api.friendInvitation({
+        const res: any = await api.friendInvitation({
             senderId: userDetails._id,
             receiverId: receiverUser._id
         })
-        if (response.err) {
+        if (res.err) {
             setShowLoader(false)
-            toast.error(response?.exception?.response?.data)
+            toast.error(toastMessage(res?.exception?.response?.data?.code, i18n))
             dispatch({ type: modalActions.SET_HIDE_MODAL_FIND_FRIEND })
         } else {
             setShowLoader(false)
-            toast.success(response?.data)
+            toast.success(toastMessage(res?.response?.data?.code, i18n))
             dispatch({ type: modalActions.SET_HIDE_MODAL_FIND_FRIEND })
         }
     }

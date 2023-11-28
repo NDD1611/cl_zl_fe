@@ -13,6 +13,7 @@ import Avatar from '../Avatar'
 import { useRouter } from 'next/router'
 import { useLingui } from '@lingui/react'
 import { Button, Modal } from '@mantine/core'
+import { toastMessage } from '../../../utils/toast'
 
 const ModalAddFriend = () => {
     let i18n = useLingui()
@@ -30,17 +31,17 @@ const ModalAddFriend = () => {
     const addFriend = async () => {
         const userDetails = JSON.parse(localStorage.getItem('userDetails'))
         setShowLoader(true)
-        const response: any = await api.friendInvitation({
+        const res: any = await api.friendInvitation({
             senderId: userDetails._id,
             receiverId: infoFindFriend._id
         })
-        if (response.err) {
+        if (res.err) {
             setShowLoader(false)
-            toast.error(response?.exception?.response?.data)
+            toast.error(toastMessage(res?.exception?.response?.data?.code, i18n))
             dispatch({ type: modalActions.SET_HIDE_MODAL_FIND_FRIEND })
         } else {
             setShowLoader(false)
-            toast.success(response?.data)
+            toast.success(toastMessage(res?.response?.data?.code, i18n))
             dispatch({ type: modalActions.SET_HIDE_MODAL_FIND_FRIEND })
         }
         setInfoFindFriend(undefined)

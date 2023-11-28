@@ -6,7 +6,10 @@ import { logout } from '../utils/auth'
 const register = async (data) => {
     try {
         let response = await axios.post('/auth/register', data)
-        return response
+        return {
+            err: false,
+            response
+        }
     } catch (exception) {
         return {
             err: true,
@@ -18,7 +21,10 @@ const register = async (data) => {
 const login = async (data) => {
     try {
         let response = await axios.post('/auth/login', data)
-        return response
+        return {
+            err: false,
+            response
+        }
     } catch (exception) {
         return {
             err: true,
@@ -83,7 +89,10 @@ const updateUserInfo = async (data) => {
 const friendInvitation = async (data) => {
     try {
         let response = await axios.post('/friend/friend-invitation', data)
-        return response
+        return {
+            code: false,
+            response
+        }
     } catch (exception) {
         checkErr(exception)
         return {
@@ -139,7 +148,10 @@ const findFriend = async (data) => {
 const deleteFriend = async (data) => {
     try {
         let response = await axios.post('/friend/delete', data)
-        return response
+        return {
+            err: false,
+            response
+        }
     } catch (exception) {
         checkErr(exception)
         return {
