@@ -20,7 +20,6 @@ const Conversation = ({ conversation }) => {
     const userDetails = useSelector((state: any) => state.auth.userDetails)
     const conversationSelected = useSelector((state: any) => state.conversation.conversationSelected)
     const conversations = useSelector((state: any) => state.conversation.conversations)
-    const countAnnounceMessage = useSelector((state: any) => state.tabs.countAnnounceMessage)
     const [friend, setFriend] = useState<any | {}>({})
     const [message, setMessage] = useState<any | null>({})
     const [countMessageReceived, setCountMessageReceived] = useState(0)
@@ -203,6 +202,16 @@ const Conversation = ({ conversation }) => {
                 </div>
             </div>
             < div className={classes.right} >
+                {countMessageReceived != 0 && <Box w={20} h={20} style={{
+                    backgroundColor: 'red',
+                    color: '#fff',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    fontSize: '13px'
+                }}>{countMessageReceived}</Box>
+                }
                 <Menu trigger="hover" openDelay={100} closeDelay={400} shadow="md" width={200} position='right'>
                     <Menu.Target>
                         <Box component='div' style={{

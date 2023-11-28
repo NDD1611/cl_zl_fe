@@ -51,7 +51,6 @@ const PendingInvitation = () => {
 
     return (
         <>
-            {showLoader ? <LoaderModal /> : ''}
             <div className={styles.PendingInvitation}>
                 <div className={styles.headerInvitation}>
                     {showBackButton &&
