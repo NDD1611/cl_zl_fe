@@ -10,8 +10,8 @@ import { useLingui } from '@lingui/react'
 const MenuItemFriend = () => {
     let i18n = useLingui()
     const dispatch = useDispatch()
-    const selectItem = useSelector(state => state.friend.selectItem)
-    const pendingInvitation = useSelector(state => state.friend.pendingInvitations)
+    const selectItem = useSelector((state: any) => state.friend.selectItem)
+    const pendingInvitation = useSelector((state: any) => state.friend.pendingInvitations)
 
     const showTab3AndCloseTabTwo = () => {
         if (window.innerWidth < 700) {
@@ -20,6 +20,9 @@ const MenuItemFriend = () => {
             })
             dispatch({
                 type: tabsActions.SET_CLOSE_TAB_TWO
+            })
+            dispatch({
+                type: tabsActions.SET_CLOSE_TAB_ONE
             })
         } else {
             dispatch({

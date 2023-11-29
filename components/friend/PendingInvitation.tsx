@@ -47,6 +47,9 @@ const PendingInvitation = () => {
         dispatch({
             type: tabsActions.SET_SHOW_TAB_TWO
         })
+        dispatch({
+            type: tabsActions.SET_SHOW_TAB_ONE
+        })
     }
 
     return (
@@ -66,7 +69,7 @@ const PendingInvitation = () => {
                         <div>
                             <img src='/images/invitation-emptystate.png' />
                         </div>
-                        <div>
+                        <div className={styles.titleNoResult}>
                             {i18n._("You don't have any friend requests")}
                         </div>
                     </div>

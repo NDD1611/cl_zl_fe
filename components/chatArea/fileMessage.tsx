@@ -77,13 +77,7 @@ const MessageFile = ({ message }) => {
             // find .ext from file name
             let name = type.name
             if (name) {
-                let index = 0
-                for (let i = name.length - 1; i > 0; i--) {
-                    if (name[i] == '.') {
-                        index = i
-                    }
-                }
-                let ext = name.slice(index + 1, name.length)
+                let ext = name.split('.').pop()
                 setExt(ext)
             }
         }

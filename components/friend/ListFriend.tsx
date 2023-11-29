@@ -39,6 +39,9 @@ const ListFriend = () => {
         dispatch({
             type: tabsActions.SET_SHOW_TAB_TWO
         })
+        dispatch({
+            type: tabsActions.SET_SHOW_TAB_ONE
+        })
     }
     const [idPopover, setIdPopover] = useState()
     const [clientXPopover, setClientXPopover] = useState(0)
@@ -197,8 +200,8 @@ const ListFriend = () => {
                     }
                     {
                         listFriends.map((friend) => {
-                            return <Box px={20}>
-                                <div key={friend._id} className={styles.friendItem}
+                            return <Box key={friend._id} px={20}>
+                                <div className={styles.friendItem}
                                     onContextMenu={(e) => { handleMouseRightClick(e, friend._id) }}
                                     onClick={(e) => { handleClickSendMessage(friend) }}
                                 >

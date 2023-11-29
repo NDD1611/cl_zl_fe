@@ -1,5 +1,6 @@
 import { tabsActions } from "../actions/tabsAction"
 const initState = {
+    breakPointMobile: 700,
     maintabSelect: 'Conversations',
     countAnnounceMessage: 0,
     showTabTwo: true,

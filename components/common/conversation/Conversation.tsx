@@ -125,19 +125,6 @@ const Conversation = ({ conversation }) => {
             })
         }
     }
-    const [popoverX, setPopoverX] = useState(0)
-    const [popoverY, setPopoverY] = useState(0)
-    const popoverId = useSelector((state: any) => state.conversation.popoverId)
-    const handleClickConversation = (e) => {
-        e.stopPropagation()
-        let height = e.target.clientHeight
-        dispatch({
-            type: conversationActions.SET_POPOVER_ID,
-            id: conversation._id
-        })
-        setPopoverX(e.target.getBoundingClientRect().x)
-        setPopoverY(e.target.getBoundingClientRect().y + height)
-    }
     useEffect(() => {
         const setPopoverId = () => {
             dispatch({
