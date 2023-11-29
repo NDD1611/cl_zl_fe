@@ -74,19 +74,19 @@ const Conversation = ({ conversation }) => {
                 }
             } else if (lastMessage.type == 'text') {
                 if (lastMessage.sender._id === userDetails._id) {
-                    setMessage({ content: i18n._('You:') + ' ' + lastMessage.content, type: 'text' })
+                    setMessage({ content: i18n._('You') + ': ' + lastMessage.content, type: 'text' })
                 } else {
                     setMessage({ content: lastMessage.content, type: 'text' })
                 }
             } else if (lastMessage.type == 'image') {
                 if (lastMessage.sender._id === userDetails._id) {
-                    setMessage({ content: i18n._('You:') + ' ', type: 'image' })
+                    setMessage({ content: i18n._('You') + ': ', type: 'image' })
                 } else {
                     setMessage({ content: '', type: 'image' })
                 }
             } else {
                 if (lastMessage.sender._id === userDetails._id) {
-                    setMessage({ content: i18n._('You:') + ' ', type: 'file' })
+                    setMessage({ content: i18n._('You') + ': ', type: 'file' })
                 } else {
                     setMessage({ content: '', type: 'file' })
                 }
@@ -105,7 +105,7 @@ const Conversation = ({ conversation }) => {
             }
         }
         setCountMessageReceived(count)
-    }, [conversation, conversations, locale])
+    }, [conversation, conversations, i18n, locale])
 
     const handleChooseConversation = () => {
         localStorage.setItem('receiverUser', JSON.stringify(friend))
@@ -174,7 +174,7 @@ const Conversation = ({ conversation }) => {
                             message.type == 'image' &&
                             <div>{message.content}
                                 < FontAwesomeIcon className={classes.iconImage} icon={faImage} />
-                                Hình ảnh
+                                {i18n._('Image')}
                             </div>
                         }
                         {

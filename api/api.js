@@ -135,7 +135,10 @@ const checkErr = (exception) => {
 const findFriend = async (data) => {
     try {
         let response = await axios.post('/friend/find', data)
-        return response
+        return {
+            err: false,
+            response: response
+        }
     } catch (exception) {
         checkErr(exception)
         return {

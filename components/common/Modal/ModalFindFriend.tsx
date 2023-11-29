@@ -7,8 +7,6 @@ import { conversationActions } from '../../../redux/actions/conversationAction'
 import api from '../../../api/api'
 import { toast } from 'react-toastify'
 import LoaderModal from './LoaderModal'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import Avatar from '../Avatar'
 import { useRouter } from 'next/router'
 import { useLingui } from '@lingui/react'
@@ -57,11 +55,11 @@ const ModalAddFriend = () => {
             dispatch({ type: modalActions.SET_HIDE_MODAL_FIND_FRIEND })
         } else {
             setShowLoader(true)
-            const response: any = await api.findFriend({ email: email })
-            if (response.data && response.data.err) {
-                toast.error(response.data.mes)
+            const res: any = await api.findFriend({ email: email })
+            if (res.err) {
+                toast.error(toastMessage(res?.exception?.response?.data?.code, i18n))
             } else {
-                let userFind = response.data
+                let userFind = res?.response?.data
                 let date = new Date(userFind.birthday)
                 let day = date.getDate().toString()
                 let month = (date.getMonth() + 1).toString()
@@ -150,7 +148,7 @@ const ModalAddFriend = () => {
     return <Modal centered size={'md'} opened={showModalFindFriend} onClose={handleCloseModalFindFriend} title={i18n._('Add friend')}>
         {/* <div className={`${styles.MainModal} ${showModalFindFriend ? '' : styles.closeModal}`}> */}
         <div className={styles.content}>
-            {showLoader && <LoaderModal />}
+            {/* {showLoader && <LoaderModal />} */}
             <div className={styles.inputEmail}>
                 <input value={email} placeholder={i18n._('Email') + '...'}
                     onChange={(e) => { setEmail(e.target.value) }}
@@ -178,8 +176,12 @@ const ModalAddFriend = () => {
                             {i18n._('Send message')}
                         </Button>
                         {
-                            !isFriend && <Button className={styles.btnCancel}
-                                onClick={addFriend}>{i18n._('Make friend')}</Button>
+                            !isFriend && (
+                                showLoader ?
+                                    <Button loading onClick={addFriend}>{i18n._('Make friend')}</Button>
+                                    :
+                                    <Button onClick={addFriend}>{i18n._('Make friend')}</Button>
+                            )
                         }
                     </div>
                     <div className={styles.userInfo}>
@@ -200,8 +202,12 @@ const ModalAddFriend = () => {
             }
 
             <div className={styles.footerBtn}>
-                <button className={styles.btnCancel} onClick={handleCloseModalFindFriend}>{i18n._('Cancel')}</button>
-                <button className={styles.btnFind} onClick={handleFindFriend}>{i18n._('Find')}</button>
+                <Button className={styles.btnCancel} onClick={handleCloseModalFindFriend}>{i18n._('Cancel')}</Button>
+                {showLoader ?
+                    <Button loading className={styles.btnFind} onClick={handleFindFriend}>{i18n._('Find')}</Button>
+                    :
+                    <Button className={styles.btnFind} onClick={handleFindFriend}>{i18n._('Find')}</Button>
+                }
             </div>
         </div>
         {/* </div > */}

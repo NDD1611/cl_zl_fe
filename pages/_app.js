@@ -24,6 +24,8 @@ const theme = createTheme({
 import messagesEn from "../locales/en/messages.json";
 import messagesVi from "../locales/vi/messages.json";
 import { useRouter } from 'next/router'
+import { useLayoutEffect } from 'react'
+import { useState } from 'react'
 
 
 i18n.load({
@@ -31,16 +33,20 @@ i18n.load({
     vi: messagesVi
 });
 
+i18n.activate('en');
 export default function app({ Component, pageProps }) {
     const router = useRouter()
     const { locale } = router
-    i18n.activate(locale);
+
     useEffect(() => {
         const userDetails = JSON.parse(localStorage.getItem('userDetails'))
         if ((userDetails && socket === null) || (socket && socket.connected === false)) {
             socketConnectToServer(userDetails)
         }
     })
+    useEffect(() => {
+        i18n.activate(locale);
+    }, [locale])
 
     return <Provider store={store}>
         <I18nProvider i18n={i18n}>

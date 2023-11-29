@@ -1,7 +1,5 @@
 {
-  "You have sent a friend request before!": "Bạn đã gửi yêu cầu kết bạn trước đây!",
-  "You have received a friend request from this person before!": "Bạn đã nhận được yêu cầu kết bạn từ người này trước đây!",
-  "sent friend request successfully!": "Đã gửi yêu cầu kết bạn thành công!",
+  "Image": "Hình ảnh",
   "An error occurred. Please try again later.": "Đã xảy ra lỗi. Vui lòng thử lại sau.",
   "Select a conversation to chat": "Chọn cuộc trò chuyện để trò chuyện",
   "Send message to ": "Gửi tin nhắn đến ",
@@ -11,7 +9,7 @@
   "Make friend": "Kết bạn",
   "has agreed to make friends": "đã đồng ý kết bạn",
   "you just made friends with": "bạn vừa kết bạn với",
-  "You:": "Bạn",
+  "You": "Bạn",
   "Delete conversation": "Xóa hội thoại",
   "Make friends to start chatting": "Kết bạn để bắt đầu chat",
   "Coming soon": "Sắp ra mắt",
@@ -73,5 +71,10 @@
   "Account registration successful!": "Đăng kí tài khoản thành công!",
   "An error occurred. Please try again later!": "Đã xảy ra lỗi. Vui lòng thử lại sau!",
   "Email is incorrect!": "Email không chính xác!",
-  "Incorrect password!": "Mật khẩu không chính xác!"
+  "Incorrect password!": "Mật khẩu không chính xác!",
+  "You have sent a friend request before!": "Bạn đã gửi yêu cầu kết bạn trước đây!",
+  "You have received a friend request from this person before!": "Bạn đã nhận được yêu cầu kết bạn từ người này trước đây!",
+  "sent friend request successfully!": "Đã gửi yêu cầu kết bạn thành công!",
+  "Delete friends successfully!": "Xóa bạn thành công!",
+  "Email account not registered!": "Email chưa đăng kí tài khoản!"
 }
