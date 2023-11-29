@@ -20,6 +20,7 @@ const AuthenticationForm = (props: PaperProps) => {
     const [showLoader, setShowLoader] = useState(false)
     const dispatch = useDispatch()
     const router = useRouter()
+    const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     const form = useForm({
         initialValues: {
             email: '',
@@ -31,9 +32,9 @@ const AuthenticationForm = (props: PaperProps) => {
         },
 
         validate: {
-            email: (val) => (/^\S+@\S+$/.test(val) ? null : i18n._('Invalid email')),
-            password: (val) => (val.length <= 6 ? i18n._('Password should include at least 6 characters') : null),
-            confirmPassword: (value, values) => value !== values.password && type === i18n._('register') ? i18n._('Passwords did not match') : null,
+            email: (val) => emailRegex.test(val) ? null : i18n._('Invalid email'),
+            password: (val) => (val.length < 6 ? i18n._('Password should include at least 6 characters') : null),
+            confirmPassword: (value, values) => value !== values.password && type === 'register' ? i18n._('Passwords did not match') : null,
         },
     });
 
@@ -100,6 +101,7 @@ const AuthenticationForm = (props: PaperProps) => {
                     <Stack>
                         {type === 'register' && (
                             <TextInput
+                                required
                                 label={i18n._("First name")}
                                 placeholder={i18n._("Your firstName")}
                                 value={form.values.firstName}
@@ -109,6 +111,7 @@ const AuthenticationForm = (props: PaperProps) => {
                         )}
                         {type === 'register' && (
                             <TextInput
+                                required
                                 label={i18n._("Last name")}
                                 placeholder={i18n._("Your lastName")}
                                 value={form.values.lastName}
